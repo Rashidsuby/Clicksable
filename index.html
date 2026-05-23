@@ -868,16 +868,14 @@ Tone: technical authority, zero fluff, premium urgency. Every line specific to T
 }
 
 async function callClaude(prompt){
-  // Regenerate this key at aistudio.google.com if compromised
-  const GEMINI_API_KEY = 'AIzaSyAUIWU0FItHej371DpuOFG7wXuBjo-Z63E';
-  const GEMINI_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=' + GEMINI_API_KEY;
+  // API key is hidden inside the Cloudflare Worker — safe to deploy publicly
+  const WORKER_URL = 'https://clicksable-api.mianhuzaifatariq789.workers.dev/';
 
-  console.log('%c[CLICKSABLE] Calling Gemini API...', 'color:#C8FF00;background:#111;padding:4px 8px;border-radius:4px;font-weight:bold');
-  console.log('%c[CLICKSABLE] Endpoint: ' + GEMINI_URL.split('?')[0], 'color:#999');
+  console.log('%c[CLICKSABLE] Calling via Cloudflare Worker...', 'color:#C8FF00;background:#111;padding:4px 8px;border-radius:4px;font-weight:bold');
 
   const systemPrefix = 'You are an elite business strategist. Always respond in clean markdown using ## H2 headers for sections, **bold** for key terms, and bullet lists where appropriate. Be specific, authoritative, and never use filler phrases.\n\n';
 
-  const res = await fetch(GEMINI_URL, {
+  const res = await fetch(WORKER_URL, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
@@ -886,21 +884,21 @@ async function callClaude(prompt){
     })
   });
 
-  console.log('%c[CLICKSABLE] Gemini HTTP status: ' + res.status, res.ok ? 'color:#C8FF00;font-weight:bold' : 'color:#FF4D4D;font-weight:bold');
+  console.log('%c[CLICKSABLE] Worker HTTP status: ' + res.status, res.ok ? 'color:#C8FF00;font-weight:bold' : 'color:#FF4D4D;font-weight:bold');
 
   if(!res.ok){
     const errBody = await res.text();
-    console.error('%c[CLICKSABLE] Gemini API FAILED ❌', 'color:#FF4D4D;font-weight:bold;font-size:14px');
+    console.error('%c[CLICKSABLE] Worker request FAILED ❌', 'color:#FF4D4D;font-weight:bold;font-size:14px');
     console.error('[CLICKSABLE] Error details:', errBody);
-    throw new Error('Gemini API error ' + res.status);
+    throw new Error('Worker error ' + res.status);
   }
 
   const data = await res.json();
   const text = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
 
   if(text){
-    console.log('%c[CLICKSABLE] ✅ Gemini responded successfully!', 'color:#C8FF00;background:#111;padding:4px 8px;border-radius:4px;font-weight:bold;font-size:14px');
-    console.log('%c[CLICKSABLE] First 200 chars of Gemini output:', 'color:#aaa');
+    console.log('%c[CLICKSABLE] ✅ Worker responded successfully!', 'color:#C8FF00;background:#111;padding:4px 8px;border-radius:4px;font-weight:bold;font-size:14px');
+    console.log('%c[CLICKSABLE] First 200 chars of output:', 'color:#aaa');
     console.log(text.slice(0, 200) + '...');
   } else {
     console.warn('%c[CLICKSABLE] Gemini returned empty response', 'color:#FF9900;font-weight:bold');
