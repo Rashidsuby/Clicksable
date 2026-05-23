@@ -1,0 +1,1039 @@
+\<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clicksable — The Distribution Engine</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#080808;--bg2:#0d0d0d;--bg3:#131313;
+  --text:#F0EDE6;--muted:#5C5C56;--mid:#999990;
+  --lime:#C8FF00;--orange:#FF5A1F;
+  --border:rgba(255,255,255,0.06);--border2:rgba(255,255,255,0.11);
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;font-weight:300;overflow-x:hidden;min-height:100vh}
+*{cursor:none!important}
+#cur{width:7px;height:7px;background:var(--lime);border-radius:50%;position:fixed;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:opacity .2s;top:0;left:0}
+#cur-ring{width:30px;height:30px;border:1px solid rgba(200,255,0,.25);border-radius:50%;position:fixed;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:width .22s,height .22s,border-color .22s;top:0;left:0}
+.page{display:none;min-height:100vh;opacity:0;transition:opacity .5s}
+.page.active{display:block}
+.page.visible{opacity:1}
+
+/* ── NAV ── */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:26px 52px;display:flex;justify-content:space-between;align-items:center}
+nav::before{content:'';position:absolute;inset:0;background:linear-gradient(to bottom,rgba(8,8,8,.98) 60%,transparent);pointer-events:none;z-index:-1}
+.logo{font-family:'Syne',sans-serif;font-weight:800;font-size:17px;letter-spacing:.22em;text-transform:uppercase;color:var(--text);text-decoration:none}
+.logo em{font-style:normal;color:var(--lime)}
+.back-btn{font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);font-family:'Syne',sans-serif;font-weight:600;background:none;border:1px solid var(--border2);padding:9px 20px;transition:all .2s;display:none}
+.back-btn:hover{color:var(--text);border-color:var(--mid)}
+.back-btn.show{display:block}
+
+/* ── GATEWAY ── */
+#pg-gateway.active{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;position:relative;overflow:hidden;padding:0 24px;text-align:center}
+.grid-bg{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.018) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.018) 1px,transparent 1px);background-size:72px 72px;pointer-events:none}
+.glow{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:700px;height:700px;background:radial-gradient(circle,rgba(200,255,0,.055) 0%,transparent 65%);pointer-events:none}
+.gw-tag{font-size:11px;letter-spacing:.32em;text-transform:uppercase;color:var(--lime);margin-bottom:36px;font-family:'Syne',sans-serif;font-weight:600;animation:fadeUp .8s .2s both}
+.gw-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(60px,9vw,132px);line-height:.9;letter-spacing:.025em;margin-bottom:26px;animation:fadeUp .8s .35s both}
+.gw-sub{font-size:16px;color:var(--muted);max-width:440px;line-height:1.75;margin-bottom:56px;animation:fadeUp .8s .5s both}
+.gw-prompt{font-size:10px;letter-spacing:.28em;text-transform:uppercase;color:var(--muted);margin-bottom:24px;font-family:'Syne',sans-serif;animation:fadeUp .8s .6s both}
+.path-btns{display:flex;gap:14px;flex-wrap:wrap;justify-content:center;animation:fadeUp .8s .7s both}
+.path-btn{position:relative;padding:19px 44px 17px;border:1px solid var(--border2);background:transparent;color:var(--text);font-family:'Syne',sans-serif;font-weight:700;font-size:13px;letter-spacing:.16em;text-transform:uppercase;display:block;text-align:center;transition:color .32s,border-color .32s;overflow:hidden}
+.path-btn::after{content:'';position:absolute;inset:0;background:var(--lime);transform:translateY(101%);transition:transform .38s cubic-bezier(.4,0,.2,1);z-index:-1}
+.path-btn:hover::after{transform:translateY(0)}
+.path-btn:hover{color:#080808;border-color:var(--lime)}
+.path-btn.warm::after{background:var(--orange)}
+.path-btn.warm:hover{border-color:var(--orange)}
+.btn-sub{display:block;font-size:10px;font-weight:400;letter-spacing:.06em;color:var(--muted);margin-top:7px;font-family:'DM Sans',sans-serif;text-transform:none;transition:color .32s}
+.path-btn:hover .btn-sub{color:rgba(8,8,8,.55)}
+.scroll-line{width:1px;height:52px;background:linear-gradient(to bottom,rgba(200,255,0,.7),transparent);animation:scrollP 2.4s infinite;margin:32px auto 0}
+@keyframes scrollP{0%,100%{opacity:.2;transform:scaleY(.6)}60%{opacity:1;transform:scaleY(1)}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:none}}
+
+/* ── FUNNEL HERO ── */
+.funnel-hero{
+  min-height:100svh;
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  text-align:center;
+  padding:96px 24px 64px;
+  position:relative;overflow:hidden
+}
+.f-tag{font-size:10px;letter-spacing:.32em;text-transform:uppercase;color:var(--lime);margin-bottom:20px;font-family:'Syne',sans-serif;font-weight:600}
+.f-tag.orange{color:var(--orange)}
+.f-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(48px,7.1vw,104px);line-height:.92;letter-spacing:.025em;margin-bottom:22px;max-width:820px}
+.f-title em{font-style:normal;color:var(--lime)}
+.f-title em.o{color:var(--orange)}
+.f-sub{font-size:17px;color:var(--muted);max-width:500px;line-height:1.8;margin:0 auto 48px}
+
+/* ── HERO STATS BAR ── */
+.hero-stats{display:flex;gap:0;border:1px solid var(--border2);margin-top:8px}
+.stat-item{padding:18px 36px;border-right:1px solid var(--border2);text-align:center}
+.stat-item:last-child{border-right:none}
+.stat-num{font-family:'Bebas Neue',sans-serif;font-size:32px;color:var(--lime);line-height:1}
+.stat-num.o{color:var(--orange)}
+.stat-label{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);font-family:'Syne',sans-serif;margin-top:4px}
+
+/* ── REALITY BLOCK ── */
+.wrap{max-width:960px;margin:0 auto;padding:0 40px}
+.reality{border-left:2px solid var(--lime);padding:32px 40px;background:rgba(200,255,0,.018);margin:0 0 72px}
+.reality.o{border-left-color:var(--orange);background:rgba(255,90,31,.018)}
+.reality p{font-size:15.5px;line-height:1.85;color:var(--mid);max-width:680px}
+.reality p+p{margin-top:18px}
+.reality strong{color:var(--text);font-weight:500}
+
+/* ── SECTION HEADING ── */
+.sec-heading{margin-bottom:48px}
+.sec-heading .label{font-size:10px;letter-spacing:.32em;text-transform:uppercase;color:var(--lime);font-family:'Syne',sans-serif;font-weight:600;margin-bottom:12px}
+.sec-heading .label.o{color:var(--orange)}
+.sec-heading h2{font-family:'Bebas Neue',sans-serif;font-size:clamp(36px,4.5vw,60px);line-height:.9;letter-spacing:.02em}
+
+/* ── FEATURES ── */
+.feat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);margin-bottom:72px}
+.feat-card{position:relative;background:var(--bg);padding:40px 32px;overflow:hidden;transition:background .3s,border-color .3s}
+.feat-card::before{content:'';position:absolute;top:28px;left:28px;width:92px;height:92px;border-radius:50%;background:radial-gradient(circle,rgba(200,255,0,.12),transparent 68%);opacity:.55;pointer-events:none;filter:blur(4px);transition:opacity .3s,transform .3s}
+.feat-card:has(.feat-num.o)::before{background:radial-gradient(circle,rgba(255,90,31,.14),transparent 68%)}
+.feat-card:hover{background:var(--bg3)}
+.feat-card:hover::before{opacity:.9;transform:scale(1.12)}
+.feat-num{position:relative;display:inline-block;font-family:'Bebas Neue',sans-serif;font-size:56px;color:rgba(200,255,0,.46);line-height:1;margin-bottom:16px;overflow:hidden;text-shadow:0 0 16px rgba(200,255,0,.28),0 0 34px rgba(200,255,0,.14)}
+.feat-num::after{content:'';position:absolute;inset:-12% -45%;background:linear-gradient(110deg,transparent 34%,rgba(255,255,255,.08) 44%,rgba(255,255,255,.78) 50%,rgba(255,255,255,.08) 56%,transparent 66%);transform:translateX(-78%) skewX(-14deg);mix-blend-mode:screen;animation:numSweep 3.4s ease-in-out infinite;pointer-events:none}
+.feat-num.o{color:rgba(255,90,31,.5);text-shadow:0 0 16px rgba(255,90,31,.3),0 0 34px rgba(255,90,31,.16)}
+.feat-card:nth-child(2) .feat-num::after{animation-delay:.45s}
+.feat-card:nth-child(3) .feat-num::after{animation-delay:.9s}
+@keyframes numSweep{0%,18%{transform:translateX(-78%) skewX(-14deg);opacity:0}32%{opacity:1}48%{transform:translateX(78%) skewX(-14deg);opacity:.95}60%,100%{transform:translateX(78%) skewX(-14deg);opacity:0}}
+.feat-title{font-family:'Syne',sans-serif;font-weight:700;font-size:15px;margin-bottom:10px}
+.feat-desc{font-size:14px;color:var(--muted);line-height:1.75}
+
+/* ── SPLIT QUOTE ── */
+.split-quote{padding:64px 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border);margin-bottom:72px;text-align:center}
+.split-quote blockquote{font-family:'Bebas Neue',sans-serif;font-size:clamp(30px,3.8vw,56px);line-height:.98;letter-spacing:.02em;color:var(--text);max-width:760px;margin:0 auto 20px}
+.split-quote blockquote em{font-style:normal;color:var(--lime)}
+.split-quote blockquote em.o{font-style:normal;color:var(--orange)}
+.split-quote cite{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);font-family:'Syne',sans-serif;font-weight:600;font-style:normal}
+
+/* ── FORM ── */
+.form-section{background:var(--bg2);padding:80px 0}
+.form-box{background:var(--bg3);border:1px solid var(--border);padding:52px;max-width:720px;margin:0 auto}
+.form-tag{font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:var(--lime);font-family:'Syne',sans-serif;font-weight:600;margin-bottom:14px}
+.form-tag.o{color:var(--orange)}
+.form-title{font-family:'Syne',sans-serif;font-weight:800;font-size:28px;margin-bottom:10px}
+.form-desc{font-size:15px;color:var(--muted);margin-bottom:36px;line-height:1.7}
+.form-group{margin-bottom:20px}
+.form-label{display:block;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--mid);font-family:'Syne',sans-serif;font-weight:600;margin-bottom:9px}
+.form-input,.form-select,.form-textarea{width:100%;background:rgba(255,255,255,.035);border:1px solid var(--border2);color:var(--text);padding:14px 18px;font-family:'DM Sans',sans-serif;font-size:15px;outline:none;transition:border-color .2s;font-weight:300;appearance:none}
+.form-input::placeholder,.form-textarea::placeholder{color:var(--muted)}
+.form-input:focus,.form-select:focus,.form-textarea:focus{border-color:var(--lime)}
+.form-input.o:focus,.form-select.o:focus,.form-textarea.o:focus{border-color:var(--orange)}
+.form-select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%235C5C56' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 16px center;background-color:rgba(255,255,255,.035)}
+.form-select option{background:#1a1a1a;color:var(--text)}
+.form-textarea{min-height:90px;resize:vertical}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.submit-btn{width:100%;padding:18px;background:var(--lime);color:#080808;border:none;font-family:'Syne',sans-serif;font-weight:800;font-size:13px;letter-spacing:.16em;text-transform:uppercase;transition:opacity .2s,transform .15s;margin-top:8px}
+.submit-btn.o{background:var(--orange)}
+.submit-btn:hover{opacity:.88}
+.submit-btn:active{transform:scale(.99)}
+.submit-btn:disabled{opacity:.4}
+
+/* ── GUARANTEE STRIP ── */
+.guarantee{display:flex;align-items:center;gap:12px;margin-top:20px;padding:16px 20px;border:1px solid var(--border);background:rgba(255,255,255,.02)}
+.guarantee-icon{font-size:18px;flex-shrink:0}
+.guarantee p{font-size:12px;color:var(--muted);line-height:1.5}
+.guarantee strong{color:var(--mid)}
+
+/* ── LOADING ── */
+.loading-screen{display:none;min-height:100vh;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:40px}
+.loading-screen.active{display:flex}
+.loading-icon{width:64px;height:64px;border:2px solid rgba(200,255,0,.15);border-top-color:var(--lime);border-radius:50%;animation:spin 1s linear infinite;margin:0 auto 36px}
+.loading-icon.o{border-color:rgba(255,90,31,.15);border-top-color:var(--orange)}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loading-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(36px,5vw,64px);margin-bottom:16px}
+.loading-status{font-size:14px;color:var(--muted);letter-spacing:.06em;min-height:22px}
+.loading-steps{display:flex;flex-direction:column;gap:10px;margin-top:36px;text-align:left;max-width:320px}
+.step-item{display:flex;align-items:center;gap:14px;font-size:13px;color:var(--muted)}
+.step-dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.1);flex-shrink:0;transition:background .4s}
+.step-dot.done{background:var(--lime)}
+.step-dot.done.o{background:var(--orange)}
+
+/* ── RESULT ── */
+.result-page{padding:120px 0 80px}
+.result-hero{text-align:center;padding:0 24px 72px}
+.result-tag{font-size:10px;letter-spacing:.32em;text-transform:uppercase;color:var(--lime);font-family:'Syne',sans-serif;font-weight:600;margin-bottom:16px}
+.result-tag.o{color:var(--orange)}
+.result-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(44px,6vw,88px);line-height:.9;margin-bottom:20px}
+.result-sub{font-size:16px;color:var(--muted);max-width:480px;margin:0 auto}
+.result-content{max-width:880px;margin:0 auto;padding:0 40px}
+.result-brief{background:var(--bg3);border:1px solid var(--border);padding:48px;margin-bottom:24px;white-space:pre-wrap;font-size:15px;line-height:1.85;color:var(--mid)}
+.result-brief strong,.result-brief b{color:var(--text);font-weight:500}
+.result-brief h2,.result-brief h3{font-family:'Syne',sans-serif;font-weight:700;color:var(--text);margin:24px 0 10px;font-size:17px;letter-spacing:.04em;text-transform:uppercase}
+.result-brief h2:first-child{margin-top:0}
+.result-brief p{margin-bottom:14px}
+.result-brief ul{padding-left:20px;margin-bottom:14px}
+.result-brief li{margin-bottom:8px}
+.result-actions{display:flex;gap:14px;flex-wrap:wrap}
+.dl-btn{flex:1;min-width:200px;padding:18px 32px;background:var(--lime);color:#080808;border:none;font-family:'Syne',sans-serif;font-weight:800;font-size:12px;letter-spacing:.14em;text-transform:uppercase;transition:opacity .2s;text-align:center}
+.dl-btn.o{background:var(--orange)}
+.dl-btn:hover{opacity:.88}
+.cal-btn{flex:1;min-width:200px;padding:18px 32px;border:1px solid var(--border2);color:var(--text);background:transparent;font-family:'Syne',sans-serif;font-weight:700;font-size:12px;letter-spacing:.14em;text-transform:uppercase;text-decoration:none;display:block;text-align:center;transition:all .3s}
+.cal-btn:hover{border-color:var(--lime);color:var(--lime)}
+.cal-btn.o:hover{border-color:var(--orange);color:var(--orange)}
+.result-note{font-size:12px;color:var(--muted);text-align:center;margin-top:16px;letter-spacing:.04em}
+
+/* ── TICKER ── */
+.ticker-wrap{background:var(--lime);padding:28px 0;overflow:hidden;white-space:nowrap}
+.ticker-inner{display:inline-block;font-family:'Bebas Neue',sans-serif;font-size:clamp(26px,3.5vw,46px);color:#080808;letter-spacing:.04em;animation:ticker 22s linear infinite}
+@keyframes ticker{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+
+/* ── FOOTER ── */
+footer{padding:80px 52px 48px;border-top:1px solid var(--border);max-width:960px;margin:0 auto}
+.footer-row{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:64px;gap:32px;flex-wrap:wrap}
+.footer-hl{font-family:'Bebas Neue',sans-serif;font-size:clamp(40px,5.5vw,80px);line-height:.9}
+.footer-hl em{font-style:normal;color:var(--lime)}
+.footer-cta{display:inline-block;padding:16px 40px;background:var(--text);color:var(--bg);font-family:'Syne',sans-serif;font-weight:800;font-size:12px;letter-spacing:.14em;text-transform:uppercase;text-decoration:none;transition:background .28s}
+.footer-cta:hover{background:var(--lime)}
+.footer-note{font-size:12px;color:var(--muted);margin-top:10px}
+.footer-base{display:flex;justify-content:space-between;align-items:center;padding-top:28px;border-top:1px solid var(--border)}
+.footer-copy{font-size:12px;color:var(--muted)}
+
+/* ── UTILS ── */
+.hr{width:100%;height:1px;background:var(--border)}
+.sec-pad{padding:80px 0}
+
+/* Regular observer class for elements below the fold */
+.fi{opacity:0;transform:translateY(24px);transition:opacity .75s,transform .75s}
+.fi.on{opacity:1;transform:none}
+
+/* ── PURE CSS HERO FADE (Fix for black screen issue) ── */
+.hero-fade {
+  opacity: 0;
+  animation: fadeUp 0.8s forwards;
+}
+
+@media(max-width:768px){
+  nav{padding:18px 24px}
+  .wrap{padding:0 24px}
+  .funnel-hero{padding:92px 20px 52px}
+  .f-title{font-size:clamp(46px,14vw,74px);max-width:620px}
+  .split-quote blockquote{font-size:clamp(30px,11vw,48px)}
+  .feat-grid{grid-template-columns:1fr}
+  .form-box{padding:32px 24px}
+  .form-row{grid-template-columns:1fr}
+  footer{padding:60px 24px 36px}
+  .result-content{padding:0 24px}
+  .result-actions{flex-direction:column}
+  .hero-stats{flex-wrap:wrap}
+  .stat-item{flex:1;min-width:120px}
+}
+</style>
+</head>
+<body>
+
+<div id="cur"></div>
+<div id="cur-ring"></div>
+
+<nav>
+  <a href="#" class="logo" onclick="goPage('gateway')">Click<em>sable</em></a>
+  <button class="back-btn" id="back-btn" onclick="goBack()">← Back</button>
+</nav>
+
+<div class="page active" id="pg-gateway">
+  <section id="gateway" style="min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;overflow:hidden;padding:0 24px;text-align:center">
+    <div class="grid-bg"></div>
+    <div class="glow"></div>
+    <p class="gw-tag">The Distribution Engine</p>
+    <h1 class="gw-title">YOUR BRIDGE TO<br>DIGITAL SUPREMACY.</h1>
+    <p class="gw-sub">The internet is splitting. Which side of the divide are you on?</p>
+    <p class="gw-prompt">Select your path below</p>
+    <div class="path-btns">
+      <button class="path-btn" onclick="goPage('creator')">
+        I Am a Creator
+        <span class="btn-sub">Monetize my audience. Escape the sponsorship rat race.</span>
+      </button>
+      <button class="path-btn warm" onclick="goPage('business')">
+        I Am a Business
+        <span class="btn-sub">Dominate the AI-first internet. Capture high-intent buyers.</span>
+      </button>
+    </div>
+    <div class="scroll-line"></div>
+  </section>
+</div>
+
+<div class="page" id="pg-creator">
+  <section class="funnel-hero" style="background:var(--bg2)">
+    <div class="grid-bg"></div>
+    <div class="glow"></div>
+    <p class="f-tag hero-fade" style="animation-delay: 0.1s;">Path 01 — Creator Engine</p>
+    <h1 class="f-title hero-fade" style="animation-delay: 0.2s;">YOU HAVE THE ATTENTION.<br><em>SOMEONE ELSE IS<br>MAKING THE MONEY.</em></h1>
+    <p class="f-sub hero-fade" style="animation-delay: 0.3s;">Stop renting your audience to brands for pennies. It is time to own your ecosystem.</p>
+    <div class="hero-stats hero-fade" style="animation-delay: 0.4s;">
+      <div class="stat-item">
+        <div class="stat-num">14</div>
+        <div class="stat-label">Day Launch Cycle</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">7X</div>
+        <div class="stat-label">Revenue Multiplier</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">0</div>
+        <div class="stat-label">Tech Overhead</div>
+      </div>
+    </div>
+  </section>
+
+  <div class="sec-pad" style="background:var(--bg)">
+    <div class="wrap">
+      <div class="sec-heading fi">
+        <div class="label">The Reality</div>
+        <h2>THE SECRET THE TOP 1%<br>NEVER TALK ABOUT</h2>
+      </div>
+      <div class="reality fi">
+        <p>Every top 1% creator—the ones doing seven figures a year without pushing discount codes—shares one secret. They don't build their own tech, they don't write their own sales copy, and they don't manage their own product launches.</p>
+        <p>They use a <strong>Shadow Operator</strong>. While you focus on front-facing content and community, a Shadow Operator acts as your invisible backend engine. They build the funnels, create the digital assets, run the 14-day launch cycles, and turn your engaged audience into <strong>recurring, sovereign revenue</strong>.</p>
+      </div>
+      <div class="split-quote fi">
+        <blockquote>"IMAGINE DROPPING A SINGLE STORY AND WATCHING A<br>SEAMLESS BACKEND SYSTEM CONVERT YOUR FOLLOWERS<br>INTO A THRIVING <em>DIGITAL BUSINESS.</em>"</blockquote>
+        <cite>The Clicksable Creator Engine</cite>
+      </div>
+      <div class="sec-heading fi">
+        <div class="label">What We Build</div>
+        <h2>YOUR INVISIBLE<br>BACKEND EMPIRE</h2>
+      </div>
+      <div class="feat-grid fi">
+        <div class="feat-card">
+          <div class="feat-num">01</div>
+          <h3 class="feat-title">Shadow Operating</h3>
+          <p class="feat-desc">We become your invisible backend team. Zero credit, maximum results. You stay on-camera; we build the empire behind the scenes. No upfront costs, no tech headaches — pure leverage.</p>
+        </div>
+        <div class="feat-card">
+          <div class="feat-num">02</div>
+          <h3 class="feat-title">14-Day Launch Cycle</h3>
+          <p class="feat-desc">A proven playbook to convert your existing audience into a product launch. Pre-sell, open cart, close — a system that runs while you create. Repeatable every quarter.</p>
+        </div>
+        <div class="feat-card">
+          <div class="feat-num">03</div>
+          <h3 class="feat-title">Sovereign Revenue</h3>
+          <p class="feat-desc">Replace volatile sponsorships with a recurring digital product ecosystem. Your revenue, your rules — permanently independent of any brand's budget or approval.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ticker-wrap">
+    <div class="ticker-inner">SHADOW OPERATING &nbsp;·&nbsp; 14-DAY LAUNCH CYCLE &nbsp;·&nbsp; SOVEREIGN REVENUE &nbsp;·&nbsp; CREATOR ENGINE &nbsp;·&nbsp; DIGITAL SUPREMACY &nbsp;·&nbsp; SPONSORSHIP INDEPENDENCE &nbsp;·&nbsp; SHADOW OPERATING &nbsp;·&nbsp; 14-DAY LAUNCH CYCLE &nbsp;·&nbsp; SOVEREIGN REVENUE &nbsp;·&nbsp; CREATOR ENGINE &nbsp;·&nbsp; DIGITAL SUPREMACY &nbsp;·&nbsp; SPONSORSHIP INDEPENDENCE &nbsp;·&nbsp;</div>
+  </div>
+
+  <div class="form-section">
+    <div class="form-box fi" id="creator-form-box">
+      <p class="form-tag">Engagement-to-Equity Engine</p>
+      <h2 class="form-title">Calculate Your Hidden Revenue</h2>
+      <p class="form-desc">Stop guessing. Answer 5 questions and our AI analyzes your social footprint — generating a personalized strategy brief with your specific gaps, your real numbers, and your exact launch angle.</p>
+      <div class="form-group">
+        <label class="form-label">Your Handle</label>
+        <input type="text" class="form-input" id="c-handle" placeholder="@yourhandle — Instagram / TikTok / YouTube">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Email Address</label>
+        <input type="email" class="form-input" id="c-email" placeholder="you@example.com">
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Primary Platform</label>
+          <select class="form-select" id="c-platform">
+            <option value="">Select platform</option>
+            <option>Instagram</option>
+            <option>TikTok</option>
+            <option>YouTube</option>
+            <option>X / Twitter</option>
+            <option>LinkedIn</option>
+            <option>Multi-platform</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Audience Size</label>
+          <select class="form-select" id="c-audience">
+            <option value="">Select range</option>
+            <option>Under 10K</option>
+            <option>10K – 50K</option>
+            <option>50K – 150K</option>
+            <option>150K – 500K</option>
+            <option>500K – 1M</option>
+            <option>1M+</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Niche / Category</label>
+          <select class="form-select" id="c-niche">
+            <option value="">Select niche</option>
+            <option>Finance / Investing</option>
+            <option>Business / Entrepreneurship</option>
+            <option>Fitness / Health</option>
+            <option>Fashion / Lifestyle</option>
+            <option>Tech / AI</option>
+            <option>Education / Coaching</option>
+            <option>Travel</option>
+            <option>Food / Cooking</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Current Monthly Revenue</label>
+          <select class="form-select" id="c-revenue">
+            <option value="">Select range</option>
+            <option>$0 — No monetization yet</option>
+            <option>$1 – $1,000</option>
+            <option>$1,000 – $5,000</option>
+            <option>$5,000 – $15,000</option>
+            <option>$15,000 – $50,000</option>
+            <option>$50,000+</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Biggest Challenge Right Now</label>
+        <textarea class="form-textarea" id="c-challenge" placeholder="e.g. I rely on brand deals that disappear. I don't know what product to sell. I have no backend system..."></textarea>
+      </div>
+      <button class="submit-btn" id="c-submit" onclick="submitCreator()">Generate My Revenue Blueprint →</button>
+      <div class="guarantee">
+        <span class="guarantee-icon">⚡</span>
+        <p><strong>10–20 second analysis.</strong> Genuinely personalized to your handle, niche, and audience — not a template. Every brief is different.</p>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <div class="footer-row">
+      <h2 class="footer-hl">READY TO OWN<br><em>YOUR AUDIENCE?</em></h2>
+      <div>
+        <a href="mailto:hello@clicksable.com" class="footer-cta">Get In Touch</a>
+        <p class="footer-note">Serious inquiries only. Limited spots available.</p>
+      </div>
+    </div>
+    <div class="footer-base">
+      <span class="footer-copy">© 2025 Clicksable. The Distribution Engine.</span>
+      <a href="#" class="logo" onclick="goPage('gateway')">Click<em>sable</em></a>
+    </div>
+  </footer>
+</div>
+
+<div class="page" id="pg-business">
+  <section class="funnel-hero" style="background:var(--bg2)">
+    <div class="grid-bg" style="background-image:linear-gradient(rgba(255,90,31,.014) 1px,transparent 1px),linear-gradient(90deg,rgba(255,90,31,.014) 1px,transparent 1px);background-size:72px 72px"></div>
+    <div class="glow" style="background:radial-gradient(circle,rgba(255,90,31,.045) 0%,transparent 65%)"></div>
+    <p class="f-tag hero-fade orange" style="animation-delay: 0.1s;">Path 02 — AI Search Engine</p>
+    <h1 class="f-title hero-fade" style="animation-delay: 0.2s;">GOOGLE IS DYING.<br><em class="o">THE ANSWER ENGINE<br>ERA IS HERE.</em></h1>
+    <p class="f-sub hero-fade" style="animation-delay: 0.3s;">If your business isn't hardcoded into the AI, you no longer exist to the modern buyer.</p>
+    <div class="hero-stats hero-fade" style="animation-delay: 0.4s;">
+      <div class="stat-item">
+        <div class="stat-num o">88%</div>
+        <div class="stat-label">AI Traffic Lost</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num o">4</div>
+        <div class="stat-label">LLMs We Optimize</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num o">90</div>
+        <div class="stat-label">Day Visibility Shift</div>
+      </div>
+    </div>
+  </section>
+
+  <div class="sec-pad" style="background:var(--bg)">
+    <div class="wrap">
+      <div class="sec-heading fi">
+        <div class="label o">The Shift</div>
+        <h2>THE WORLD SEARCHES<br>DIFFERENTLY NOW</h2>
+      </div>
+      <div class="reality o fi">
+        <p>Millions of high-ticket clients, digital nomads, and enterprises no longer scroll through ten pages of Google links. They ask ChatGPT, Perplexity, and Claude for a <strong>single, definitive recommendation</strong>. Traditional SEO is completely blind to this.</p>
+        <p>To survive, you need <strong>Generative Engine Optimization (GEO)</strong>. By engineering and injecting custom /llm.txt files and conversational commerce structures directly into your tech stack, we ensure AI search engines don't just mention your name — they <strong>hand buyers your direct booking link</strong>. You aren't competing for clicks. You are the undisputed answer.</p>
+      </div>
+      <div class="split-quote fi">
+        <blockquote style="color:var(--text)">"IMAGINE A HIGH-INTENT BUYER ASKING AN AI FOR THE BEST<br>SOLUTION IN YOUR SPACE — AND THE AI DOESN'T JUST<br>MENTION YOUR NAME. IT HANDS THEM <em class="o">YOUR DIRECT LINK.</em>"</blockquote>
+        <cite>The Clicksable GEO Engine</cite>
+      </div>
+      <div class="sec-heading fi">
+        <div class="label o">How We Do It</div>
+        <h2>THE THREE-LAYER<br>GEO ARCHITECTURE</h2>
+      </div>
+      <div class="feat-grid fi">
+        <div class="feat-card">
+          <div class="feat-num o">01</div>
+          <h3 class="feat-title">AI Visibility Pipelines</h3>
+          <p class="feat-desc">We map and optimize your brand across every major LLM — ChatGPT, Perplexity, Claude, Gemini. Be the answer, not just a result. Your competitors are already doing this.</p>
+        </div>
+        <div class="feat-card">
+          <div class="feat-num o">02</div>
+          <h3 class="feat-title">Custom /llm.txt Architecture</h3>
+          <p class="feat-desc">Proprietary machine-readable files that train AI engines on your brand's value proposition, offerings, and direct transaction links. The foundation of total AI visibility.</p>
+        </div>
+        <div class="feat-card">
+          <div class="feat-num o">03</div>
+          <h3 class="feat-title">Conversational Commerce</h3>
+          <p class="feat-desc">Structure your presence so AI conversations end with your booking link — not a competitor's. Capture the precise moment of buyer intent before they ever reach Google.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ticker-wrap" style="background:var(--orange)">
+    <div class="ticker-inner">GEO ARCHITECTURE &nbsp;·&nbsp; AI VISIBILITY PIPELINES &nbsp;·&nbsp; ANSWER ENGINE ERA &nbsp;·&nbsp; CONVERSATIONAL COMMERCE &nbsp;·&nbsp; LLM.TXT INJECTION &nbsp;·&nbsp; GENERATIVE ENGINE OPTIMIZATION &nbsp;·&nbsp; GEO ARCHITECTURE &nbsp;·&nbsp; AI VISIBILITY PIPELINES &nbsp;·&nbsp; ANSWER ENGINE ERA &nbsp;·&nbsp; CONVERSATIONAL COMMERCE &nbsp;·&nbsp; LLM.TXT INJECTION &nbsp;·&nbsp; GENERATIVE ENGINE OPTIMIZATION &nbsp;·&nbsp;</div>
+  </div>
+
+  <div class="form-section">
+    <div class="form-box fi" id="business-form-box">
+      <p class="form-tag o">AI Visibility Scanner</p>
+      <h2 class="form-title">Does the AI Even Know You Exist?</h2>
+      <p class="form-desc">Don't assume. Our deep-scan technology tests your brand's real presence across the world's leading LLMs and generates an audit of exactly where you're invisible — and how to fix it.</p>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Company Name</label>
+          <input type="text" class="form-input o" id="b-name" placeholder="Acme Corp">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Website Domain</label>
+          <input type="text" class="form-input o" id="b-domain" placeholder="acmecorp.com">
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Email Address</label>
+        <input type="email" class="form-input o" id="b-email" placeholder="you@company.com">
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Industry</label>
+          <select class="form-select o" id="b-industry">
+            <option value="">Select industry</option>
+            <option>SaaS / Software</option>
+            <option>E-commerce / Retail</option>
+            <option>Professional Services</option>
+            <option>Healthcare</option>
+            <option>Education</option>
+            <option>Finance</option>
+            <option>Real Estate</option>
+            <option>Hospitality / Travel</option>
+            <option>Marketing / Agency</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Company Size</label>
+          <select class="form-select o" id="b-size">
+            <option value="">Select size</option>
+            <option>Solo / Freelancer</option>
+            <option>2 – 10 employees</option>
+            <option>10 – 50 employees</option>
+            <option>50 – 200 employees</option>
+            <option>200+ employees</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Top 3 Keywords You Want AI to Recommend You For</label>
+        <input type="text" class="form-input o" id="b-keywords" placeholder="e.g. project management software, remote team tools, startup CRM">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Current Biggest Pain Point</label>
+        <textarea class="form-textarea o" id="b-pain" placeholder="e.g. We rank on Google but ChatGPT never recommends us. Our competitors keep showing up in AI answers instead of us..."></textarea>
+      </div>
+      <button class="submit-btn o" id="b-submit" onclick="submitBusiness()">Run My AI Visibility Audit →</button>
+      <div class="guarantee">
+        <span class="guarantee-icon">🔍</span>
+        <p><strong>Real AI analysis.</strong> Not a simulated score — our engine actually tests your brand's presence across LLMs and identifies the exact queries where you're invisible.</p>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <div class="footer-row">
+      <h2 class="footer-hl">READY TO OWN<br><em style="color:var(--orange)">THE NEW INTERNET?</em></h2>
+      <div>
+        <a href="mailto:hello@clicksable.com" class="footer-cta" style="transition:background .28s" onmouseover="this.style.background='var(--orange)'" onmouseout="this.style.background='var(--text)'">Get In Touch</a>
+        <p class="footer-note">Serious inquiries only. Limited spots available.</p>
+      </div>
+    </div>
+    <div class="footer-base">
+      <span class="footer-copy">© 2025 Clicksable. The Distribution Engine.</span>
+      <a href="#" class="logo" onclick="goPage('gateway')">Click<em>sable</em></a>
+    </div>
+  </footer>
+</div>
+
+<div class="page" id="pg-loading">
+  <div class="loading-screen active" style="min-height:100vh">
+    <div class="loading-icon" id="load-icon"></div>
+    <h2 class="loading-title" id="load-title">ANALYZING YOUR PROFILE</h2>
+    <p class="loading-status" id="load-status">Initializing analysis engine...</p>
+    <div class="loading-steps" id="load-steps"></div>
+  </div>
+</div>
+
+<div class="page" id="pg-result">
+  <div class="result-page">
+    <div class="result-hero">
+      <p class="result-tag" id="res-tag">Creator Revenue Blueprint</p>
+      <h1 class="result-title" id="res-title">YOUR BLUEPRINT<br>IS READY.</h1>
+      <p class="result-sub" id="res-sub">Here is your personalized strategy brief. Every recommendation is specific to your profile.</p>
+    </div>
+    <div class="result-content">
+      <div class="result-brief" id="result-brief">Loading...</div>
+      <div class="result-actions" style="margin-bottom:16px">
+        <button class="dl-btn" id="dl-btn" onclick="downloadPDF()">↓ Download PDF Brief</button>
+        <a href="mailto:hello@clicksable.com?subject=Booking%20Inquiry%20from%20Clicksable%20Blueprint" class="cal-btn" id="cal-btn">Book My 20-Min Strategy Call →</a>
+      </div>
+      <p class="result-note">This brief was generated by AI based on your inputs. Actual results vary. Book a call to discuss implementation.</p>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── STATE ──
+let currentPath = 'creator';
+let briefText = '';
+let userData = {};
+const SUPABASE_URL = 'https://ctwrrrnjbytnthadpksl.supabase.co';
+const SUPABASE_ANON_KEY = 'sb_publishable_GgNKeidATKP54WWXGgfduQ_sq487yx_';
+const LEADS_TABLE = 'leads';
+const leadDb = SUPABASE_URL && SUPABASE_ANON_KEY
+  ? supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
+  : null;
+
+// ── CURSOR ──
+const dot = document.getElementById('cur');
+const ring = document.getElementById('cur-ring');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;dot.style.left=mx+'px';dot.style.top=my+'px'});
+(function anim(){rx+=(mx-rx)*.13;ry+=(my-ry)*.13;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(anim)})();
+document.querySelectorAll('a,button,.feat-card,.path-btn').forEach(el=>{
+  el.addEventListener('mouseenter',()=>{ring.style.width='46px';ring.style.height='46px';ring.style.borderColor='rgba(200,255,0,.5)'});
+  el.addEventListener('mouseleave',()=>{ring.style.width='30px';ring.style.height='30px';ring.style.borderColor='rgba(200,255,0,.25)'});
+});
+
+// ── PAGE ROUTING ──
+function goPage(id){
+  document.querySelectorAll('.page').forEach(p=>{p.classList.remove('active','visible')});
+  const pg = document.getElementById('pg-'+id);
+
+  pg.classList.add('active');
+
+  // Reset the scroll after the new page is active, so the browser has
+  // real page height to snap against instead of landing on an empty area.
+  document.documentElement.style.scrollBehavior = 'auto';
+  window.scrollTo(0,0);
+  document.body.scrollTop = 0;
+  document.documentElement.scrollTop = 0;
+  resetHeroFade(pg);
+  
+  setTimeout(()=>{
+    pg.classList.add('visible');
+    window.scrollTo(0,0);
+    document.documentElement.style.scrollBehavior = '';
+    
+    observeFadeIns();
+  }, 50);
+
+  document.getElementById('back-btn').classList.toggle('show', id!=='gateway');
+  if(id==='gateway') currentPath='creator';
+}
+
+function resetHeroFade(pg){
+  pg.querySelectorAll('.hero-fade').forEach(el=>{
+    el.style.animation = 'none';
+    el.offsetHeight;
+    el.style.animation = '';
+  });
+}
+
+function goBack(){
+  if(currentPath==='creator') goPage('creator');
+  else goPage('business');
+}
+
+// ── FADE-IN OBSERVER ──
+const obs = new IntersectionObserver(entries => {
+  entries.forEach((e, i) => {
+    if (e.isIntersecting) {
+      setTimeout(() => e.target.classList.add('on'), i * 80);
+      obs.unobserve(e.target); 
+    }
+  });
+}, { 
+  threshold: 0.05,
+  rootMargin: "50px 0px"
+});
+
+function observeFadeIns() {
+  obs.disconnect(); 
+  document.querySelectorAll('.page.active .fi:not(.on)').forEach(el => obs.observe(el));
+}
+
+// Initialize on first load
+observeFadeIns();
+
+// ── CREATOR SUBMIT ──
+function submitCreator(){
+  const handle = document.getElementById('c-handle').value.trim();
+  const email = document.getElementById('c-email').value.trim();
+  const platform = document.getElementById('c-platform').value;
+  const audience = document.getElementById('c-audience').value;
+  const niche = document.getElementById('c-niche').value;
+  const revenue = document.getElementById('c-revenue').value;
+  const challenge = document.getElementById('c-challenge').value.trim();
+  if(!handle||!email||!platform||!audience||!niche||!revenue){alert('Please fill in all required fields.');return}
+  currentPath='creator';
+  userData={handle,email,platform,audience,niche,revenue,challenge};
+  captureLead('creator', userData);
+  runAnalysis('creator',{handle,email,platform,audience,niche,revenue,challenge});
+}
+
+// ── BUSINESS SUBMIT ──
+function submitBusiness(){
+  const name = document.getElementById('b-name').value.trim();
+  const domain = document.getElementById('b-domain').value.trim();
+  const email = document.getElementById('b-email').value.trim();
+  const industry = document.getElementById('b-industry').value;
+  const size = document.getElementById('b-size').value;
+  const keywords = document.getElementById('b-keywords').value.trim();
+  const pain = document.getElementById('b-pain').value.trim();
+  if(!name||!domain||!email||!industry||!size||!keywords){alert('Please fill in all required fields.');return}
+  currentPath='business';
+  userData={name,domain,email,industry,size,keywords,pain};
+  captureLead('business', userData);
+  runAnalysis('business',{name,domain,email,industry,size,keywords,pain});
+}
+
+// ── LOADING & ANALYSIS ──
+async function captureLead(type, data){
+  const lead = {
+    type,
+    created_at: new Date().toISOString(),
+    source: 'Clicksable funnel',
+    page: location.href,
+    ...data
+  };
+
+  try {
+    const saved = JSON.parse(localStorage.getItem('clicksableLeads') || '[]');
+    saved.push(lead);
+    localStorage.setItem('clicksableLeads', JSON.stringify(saved.slice(-100)));
+  } catch(e) {}
+
+  if(!leadDb) return;
+
+  try {
+    const { error } = await leadDb.from(LEADS_TABLE).insert(lead);
+    if(error) console.warn('Lead capture failed:', error.message);
+  } catch(e) {
+    console.warn('Lead capture failed:', e.message);
+  }
+}
+
+async function runAnalysis(type, data){
+  goPage('loading');
+  const isCreator = type==='creator';
+  
+  document.getElementById('load-icon').className = 'loading-icon' + (isCreator?'':' o');
+  document.getElementById('load-title').textContent = isCreator ? 'ANALYZING YOUR PROFILE' : 'SCANNING YOUR VISIBILITY';
+  
+  const steps = isCreator ? [
+    'Mapping your audience profile',
+    'Estimating monetization potential',
+    'Identifying product opportunities',
+    'Building your launch strategy',
+    'Generating personalized brief'
+  ] : [
+    'Auditing brand footprint',
+    'Testing ChatGPT visibility',
+    'Testing Perplexity & Claude',
+    'Identifying GEO gaps',
+    'Generating your audit report'
+  ];
+  
+  const stepsEl = document.getElementById('load-steps');
+  stepsEl.innerHTML = steps.map((s,i)=>`<div class="step-item" id="step-${i}"><div class="step-dot${isCreator?'':' o'}" id="dot-${i}"></div><span>${s}</span></div>`).join('');
+  
+  const statusEl = document.getElementById('load-status');
+  
+  for(let i=0;i<steps.length;i++){
+    await sleep(400+Math.random()*400);
+    statusEl.textContent = steps[i]+'...';
+    document.getElementById('dot-'+i).classList.add('done');
+  }
+  
+  const prompt = isCreator ? buildCreatorPrompt(data) : buildBizPrompt(data);
+  
+  try {
+    statusEl.textContent = 'Finalizing your brief...';
+    const result = await callClaude(prompt);
+    briefText = result;
+    console.log('%c[CLICKSABLE] ✅ USING LIVE GEMINI OUTPUT — not fallback', 'color:#C8FF00;background:#111;padding:6px 12px;border-radius:4px;font-weight:bold;font-size:15px');
+    showResult(type, data, result);
+  } catch(e) {
+    console.error('%c[CLICKSABLE] ❌ USING FALLBACK TEMPLATE — Gemini failed', 'color:#FF4D4D;background:#111;padding:6px 12px;border-radius:4px;font-weight:bold;font-size:15px');
+    console.error('[CLICKSABLE] Reason:', e.message);
+    briefText = getFallback(type, data);
+    showResult(type, data, briefText);
+  }
+}
+
+function sleep(ms){return new Promise(r=>setTimeout(r,ms))}
+
+function buildCreatorPrompt(d){
+  return `You are a senior revenue strategist at Clicksable. Your job is to write a DIAGNOSTIC BRIEF — not a how-to guide. The goal is to make the creator feel deeply understood, show them exactly what is broken and what is possible, but deliberately withhold the specific execution steps. The strategy call is where the real blueprint gets built. Think: show them the locked door, not the key.
+
+CREATOR PROFILE:
+- Handle: ${d.handle}
+- Platform: ${d.platform}
+- Audience Size: ${d.audience}
+- Niche: ${d.niche}
+- Current Monthly Revenue: ${d.revenue}
+- Biggest Challenge: ${d.challenge || 'Not specified'}
+
+Write using these H2 sections:
+
+## YOUR SITUATION ANALYSIS
+3-4 sentences. Be brutally specific about their exact position — platform, niche, audience size, revenue stage. Name the core structural problem holding them back. Make them feel like you have been watching their account.
+
+## YOUR HIDDEN REVENUE POTENTIAL
+Give a specific monthly revenue range based on their niche and audience. Break it into 3 revenue streams with dollar estimates. Then add: "The exact product angle and pricing structure that unlocks this for your specific audience is what we map out on the strategy call."
+
+## THE THREE GAPS COSTING YOU MONEY RIGHT NOW
+Name three specific, painful gaps. For each: give it a sharp name, describe the damage it is doing in 2 sentences, then end with "Closing this gap is a core part of what we build in your first session." DO NOT explain how to close it.
+
+## WHAT YOUR AUDIENCE IS ACTUALLY READY TO BUY
+2-3 sentences identifying what type of offer their audience psychologically wants based on niche and platform behavior. Do NOT name a specific product or price point. End with: "The exact offer structure, positioning, and launch angle — that is what gets built on the call."
+
+## YOUR COMPETITIVE WINDOW
+2 sentences on why NOW is the right moment for this creator specifically to monetize — based on their niche timing and platform dynamics. Create urgency without being generic.
+
+## YOUR NEXT MOVE
+3 sentences maximum. Tell them what they now know, what is still missing, and why the 20-minute strategy call is the exact next step. End with: "Book your 20-minute strategy call — and we will turn this diagnosis into a live revenue system built specifically for ${d.handle}."
+
+Tone: elite consultant, not a coach. Authoritative. Every line must feel like it was written for THIS creator only. No generic advice. No action steps. Diagnose, intrigue, close. Total: 450-600 words.`;
+}
+
+function buildBizPrompt(d){
+  return `You are a senior GEO (Generative Engine Optimization) strategist at Clicksable. Your job is to write a DIAGNOSTIC AUDIT — not a technical guide. The goal is to make this business feel the exact weight of their AI invisibility problem, show them what it is costing them, and create a clear desire for the strategy call. Show them the bleeding wound. Do not hand them the bandage.
+
+BUSINESS PROFILE:
+- Company: ${d.name}
+- Domain: ${d.domain}
+- Industry: ${d.industry}
+- Size: ${d.size}
+- Target Keywords: ${d.keywords}
+- Pain Point: ${d.pain || 'Not specified'}
+
+Write using these H2 sections:
+
+## YOUR AI VISIBILITY DIAGNOSIS
+3-4 sentences. Estimate their current AI visibility percentage across ChatGPT, Perplexity, Claude, and Gemini for their specific industry and keywords. Be direct and specific about how invisible they currently are. Name the exact type of queries where they are losing buyers right now.
+
+## THE QUERIES SENDING YOUR BUYERS TO COMPETITORS
+List 5 specific buyer-intent AI queries (in quotes) that people in their industry are asking RIGHT NOW where ${d.name} almost certainly does not appear. Make these feel real and urgent, not generic. These should sting.
+
+## WHAT THIS INVISIBILITY IS COSTING YOU
+Based on their industry and company size, give a specific estimate of monthly leads or revenue being silently routed to competitors because of AI invisibility. Be bold. End with: "This is not a future problem. It is happening in every AI conversation happening right now."
+
+## WHY YOUR COMPETITORS ARE WINNING IN AI SEARCH
+2-3 sentences on the specific GEO moves competitors in their industry are making that ${d.name} is not. Be specific to their industry. Do NOT explain how to replicate it — just make the gap feel real and urgent.
+
+## THE THREE LAYERS THAT FIX THIS
+Name the three layers of the Clicksable GEO Architecture: (1) AI Presence Engineering, (2) Conversational Commerce Structure, (3) LLM Citation Network. For each, write one sentence on what it does and one sentence on what is currently missing for ${d.name}. End each with: "This gets built in your first 30 days." Do NOT explain the technical implementation.
+
+## YOUR NEXT MOVE
+3 sentences. Tell them what they now know about their AI blind spot, what the cost of waiting is, and why the strategy call is the only logical next step. End with: "Book your 20-minute strategy call — and we will show you the exact queries ${d.name} is invisible on, and what it takes to own them."
+
+Tone: technical authority, zero fluff, premium urgency. Every line specific to THIS business. No how-to. Diagnose, expose the cost, close. Total: 450-600 words.`;
+}
+
+async function callClaude(prompt){
+  // Regenerate this key at aistudio.google.com if compromised
+  const GEMINI_API_KEY = 'AIzaSyAUIWU0FItHej371DpuOFG7wXuBjo-Z63E';
+  const GEMINI_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=' + GEMINI_API_KEY;
+
+  console.log('%c[CLICKSABLE] Calling Gemini API...', 'color:#C8FF00;background:#111;padding:4px 8px;border-radius:4px;font-weight:bold');
+  console.log('%c[CLICKSABLE] Endpoint: ' + GEMINI_URL.split('?')[0], 'color:#999');
+
+  const systemPrefix = 'You are an elite business strategist. Always respond in clean markdown using ## H2 headers for sections, **bold** for key terms, and bullet lists where appropriate. Be specific, authoritative, and never use filler phrases.\n\n';
+
+  const res = await fetch(GEMINI_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      contents: [{ parts: [{ text: systemPrefix + prompt }] }],
+      generationConfig: { maxOutputTokens: 3500, temperature: 0.85 }
+    })
+  });
+
+  console.log('%c[CLICKSABLE] Gemini HTTP status: ' + res.status, res.ok ? 'color:#C8FF00;font-weight:bold' : 'color:#FF4D4D;font-weight:bold');
+
+  if(!res.ok){
+    const errBody = await res.text();
+    console.error('%c[CLICKSABLE] Gemini API FAILED ❌', 'color:#FF4D4D;font-weight:bold;font-size:14px');
+    console.error('[CLICKSABLE] Error details:', errBody);
+    throw new Error('Gemini API error ' + res.status);
+  }
+
+  const data = await res.json();
+  const text = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
+
+  if(text){
+    console.log('%c[CLICKSABLE] ✅ Gemini responded successfully!', 'color:#C8FF00;background:#111;padding:4px 8px;border-radius:4px;font-weight:bold;font-size:14px');
+    console.log('%c[CLICKSABLE] First 200 chars of Gemini output:', 'color:#aaa');
+    console.log(text.slice(0, 200) + '...');
+  } else {
+    console.warn('%c[CLICKSABLE] Gemini returned empty response', 'color:#FF9900;font-weight:bold');
+  }
+
+  return text;
+}
+
+function getFallback(type, data){
+  if(type==='creator'){
+    return `## YOUR SITUATION ANALYSIS\n\nWith ${data.audience} followers on ${data.platform} in the ${data.niche} space, you are in a strong position to build a recurring revenue engine. The gap is infrastructure — without a backend system, sponsorships will always be your ceiling.\n\n## YOUR HIDDEN REVENUE POTENTIAL\n\nConservatively: $4,500–$12,000/month. Digital product potential ($2,500), community subscription ($1,200), launch multiplier on 14-day cycles ($800+). This is without adding a single follower.\n\n## THE THREE GAPS COSTING YOU MONEY\n\n**Gap 1 — No owned product.** You are converting attention into someone else's revenue. Without a digital product, every piece of content you create builds someone else's business.\n\n**Gap 2 — No launch system.** Most creators wing product drops. A 14-day structured launch cycle with pre-sell, open cart, and urgency close can 3x revenue versus a casual announce.\n\n**Gap 3 — No community monetization.** Your most engaged 1% will pay for access. A membership or inner circle layer is the most stable recurring revenue vehicle available to you.\n\n## YOUR 14-DAY SHADOW LAUNCH ROADMAP\n\n**Week 1 (Days 1–7):** Validate your product idea with a quick audience poll. Build the sales page and checkout. Create a 3-email pre-launch sequence. Warm your audience with teaser content.\n\n**Week 2 (Days 8–14):** Open cart day with an urgency window. Daily story/post reminders. Close cart on Day 14 with a deadline email sequence. Debrief and collect testimonials.\n\n## THE ONE PRODUCT YOU SHOULD LAUNCH FIRST\n\nA digital course or guide directly tied to your most-asked questions in the ${data.niche} space. This leverages your existing authority, requires zero fulfillment overhead, and can be priced at $97–$297 — the sweet spot for your audience tier.\n\n## YOUR NEXT MOVE\n\nThis blueprint is the roadmap. The Shadow Operator team is the engine that executes it. Book your 20-minute strategy call to turn this blueprint into a live revenue system.`;
+  }
+  return `## YOUR CURRENT AI VISIBILITY STATUS\n\nFor a ${data.size} company in ${data.industry}, current AI visibility across major LLMs is typically 3–12% without GEO optimization. That means 88–97% of AI-driven queries in your space currently route buyers to competitors.\n\n## THE QUERIES WHERE YOU ARE INVISIBLE\n\n"What is the best ${data.industry.toLowerCase()} solution for a small team?"\n"Which ${data.industry.toLowerCase()} company should I use?"\n"Recommend a ${data.industry.toLowerCase()} provider with good reviews"\n"What tools do experts recommend for ${data.keywords.split(',')[0]}?"\n\n## WHAT YOUR COMPETITORS ARE DOING\n\nGEO-optimized competitors have already injected /llm.txt files, structured their content in conversational Q&A formats, and built citation pipelines across Reddit, LinkedIn, and review platforms. They appear in AI answers because they engineered it — not because they got lucky.\n\n## THE THREE-LAYER GEO ARCHITECTURE\n\n**Layer 1 — /llm.txt Engineering.** We build custom machine-readable files that feed your brand positioning, services, and booking links directly to AI crawlers. This is the foundation.\n\n**Layer 2 — Conversational Commerce Structures.** We restructure your key pages in natural language Q&A format that AI engines cite when answering buyer questions.\n\n**Layer 3 — LLM Citation Pipeline.** We engineer third-party mentions across trusted sources that major LLMs scrape — Reddit, industry publications, LinkedIn — creating a citation network that reinforces your brand as the answer.\n\n## YOUR 90-DAY VISIBILITY ROADMAP\n\n**Month 1:** /llm.txt deployment, site restructuring, citation seeding. Expected visibility: 15–25%.\n\n**Month 2:** Citation amplification, conversational content layer. Expected visibility: 35–50%.\n\n**Month 3:** LLM monitoring, gap analysis, iteration. Expected visibility: 55–75% on target queries.\n\n## ESTIMATED ROI IMPACT\n\nFor a ${data.size} ${data.industry} business, achieving 55%+ AI visibility on target queries typically translates to 12–30 additional qualified leads per month from AI-driven channels alone.\n\n## YOUR NEXT MOVE\n\nThe audit above is the diagnosis. The GEO architecture is the cure. Book your 20-minute strategy call and we will show you exactly which queries your business is invisible on — and how to own them.`;
+}
+
+function showResult(type, data, brief){
+  const isCreator = type==='creator';
+  
+  document.getElementById('res-tag').textContent = isCreator ? 'Creator Revenue Blueprint' : 'AI Visibility Audit';
+  document.getElementById('res-tag').className = 'result-tag' + (isCreator ? '' : ' o');
+  document.getElementById('res-title').textContent = isCreator ? 'YOUR BLUEPRINT\nIS READY.' : 'YOUR AUDIT\nIS COMPLETE.';
+  document.getElementById('res-sub').textContent = isCreator 
+    ? `Personalized for ${data.handle} — ${data.audience} ${data.platform} audience in ${data.niche}.`
+    : `AI visibility audit for ${data.name} (${data.domain}) in ${data.industry}.`;
+  
+  document.getElementById('dl-btn').className = 'dl-btn' + (isCreator ? '' : ' o');
+  document.getElementById('cal-btn').className = 'cal-btn' + (isCreator ? '' : ' o');
+  
+  const html = markdownToHTML(brief);
+  document.getElementById('result-brief').innerHTML = html;
+  
+  goPage('result');
+}
+
+function markdownToHTML(md){
+  return md
+    .replace(/## (.+)/g,'<h2>$1</h2>')
+    .replace(/### (.+)/g,'<h3>$1</h3>')
+    .replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>')
+    .replace(/\*(.+?)\*/g,'<em>$1</em>')
+    .replace(/\n\n/g,'</p><p>')
+    .replace(/^/,'<p>').replace(/$/,'</p>')
+    .replace(/<p>(<h[23]>)/g,'$1')
+    .replace(/(<\/h[23]>)<\/p>/g,'$1')
+    .replace(/<p>\s*<\/p>/g,'');
+}
+
+// ── PDF GENERATION ──
+function downloadPDF(){
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF({unit:'mm',format:'a4'});
+  const isCreator = currentPath==='creator';
+  const accentHex = isCreator ? [200,255,0] : [255,90,31];
+  const W=210, margin=20, textW=W-margin*2;
+  
+  doc.setFillColor(8,8,8);
+  doc.rect(0,0,210,297,'F');
+  doc.setFillColor(...accentHex);
+  doc.rect(0,0,4,297,'F');
+  
+  doc.setFont('helvetica','bold');
+  doc.setFontSize(9);
+  doc.setTextColor(200,200,190);
+  doc.setCharSpace(2);
+  doc.text('CLICKSABLE',margin,18);
+  doc.setCharSpace(0);
+  
+  doc.setFontSize(8);
+  doc.setTextColor(...accentHex);
+  const tag = isCreator ? 'CREATOR REVENUE BLUEPRINT' : 'AI VISIBILITY AUDIT';
+  doc.text(tag,margin,30);
+  
+  doc.setTextColor(90,90,86);
+  doc.setFontSize(7);
+  doc.text(new Date().toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'}),W-margin,30,{align:'right'});
+  
+  doc.setDrawColor(...accentHex);
+  doc.setLineWidth(0.3);
+  doc.line(margin,34,W-margin,34);
+  
+  doc.setFont('helvetica','bold');
+  doc.setFontSize(22);
+  doc.setTextColor(240,237,230);
+  const titleText = isCreator 
+    ? `${userData.handle || 'Creator'} — Revenue Blueprint`
+    : `${userData.name || 'Business'} — AI Visibility Audit`;
+  doc.text(titleText,margin,46,{maxWidth:textW});
+  
+  doc.setFont('helvetica','normal');
+  doc.setFontSize(9);
+  doc.setTextColor(90,90,86);
+  const sub = isCreator 
+    ? `${userData.audience} ${userData.platform} — ${userData.niche}`
+    : `${userData.domain} — ${userData.industry}`;
+  doc.text(sub,margin,55);
+  
+  let y = 68;
+  const sections = briefText.split(/^## /m).filter(Boolean);
+  
+  for(const section of sections){
+    if(y > 260){doc.addPage();doc.setFillColor(8,8,8);doc.rect(0,0,210,297,'F');doc.setFillColor(...accentHex);doc.rect(0,0,4,297,'F');y=20}
+    const lines = section.split('\n');
+    const heading = lines[0].trim();
+    const body = lines.slice(1).join('\n').trim();
+    
+    doc.setFillColor(20,20,20);
+    doc.roundedRect(margin,y-4,textW,8,1,1,'F');
+    doc.setFont('helvetica','bold');
+    doc.setFontSize(8);
+    doc.setTextColor(...accentHex);
+    doc.setCharSpace(1.5);
+    doc.text(heading.toUpperCase(),margin+4,y+1);
+    doc.setCharSpace(0);
+    y+=13;
+    
+    doc.setFont('helvetica','normal');
+    doc.setFontSize(9.5);
+    doc.setTextColor(180,178,172);
+    const bodyLines = doc.splitTextToSize(body.replace(/\*\*/g,'').replace(/\*/g,''), textW);
+    for(const line of bodyLines){
+      if(y>272){doc.addPage();doc.setFillColor(8,8,8);doc.rect(0,0,210,297,'F');doc.setFillColor(...accentHex);doc.rect(0,0,4,297,'F');y=20}
+      doc.text(line,margin,y);
+      y+=5.2;
+    }
+    y+=8;
+  }
+  
+  doc.setDrawColor(30,30,30);
+  doc.setLineWidth(0.3);
+  doc.line(margin,285,W-margin,285);
+  doc.setFont('helvetica','normal');
+  doc.setFontSize(7.5);
+  doc.setTextColor(70,70,66);
+  doc.text('hello@clicksable.com  ·  clicksable.com  ·  © 2025 Clicksable — The Distribution Engine',W/2,290,{align:'center'});
+  
+  const fname = isCreator ? `clicksable-creator-blueprint.pdf` : `clicksable-geo-audit.pdf`;
+  doc.save(fname);
+}
+
+// ── ENTER KEY ──
+['c-handle','c-keywords'].forEach(id=>{
+  const el=document.getElementById(id);
+  if(el) el.addEventListener('keydown',e=>{if(e.key==='Enter'){if(id.startsWith('c'))submitCreator();else submitBusiness()}});
+});
+
+// Initial page visible
+setTimeout(()=>document.getElementById('pg-gateway').classList.add('visible'),50);
+</script>
+</body>
+</html>
