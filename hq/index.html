@@ -344,6 +344,7 @@ html,body{height:100%;background:var(--bg0);color:var(--text);font-family:'DM Sa
     </div>
     <div class="topbar-right">
       <span style="font-size:12px;color:var(--text3)" id="topbar-info">Loading...</span>
+      <button class="tb-btn" onclick="showCreatorsDirectory()">👥 View All Creators</button>
       <button class="tb-btn" onclick="resetForm()">+ New Campaign</button>
       <button class="tb-btn danger" onclick="lockAdmin()">Lock</button>
     </div>
@@ -520,6 +521,22 @@ html,body{height:100%;background:var(--bg0);color:var(--text);font-family:'DM Sa
   </div>
 </div>
 
+<!-- CREATORS DIRECTORY MODAL -->
+<div id="creators-modal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.8); z-index:2000; align-items:center; justify-content:center; backdrop-filter:blur(5px);">
+  <div style="background:var(--bg1); border:1px solid var(--border); border-radius:20px; width:90%; max-width:800px; max-height:85vh; display:flex; flex-direction:column; overflow:hidden; box-shadow:0 40px 100px rgba(0,0,0,.8);">
+    <div style="padding:24px; border-bottom:1px solid var(--border); display:flex; justify-content:space-between; align-items:center;">
+      <div>
+        <h2 style="font-family:'Bebas Neue',sans-serif; font-size:32px; letter-spacing:2px; color:var(--text);">Creator <span style="color:var(--lime);">Directory</span></h2>
+        <div style="font-size:12px; color:var(--text3); margin-top:4px;">All registered creators on the platform.</div>
+      </div>
+      <button onclick="document.getElementById('creators-modal').style.display='none'" style="background:var(--bg2); border:1px solid var(--border); color:var(--text); padding:8px 14px; border-radius:8px; cursor:pointer; font-family:'Syne',sans-serif; font-size:11px; font-weight:700; text-transform:uppercase;">Close</button>
+    </div>
+    <div id="creators-grid" style="padding:24px; overflow-y:auto; flex:1; display:grid; grid-template-columns:repeat(auto-fill, minmax(300px, 1fr)); gap:16px;">
+      <!-- Creator cards will load here -->
+    </div>
+  </div>
+</div>
+
 <div id="toast"></div>
 
 <script>
@@ -563,7 +580,7 @@ function lockAdmin(){
   pinError.style.display = 'none';
 }
 
-// ── LOAD DIRECTORY ──
+// ── LOAD DIRECTORY & SUBMISSIONS ──
 async function loadSubmissions(){
   const list = document.getElementById('submission-list');
   if(!leadDb){
@@ -577,7 +594,13 @@ async function loadSubmissions(){
   ]);
 
   if(subError){ list.innerHTML = '<div class="dir-empty">Failed to load submissions.</div>'; showToast(subError.message, 'error'); return; }
-  if(creatorError){ showToast('Creator profiles could not be loaded', 'error'); }
+  
+  // 🔍 DEBUG TRACKER: Open your browser console (F12) to see this
+  console.log("HQ FETCHED CREATORS:", creators);
+  if(creatorError){ 
+    console.error("HQ CREATOR ERROR:", creatorError);
+    showToast('Creator profiles could not be loaded. Check RLS.', 'error'); 
+  }
 
   allSubmissions = submissions || [];
   allCreators = creators || [];
@@ -592,12 +615,12 @@ function renderSubmissions(){
   }
 
   list.innerHTML = allSubmissions.map(s => {
-    // Find the full creator profile for this submission
-    const creator = allCreators.find(c => c.creator_id === s.creator_id) || {};
+    // 🛡️ BULLETPROOF MATCHING: Force strings and remove hidden spaces
+    const creator = allCreators.find(c => String(c.creator_id).trim() === String(s.creator_id).trim()) || {};
+    
     const status = s.status || 'Pending';
     const statusColor = status === 'Approved' ? 'var(--lime)' : status === 'Rejected' ? 'var(--danger)' : 'var(--orange)';
     
-    // Build clickable social links based on what the creator filled out
     const tiktokHtml = creator.tiktok_handle ? `<a href="${creator.tiktok_url || '#'}" target="_blank" style="color:var(--text); text-decoration:none; background:var(--bg3); padding:4px 8px; border-radius:6px; font-size:11px;">🎵 ${creator.tiktok_handle}</a>` : '';
     const instaHtml = creator.instagram_handle ? `<a href="${creator.instagram_url || '#'}" target="_blank" style="color:var(--text); text-decoration:none; background:var(--bg3); padding:4px 8px; border-radius:6px; font-size:11px;">📸 ${creator.instagram_handle}</a>` : '';
     const youtubeHtml = creator.youtube_handle ? `<a href="${creator.youtube_url || '#'}" target="_blank" style="color:var(--text); text-decoration:none; background:var(--bg3); padding:4px 8px; border-radius:6px; font-size:11px;">▶️ ${creator.youtube_handle}</a>` : '';
@@ -608,7 +631,6 @@ function renderSubmissions(){
         <div>
           <div style="font-family:'Syne',sans-serif;font-size:13px;font-weight:800;margin-bottom:6px">${s.campaign_title || 'Campaign submission'}</div>
           
-          <!-- FULL CREATOR PROFILE CARD -->
           <div style="background:var(--bg1); border:1px solid var(--border); border-radius:10px; padding:12px; margin-bottom:12px;">
             <div style="font-size:13px; font-weight:700; color:var(--text); margin-bottom:4px;">👤 ${creator.name || s.creator_name || 'Unknown Creator'}</div>
             <div style="font-size:12px; color:var(--text2); margin-bottom:10px;">✉️ ${creator.email || s.creator_email || 'No email provided'}</div>
@@ -856,6 +878,49 @@ function showToast(msg, type='success'){
   t.textContent = msg;
   t.className = 'show ' + type;
   setTimeout(() => { t.className = type; }, 3000);
+}
+
+// ── MODAL DIRECTORY JS ──
+async function showCreatorsDirectory() {
+  const modal = document.getElementById('creators-modal');
+  const grid = document.getElementById('creators-grid');
+  modal.style.display = 'flex';
+  grid.innerHTML = '<div style="color:var(--text3); font-size:13px;">Loading creators...</div>';
+
+  if (!leadDb) {
+    grid.innerHTML = '<div style="color:var(--danger); font-size:13px;">Supabase not connected. Cannot load creators.</div>';
+    return;
+  }
+
+  const { data, error } = await leadDb.from('creators').select('*').order('updated_at', { ascending: false });
+  
+  if (error) {
+    grid.innerHTML = `<div style="color:var(--danger); font-size:13px;">Error: ${error.message}</div>`;
+    return;
+  }
+
+  if (!data || data.length === 0) {
+    grid.innerHTML = '<div style="color:var(--text3); font-size:13px;">No creators have registered yet.</div>';
+    return;
+  }
+
+  grid.innerHTML = data.map(c => {
+    const tiktokHtml = c.tiktok_handle ? `<a href="${c.tiktok_url || '#'}" target="_blank" style="color:var(--text); text-decoration:none; background:var(--bg3); padding:4px 8px; border-radius:6px; font-size:11px;">🎵 ${c.tiktok_handle}</a>` : '';
+    const instaHtml = c.instagram_handle ? `<a href="${c.instagram_url || '#'}" target="_blank" style="color:var(--text); text-decoration:none; background:var(--bg3); padding:4px 8px; border-radius:6px; font-size:11px;">📸 ${c.instagram_handle}</a>` : '';
+    const youtubeHtml = c.youtube_handle ? `<a href="${c.youtube_url || '#'}" target="_blank" style="color:var(--text); text-decoration:none; background:var(--bg3); padding:4px 8px; border-radius:6px; font-size:11px;">▶️ ${c.youtube_handle}</a>` : '';
+    const socialLinks = [tiktokHtml, instaHtml, youtubeHtml].filter(Boolean).join(' ') || '<span style="color:var(--text3); font-size:11px;">No handles provided</span>';
+
+    return `
+      <div style="background:var(--bg2); border:1px solid var(--border); border-radius:12px; padding:16px;">
+        <div style="font-size:15px; font-weight:700; color:var(--lime); margin-bottom:4px;">${c.name || 'Unnamed Creator'}</div>
+        <div style="font-size:12px; color:var(--text2); margin-bottom:12px;">✉️ ${c.email || 'No email'}</div>
+        <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:12px;">
+          ${socialLinks}
+        </div>
+        <div style="font-size:9px; color:var(--text3); font-family:'Syne',sans-serif; text-transform:uppercase; border-top:1px solid var(--border); padding-top:10px;">ID: ${c.creator_id}</div>
+      </div>
+    `;
+  }).join('');
 }
 </script>
 </body>
