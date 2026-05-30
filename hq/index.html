@@ -297,6 +297,34 @@ html,body{height:100%;background:var(--bg0);color:var(--text);font-family:'DM Sa
 }
 #btn-delete:hover{background:rgba(255,59,59,.08)}
 
+/* TABS */
+.panel-tabs{
+  display:flex;border-bottom:1px solid var(--border);
+  background:var(--bg1);flex-shrink:0;padding:0 24px;gap:4px;
+}
+.panel-tab{
+  padding:14px 18px;font-family:'Syne',sans-serif;font-size:11px;font-weight:700;
+  letter-spacing:.12em;text-transform:uppercase;color:var(--text3);
+  cursor:pointer;border-bottom:2px solid transparent;transition:all .2s;
+  position:relative;top:1px;
+}
+.panel-tab:hover{color:var(--text)}
+.panel-tab.active{color:var(--lime);border-bottom-color:var(--lime)}
+
+/* ANNOUNCEMENT FORM */
+.ann-type-select{
+  display:flex;gap:8px;margin-bottom:0;
+}
+.ann-type-btn{
+  flex:1;padding:8px;border-radius:8px;border:1px solid var(--border2);
+  font-family:'Syne',sans-serif;font-size:10px;font-weight:700;
+  letter-spacing:.1em;text-transform:uppercase;
+  background:transparent;cursor:pointer;transition:all .2s;color:var(--text3);
+}
+.ann-type-btn.sel-New{background:rgba(200,255,0,.1);border-color:rgba(200,255,0,.3);color:var(--lime)}
+.ann-type-btn.sel-Policy{background:rgba(255,90,31,.08);border-color:rgba(255,90,31,.3);color:var(--orange)}
+.ann-type-btn.sel-Info{background:rgba(255,255,255,.05);border-color:var(--border);color:var(--text2)}
+
 /* TOAST */
 #toast{
   position:fixed;bottom:32px;right:32px;z-index:9999;
@@ -368,8 +396,17 @@ html,body{height:100%;background:var(--bg0);color:var(--text);font-family:'DM Sa
       </div>
     </div>
 
-    <!-- RIGHT: FORM -->
-    <div class="form-panel">
+    <!-- RIGHT: TABBED PANEL -->
+    <div class="form-panel" style="display:flex;flex-direction:column;overflow:hidden">
+      <!-- TAB NAVIGATION -->
+      <div class="panel-tabs">
+        <div class="panel-tab active" onclick="switchTab('campaigns')" id="tab-campaigns">Campaigns</div>
+        <div class="panel-tab" onclick="switchTab('announcements')" id="tab-announcements">Announcements</div>
+        <div class="panel-tab" onclick="switchTab('earnings')" id="tab-earnings">Creator Earnings</div>
+      </div>
+
+      <!-- TAB: CAMPAIGNS (existing form) -->
+      <div id="tabpanel-campaigns" style="flex:1;overflow-y:auto">
       <div class="form-wrap">
         <div class="form-mode-bar">
           <div>
@@ -517,9 +554,92 @@ html,body{height:100%;background:var(--bg0);color:var(--text);font-family:'DM Sa
           <button id="btn-delete" onclick="deleteCampaign()">🗑 Delete</button>
         </div>
       </div>
-    </div>
-  </div>
-</div>
+      </div><!-- end tabpanel-campaigns -->
+
+      <!-- TAB: ANNOUNCEMENTS -->
+      <div id="tabpanel-announcements" style="display:none;flex:1;overflow-y:auto">
+        <div class="form-wrap">
+          <div class="form-mode-bar" style="margin-bottom:20px">
+            <div>
+              <div class="form-mode-title">Manage <span>Announcements</span></div>
+              <div class="form-mode-sub">Push updates to the Creator Rewards announcement feed in real time.</div>
+            </div>
+          </div>
+
+          <!-- Existing announcements list -->
+          <div class="form-section" style="margin-bottom:16px">
+            <div class="form-section-title" style="display:flex;align-items:center;justify-content:space-between">
+              Published Announcements
+              <button class="tb-btn" onclick="loadAnnouncementsHQ()" style="font-size:9px;padding:5px 12px">Refresh</button>
+            </div>
+            <div id="hq-ann-list" style="display:grid;gap:10px">
+              <div class="dir-empty">Click Refresh to load announcements.</div>
+            </div>
+          </div>
+
+          <!-- Create/Edit announcement form -->
+          <div class="form-section" id="ann-form-section">
+            <div class="form-section-title" id="ann-form-title">New Announcement</div>
+            <div class="form-row">
+              <div class="form-field">
+                <label>Title *</label>
+                <input type="text" id="ann-title" placeholder="e.g. New campaign just dropped!"/>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-field">
+                <label>Body / Message *</label>
+                <textarea id="ann-body" style="min-height:120px" placeholder="Write the full announcement text here..."></textarea>
+              </div>
+            </div>
+            <div class="form-row cols2">
+              <div class="form-field">
+                <label>Type</label>
+                <div class="ann-type-select" id="ann-type-btns">
+                  <button class="ann-type-btn sel-New" onclick="selectAnnType('New')">New</button>
+                  <button class="ann-type-btn" onclick="selectAnnType('Policy')">Policy</button>
+                  <button class="ann-type-btn" onclick="selectAnnType('Info')">Info</button>
+                </div>
+              </div>
+              <div class="form-field">
+                <label>Visibility</label>
+                <select id="ann-published">
+                  <option value="true">Published (Visible to Creators)</option>
+                  <option value="false">Draft (Hidden)</option>
+                </select>
+              </div>
+            </div>
+            <div style="display:flex;gap:10px;margin-top:8px">
+              <button id="ann-btn-publish" onclick="publishAnnouncement()" style="flex:1;padding:14px;border-radius:12px;border:none;cursor:pointer;background:var(--lime);color:#000;font-family:'Syne',sans-serif;font-size:12px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;">📢 Publish Announcement</button>
+              <button id="ann-btn-update" onclick="updateAnnouncement()" style="display:none;flex:1;padding:14px;border-radius:12px;border:none;cursor:pointer;background:rgba(255,90,31,.15);border:1px solid rgba(255,90,31,.4);color:var(--orange);font-family:'Syne',sans-serif;font-size:12px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;">Update</button>
+              <button id="ann-btn-cancel" onclick="resetAnnForm()" style="display:none;padding:14px 20px;border-radius:12px;border:1px solid var(--border2);cursor:pointer;background:transparent;color:var(--text2);font-family:'Syne',sans-serif;font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;">Cancel</button>
+            </div>
+          </div>
+        </div>
+      </div><!-- end tabpanel-announcements -->
+
+      <!-- TAB: CREATOR EARNINGS -->
+      <div id="tabpanel-earnings" style="display:none;flex:1;overflow-y:auto">
+        <div class="form-wrap">
+          <div class="form-mode-bar" style="margin-bottom:20px">
+            <div>
+              <div class="form-mode-title">Creator <span>Earnings</span></div>
+              <div class="form-mode-sub">Review video submissions, update view counts, set earnings, approve or reject.</div>
+            </div>
+            <button class="tb-btn" onclick="loadSubmissions()" style="white-space:nowrap">Refresh</button>
+          </div>
+          <div class="form-section">
+            <div class="form-section-title">All Video Submissions</div>
+            <div id="submission-list-tab" style="display:grid;gap:12px">
+              <div class="dir-empty">Click Refresh to load creator submissions.</div>
+            </div>
+          </div>
+        </div>
+      </div><!-- end tabpanel-earnings -->
+
+    </div><!-- end form-panel -->
+  </div><!-- end cms-layout -->
+</div><!-- end app -->
 
 <!-- CREATORS DIRECTORY MODAL -->
 <div id="creators-modal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.8); z-index:2000; align-items:center; justify-content:center; backdrop-filter:blur(5px);">
@@ -875,6 +995,200 @@ document.getElementById('dir-search-input').addEventListener('keyup', e => {
   const q = e.target.value.toLowerCase();
   renderDirectory(allCampaigns.filter(c => (c.title || '').toLowerCase().includes(q)));
 });
+
+// ── TAB SWITCHING ──
+function switchTab(tab) {
+  ['campaigns','announcements','earnings'].forEach(t => {
+    document.getElementById('tabpanel-'+t).style.display = 'none';
+    document.getElementById('tab-'+t).classList.remove('active');
+  });
+  document.getElementById('tabpanel-'+tab).style.display = 'flex';
+  document.getElementById('tabpanel-'+tab).style.flexDirection = 'column';
+  document.getElementById('tab-'+tab).classList.add('active');
+  if(tab === 'announcements') loadAnnouncementsHQ();
+  if(tab === 'earnings') loadSubmissionsTab();
+}
+
+// ── ANNOUNCEMENTS MANAGEMENT ──
+let editingAnnId = null;
+let selectedAnnType = 'New';
+
+function selectAnnType(type) {
+  selectedAnnType = type;
+  document.querySelectorAll('.ann-type-btn').forEach(b => {
+    b.className = 'ann-type-btn';
+    if(b.textContent === type) b.classList.add('sel-'+type);
+  });
+}
+
+async function loadAnnouncementsHQ() {
+  const list = document.getElementById('hq-ann-list');
+  if(!leadDb){ list.innerHTML = '<div class="dir-empty">Connect Supabase to manage announcements.</div>'; return; }
+  list.innerHTML = '<div class="dir-empty">Loading...</div>';
+
+  const { data, error } = await leadDb.from('announcements').select('*').order('created_at', { ascending: false });
+  if(error){ list.innerHTML = `<div class="dir-empty" style="color:var(--danger)">Error: ${error.message}<br><small>Make sure the "announcements" table exists in Supabase.</small></div>`; return; }
+  if(!data || !data.length){ list.innerHTML = '<div class="dir-empty">No announcements yet. Create the first one below.</div>'; return; }
+
+  const typeColors = {
+    'New':'var(--lime)', 'Policy':'var(--orange)', 'Info':'var(--text2)'
+  };
+
+  list.innerHTML = data.map(a => `
+    <div style="background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:14px;display:flex;align-items:flex-start;gap:12px">
+      <div style="flex:1;min-width:0">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
+          <span style="font-family:'Syne',sans-serif;font-size:9px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:${typeColors[a.type]||'var(--text2)'}">${a.type||'Info'}</span>
+          <span style="font-size:10px;color:var(--text3)">${new Date(a.created_at).toLocaleDateString()}</span>
+          ${!a.published ? '<span style="font-size:9px;color:var(--text3);font-family:Syne,sans-serif;text-transform:uppercase">· Draft</span>' : ''}
+        </div>
+        <div style="font-family:Syne,sans-serif;font-size:13px;font-weight:700;margin-bottom:4px">${a.title}</div>
+        <div style="font-size:12px;color:var(--text2);line-height:1.5">${a.body.length > 100 ? a.body.substring(0,100)+'...' : a.body}</div>
+      </div>
+      <div style="display:flex;gap:6px;flex-shrink:0">
+        <button onclick="loadAnnEdit(${a.id})" class="dir-edit">Edit</button>
+        <button onclick="deleteAnn(${a.id})" style="flex-shrink:0;padding:5px 10px;border-radius:6px;border:1px solid rgba(255,59,59,.25);font-family:'Syne',sans-serif;font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--danger);cursor:pointer;background:transparent">Del</button>
+      </div>
+    </div>`).join('');
+}
+
+function loadAnnEdit(id) {
+  const ann = (window._hqAnns || []).find(a => a.id === id);
+  if(!ann) { loadAnnouncementsHQ(); return; }
+  editingAnnId = id;
+  document.getElementById('ann-title').value = ann.title || '';
+  document.getElementById('ann-body').value = ann.body || '';
+  document.getElementById('ann-published').value = ann.published ? 'true' : 'false';
+  selectAnnType(ann.type || 'New');
+  document.getElementById('ann-form-title').textContent = 'Edit Announcement';
+  document.getElementById('ann-btn-publish').style.display = 'none';
+  document.getElementById('ann-btn-update').style.display = 'flex';
+  document.getElementById('ann-btn-cancel').style.display = 'flex';
+  document.getElementById('ann-form-section').scrollIntoView({behavior:'smooth'});
+}
+
+// Patch loadAnnouncementsHQ to store data for edit
+const _origLoadAnn = loadAnnouncementsHQ;
+
+function resetAnnForm() {
+  editingAnnId = null;
+  document.getElementById('ann-title').value = '';
+  document.getElementById('ann-body').value = '';
+  document.getElementById('ann-published').value = 'true';
+  selectAnnType('New');
+  document.getElementById('ann-form-title').textContent = 'New Announcement';
+  document.getElementById('ann-btn-publish').style.display = 'flex';
+  document.getElementById('ann-btn-update').style.display = 'none';
+  document.getElementById('ann-btn-cancel').style.display = 'none';
+}
+
+function collectAnnForm() {
+  return {
+    title:     document.getElementById('ann-title').value.trim(),
+    body:      document.getElementById('ann-body').value.trim(),
+    type:      selectedAnnType,
+    published: document.getElementById('ann-published').value === 'true',
+  };
+}
+
+async function publishAnnouncement() {
+  if(!leadDb){ showToast('Connect Supabase first', 'error'); return; }
+  const data = collectAnnForm();
+  if(!data.title || !data.body){ showToast('Title and body required', 'error'); return; }
+  const btn = document.getElementById('ann-btn-publish');
+  btn.textContent = 'Publishing...'; btn.disabled = true;
+  const { error } = await leadDb.from('announcements').insert([data]);
+  btn.textContent = '📢 Publish Announcement'; btn.disabled = false;
+  if(error){ showToast(error.message, 'error'); return; }
+  showToast('Announcement published!', 'success');
+  resetAnnForm();
+  loadAnnouncementsHQ();
+}
+
+async function updateAnnouncement() {
+  if(!leadDb || !editingAnnId) return;
+  const data = collectAnnForm();
+  if(!data.title || !data.body){ showToast('Title and body required', 'error'); return; }
+  const btn = document.getElementById('ann-btn-update');
+  btn.textContent = 'Updating...'; btn.disabled = true;
+  const { error } = await leadDb.from('announcements').update(data).eq('id', editingAnnId);
+  btn.textContent = 'Update'; btn.disabled = false;
+  if(error){ showToast(error.message, 'error'); return; }
+  showToast('Announcement updated!', 'success');
+  resetAnnForm();
+  loadAnnouncementsHQ();
+}
+
+async function deleteAnn(id) {
+  if(!confirm('Delete this announcement? Creators will no longer see it.')) return;
+  const { error } = await leadDb.from('announcements').delete().eq('id', id);
+  if(error){ showToast(error.message, 'error'); return; }
+  showToast('Deleted.', 'success');
+  loadAnnouncementsHQ();
+}
+
+// ── CREATOR EARNINGS TAB (mirrors existing submissions) ──
+async function loadSubmissionsTab() {
+  const list = document.getElementById('submission-list-tab');
+  if(!leadDb){ list.innerHTML = '<div class="dir-empty">Connect Supabase to manage earnings.</div>'; return; }
+  list.innerHTML = '<div class="dir-empty">Loading...</div>';
+
+  const [{ data: subs }, { data: creators }] = await Promise.all([
+    leadDb.from('video_submissions').select('*').order('submitted_at', { ascending: false }),
+    leadDb.from('creators').select('*')
+  ]);
+
+  if(!subs || !subs.length){ list.innerHTML = '<div class="dir-empty">No submissions yet.</div>'; return; }
+
+  list.innerHTML = subs.map(s => {
+    const creator = (creators||[]).find(c => String(c.creator_id) === String(s.creator_id)) || {};
+    const statusColor = s.status === 'Approved' ? 'var(--lime)' : s.status === 'Rejected' ? 'var(--danger)' : 'var(--orange)';
+    return `<div style="background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:16px">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:12px">
+        <div>
+          <div style="font-family:'Syne',sans-serif;font-size:13px;font-weight:800;margin-bottom:4px">${s.campaign_title||'Campaign'}</div>
+          <div style="font-size:12px;color:var(--text2)">👤 ${creator.name||s.creator_name||'Unknown'} &nbsp;·&nbsp; ${s.platform||'Platform'}</div>
+          <div style="margin-top:6px"><a href="${s.video_url||'#'}" target="_blank" style="font-size:11px;color:var(--lime)">View Video →</a></div>
+        </div>
+        <span style="font-family:'Syne',sans-serif;font-size:10px;font-weight:800;color:${statusColor};text-transform:uppercase;flex-shrink:0">${s.status||'Pending'}</span>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px">
+        <div>
+          <label style="font-family:'Syne',sans-serif;font-size:9px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--text3);display:block;margin-bottom:4px">Views</label>
+          <input type="number" id="views-${s.id}" value="${s.views||0}" min="0"
+            style="width:100%;background:var(--bg1);border:1px solid var(--border2);border-radius:8px;padding:8px 10px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:13px;outline:none"/>
+        </div>
+        <div>
+          <label style="font-family:'Syne',sans-serif;font-size:9px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--text3);display:block;margin-bottom:4px">Earnings ($)</label>
+          <input type="number" id="earn-${s.id}" value="${s.earnings||0}" min="0" step="0.01"
+            style="width:100%;background:var(--bg1);border:1px solid var(--border2);border-radius:8px;padding:8px 10px;color:var(--lime);font-family:'DM Sans',sans-serif;font-size:13px;outline:none"/>
+        </div>
+      </div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <button onclick="saveEarnings('${s.id}')" style="flex:1;padding:9px;border-radius:8px;border:none;cursor:pointer;background:rgba(200,255,0,.1);border:1px solid rgba(200,255,0,.25);color:var(--lime);font-family:'Syne',sans-serif;font-size:10px;font-weight:800;letter-spacing:.1em;text-transform:uppercase">Save Views & Earnings</button>
+        <button onclick="setStatus('${s.id}','Approved')" style="padding:9px 14px;border-radius:8px;border:1px solid rgba(200,255,0,.25);cursor:pointer;background:transparent;color:var(--lime);font-family:'Syne',sans-serif;font-size:10px;font-weight:700;text-transform:uppercase">✓ Approve</button>
+        <button onclick="setStatus('${s.id}','Rejected')" style="padding:9px 14px;border-radius:8px;border:1px solid rgba(255,59,59,.25);cursor:pointer;background:transparent;color:var(--danger);font-family:'Syne',sans-serif;font-size:10px;font-weight:700;text-transform:uppercase">✗ Reject</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+async function saveEarnings(id) {
+  if(!leadDb) return;
+  const views = parseInt(document.getElementById('views-'+id).value) || 0;
+  const earnings = parseFloat(document.getElementById('earn-'+id).value) || 0;
+  const { error } = await leadDb.from('video_submissions').update({ views, earnings }).eq('id', id);
+  if(error){ showToast(error.message, 'error'); return; }
+  showToast('Earnings saved!', 'success');
+}
+
+async function setStatus(id, status) {
+  if(!leadDb) return;
+  const { error } = await leadDb.from('video_submissions').update({ status }).eq('id', id);
+  if(error){ showToast(error.message, 'error'); return; }
+  showToast('Status updated to '+status, 'success');
+  loadSubmissionsTab();
+}
 
 // ── TOAST ──
 function showToast(msg, type='success'){
