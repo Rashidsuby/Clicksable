@@ -1,0 +1,1149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Clicksable — Creator Rewards</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+:root{
+  --bg0:#080808;--bg1:#0d0d0d;--bg2:#131313;--bg3:#1a1a1a;
+  --border:rgba(255,255,255,0.06);--border2:rgba(255,255,255,0.1);
+  --lime:#C8FF00;--orange:#FF5A1F;
+  --text:#ffffff;--text2:#a0a0a0;--text3:#606060;
+  --sidebar:260px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%;background:var(--bg0);color:var(--text);font-family:'DM Sans',sans-serif;overflow:hidden}
+
+/* ── SIDEBAR ── */
+#sidebar{
+  position:fixed;top:0;left:0;width:var(--sidebar);height:100vh;
+  background:var(--bg1);border-right:1px solid var(--border);
+  display:flex;flex-direction:column;z-index:100;
+}
+.sb-logo{
+  padding:28px 24px 24px;border-bottom:1px solid var(--border);
+}
+.sb-logo .wordmark{
+  font-family:'Bebas Neue',sans-serif;font-size:26px;
+  letter-spacing:2px;color:var(--text);
+}
+.sb-logo .wordmark em{color:var(--lime);font-style:normal}
+.sb-logo .tag{font-family:'Syne',sans-serif;font-size:10px;
+  letter-spacing:.18em;color:var(--text3);text-transform:uppercase;margin-top:4px}
+
+.sb-section{padding:20px 0 8px;border-bottom:1px solid var(--border)}
+.sb-label{
+  font-family:'Syne',sans-serif;font-size:9px;letter-spacing:.2em;
+  color:var(--text3);text-transform:uppercase;padding:0 24px 10px;
+}
+.sb-item{
+  display:flex;align-items:center;gap:10px;
+  padding:11px 24px;cursor:pointer;position:relative;
+  font-family:'Syne',sans-serif;font-size:13px;font-weight:600;
+  color:var(--text2);transition:all .2s;text-decoration:none;
+}
+.sb-item:hover{color:var(--text);background:rgba(255,255,255,.03)}
+.sb-item.active{color:var(--lime)}
+.sb-item.active::before{
+  content:'';position:absolute;left:0;top:4px;bottom:4px;
+  width:3px;background:var(--lime);border-radius:0 3px 3px 0;
+}
+.sb-icon{width:16px;height:16px;opacity:.6;flex-shrink:0}
+.sb-item.active .sb-icon{opacity:1}
+.sb-badge{
+  margin-left:auto;background:var(--lime);color:#000;
+  font-size:9px;font-weight:800;padding:2px 7px;border-radius:20px;
+  font-family:'Syne',sans-serif;letter-spacing:.05em;
+}
+
+.sb-footer{margin-top:auto;padding:20px 24px;border-top:1px solid var(--border)}
+.sb-user{display:flex;align-items:center;gap:10px}
+.sb-avatar{
+  width:32px;height:32px;border-radius:50%;
+  background:linear-gradient(135deg,var(--lime),var(--orange));
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Syne',sans-serif;font-size:12px;font-weight:800;color:#000;
+}
+.sb-user-info .name{font-family:'Syne',sans-serif;font-size:12px;font-weight:700}
+.sb-user-info .role{font-size:11px;color:var(--text3)}
+
+/* ── MAIN STAGE ── */
+#stage{
+  margin-left:var(--sidebar);height:100vh;
+  overflow-y:auto;background:var(--bg0);
+}
+#stage::-webkit-scrollbar{width:4px}
+#stage::-webkit-scrollbar-track{background:transparent}
+#stage::-webkit-scrollbar-thumb{background:var(--border2);border-radius:4px}
+
+/* ── VIEW A: GRID ── */
+#view-grid{padding:40px 40px 60px;animation:fadeUp .4s ease}
+.grid-header{margin-bottom:32px}
+.grid-title{
+  font-family:'Bebas Neue',sans-serif;font-size:52px;
+  letter-spacing:2px;line-height:1;
+}
+.grid-title span{color:var(--lime)}
+.grid-sub{font-size:14px;color:var(--text2);margin-top:8px;max-width:500px}
+
+.search-row{display:flex;align-items:center;gap:12px;margin-top:24px}
+.search-wrap{
+  flex:1;max-width:400px;position:relative;
+}
+.search-wrap svg{
+  position:absolute;left:14px;top:50%;transform:translateY(-50%);
+  width:16px;height:16px;opacity:.4;
+}
+#search-input{
+  width:100%;background:var(--bg2);border:1px solid var(--border2);
+  border-radius:10px;padding:11px 16px 11px 42px;
+  font-family:'DM Sans',sans-serif;font-size:13px;color:var(--text);
+  outline:none;transition:border-color .2s;
+}
+#search-input:focus{border-color:rgba(200,255,0,.4)}
+#search-input::placeholder{color:var(--text3)}
+
+.filter-tabs{display:flex;gap:6px}
+.ftab{
+  padding:8px 16px;border-radius:8px;border:1px solid var(--border2);
+  font-family:'Syne',sans-serif;font-size:11px;font-weight:700;
+  letter-spacing:.08em;color:var(--text2);cursor:pointer;
+  background:var(--bg2);transition:all .2s;text-transform:uppercase;
+}
+.ftab:hover{border-color:rgba(200,255,0,.3);color:var(--lime)}
+.ftab.on{background:rgba(200,255,0,.1);border-color:var(--lime);color:var(--lime)}
+
+.stats-strip{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:12px;
+  margin-bottom:32px;
+}
+.stat-pill{
+  background:var(--bg2);border:1px solid var(--border);border-radius:12px;
+  padding:16px 20px;display:flex;align-items:center;gap:14px;
+}
+.stat-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.stat-dot.lime{background:var(--lime);box-shadow:0 0 8px var(--lime)}
+.stat-dot.orange{background:var(--orange);box-shadow:0 0 8px var(--orange)}
+.stat-dot.grey{background:var(--text3)}
+.stat-num{font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:1px}
+.stat-lbl{font-size:11px;color:var(--text3);font-family:'Syne',sans-serif;letter-spacing:.1em;text-transform:uppercase}
+
+#campaign-grid{
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px;
+}
+.empty-state{
+  grid-column:1/-1;text-align:center;padding:80px 20px;
+}
+.empty-icon{font-size:48px;margin-bottom:16px}
+.empty-title{font-family:'Bebas Neue',sans-serif;font-size:32px;color:var(--text2)}
+.empty-sub{font-size:14px;color:var(--text3);margin-top:8px}
+
+/* ── CAMPAIGN CARD ── */
+.c-card{
+  background:var(--bg1);border:1px solid var(--border);border-radius:16px;
+  overflow:hidden;cursor:pointer;transition:all .25s;position:relative;
+}
+.c-card:hover{border-color:rgba(200,255,0,.25);transform:translateY(-2px);
+  box-shadow:0 12px 40px rgba(0,0,0,.5)}
+.c-card:hover .c-thumb img{transform:scale(1.04)}
+
+.c-thumb{
+  aspect-ratio:16/9;overflow:hidden;background:var(--bg3);
+  position:relative;
+}
+.c-thumb img{width:100%;height:100%;object-fit:cover;transition:transform .4s}
+.c-thumb-fallback{
+  width:100%;height:100%;display:flex;align-items:center;justify-content:center;
+  font-family:'Bebas Neue',sans-serif;font-size:24px;color:var(--text3);
+}
+.c-status{
+  position:absolute;top:10px;right:10px;
+  font-family:'Syne',sans-serif;font-size:9px;font-weight:800;
+  letter-spacing:.12em;text-transform:uppercase;
+  padding:4px 10px;border-radius:20px;
+}
+.c-status.active{background:rgba(200,255,0,.15);color:var(--lime);border:1px solid rgba(200,255,0,.3)}
+.c-status.paused{background:rgba(255,255,255,.06);color:var(--text3);border:1px solid var(--border)}
+
+.c-body{padding:16px}
+.c-cat{
+  font-family:'Syne',sans-serif;font-size:9px;font-weight:700;
+  letter-spacing:.18em;text-transform:uppercase;color:var(--orange);margin-bottom:8px;
+}
+.c-title{
+  font-family:'Syne',sans-serif;font-size:15px;font-weight:700;
+  line-height:1.4;margin-bottom:12px;
+}
+.c-platforms{display:flex;align-items:center;gap:8px;margin-bottom:14px}
+.plt-icon{
+  display:flex;align-items:center;gap:4px;
+  font-family:'Syne',sans-serif;font-size:10px;font-weight:600;color:var(--text3);
+}
+.plt-icon svg{width:14px;height:14px}
+.c-cpm{
+  display:inline-flex;align-items:center;gap:6px;
+  background:rgba(200,255,0,.08);border:1px solid rgba(200,255,0,.2);
+  border-radius:8px;padding:5px 10px;margin-bottom:14px;
+}
+.c-cpm-label{font-family:'Syne',sans-serif;font-size:9px;color:var(--text3);letter-spacing:.1em;text-transform:uppercase}
+.c-cpm-val{font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--lime);letter-spacing:1px}
+
+.c-progress-wrap{margin-top:4px}
+.c-progress-label{
+  display:flex;justify-content:space-between;align-items:center;
+  font-size:11px;color:var(--text3);margin-bottom:6px;
+  font-family:'Syne',sans-serif;
+}
+.c-progress-bar{
+  height:4px;background:var(--bg3);border-radius:4px;overflow:hidden;
+}
+.c-progress-fill{
+  height:100%;background:linear-gradient(90deg,var(--lime),var(--orange));
+  border-radius:4px;transition:width .6s ease;
+}
+
+/* ── VIEW B: DETAIL ── */
+#view-detail{display:none;animation:fadeUp .35s ease}
+#view-detail.show{display:block}
+
+.back-btn{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:20px 40px 0;cursor:pointer;
+  font-family:'Syne',sans-serif;font-size:12px;font-weight:700;
+  letter-spacing:.12em;text-transform:uppercase;color:var(--text2);
+  transition:color .2s;
+}
+.back-btn:hover{color:var(--lime)}
+.back-btn svg{width:16px;height:16px;transition:transform .2s}
+.back-btn:hover svg{transform:translateX(-3px)}
+
+.d-banner{
+  margin:20px 40px 0;border-radius:20px;overflow:hidden;
+  position:relative;min-height:280px;
+  background:var(--bg2);border:1px solid var(--border);
+}
+.d-banner-img{
+  width:100%;height:280px;object-fit:cover;display:block;
+  filter:brightness(.55);
+}
+.d-banner-overlay{
+  position:absolute;inset:0;
+  background:linear-gradient(135deg,rgba(8,8,8,.7) 0%,transparent 60%);
+  padding:40px;display:flex;flex-direction:column;justify-content:flex-end;
+}
+.d-banner-cat{
+  font-family:'Syne',sans-serif;font-size:10px;font-weight:800;
+  letter-spacing:.2em;text-transform:uppercase;color:var(--orange);margin-bottom:10px;
+}
+.d-banner-title{
+  font-family:'Bebas Neue',sans-serif;font-size:52px;
+  letter-spacing:2px;line-height:1;margin-bottom:12px;
+}
+.d-banner-tags{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}
+.d-tag{
+  font-family:'Syne',sans-serif;font-size:10px;font-weight:700;
+  letter-spacing:.1em;text-transform:uppercase;
+  padding:4px 12px;border-radius:20px;
+  border:1px solid rgba(255,255,255,.15);color:var(--text2);
+}
+.d-review{font-size:12px;color:var(--text3)}
+.d-review span{color:var(--lime)}
+
+.d-body{
+  display:grid;grid-template-columns:1fr 340px;gap:24px;
+  padding:24px 40px 60px;
+}
+
+/* LEFT COLUMN */
+.d-section{
+  background:var(--bg1);border:1px solid var(--border);
+  border-radius:16px;padding:24px;margin-bottom:16px;
+}
+.d-section-title{
+  font-family:'Syne',sans-serif;font-size:11px;font-weight:800;
+  letter-spacing:.2em;text-transform:uppercase;color:var(--text3);
+  margin-bottom:18px;padding-bottom:14px;border-bottom:1px solid var(--border);
+}
+.d-requirements{font-size:14px;color:var(--text2);line-height:1.8}
+
+.earnings-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.earn-card{
+  background:rgba(255,255,255,.03);border:1px solid var(--border);
+  border-radius:12px;padding:16px;text-align:center;
+  backdrop-filter:blur(10px);position:relative;overflow:hidden;
+}
+.earn-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+}
+.earn-card.tiktok::before{background:linear-gradient(90deg,#69C9D0,#EE1D52)}
+.earn-card.instagram::before{background:linear-gradient(90deg,#f09433,#e6683c,#dc2743,#cc2366)}
+.earn-card.youtube::before{background:#FF0000}
+.earn-icon{font-size:20px;margin-bottom:8px}
+.earn-platform{font-family:'Syne',sans-serif;font-size:9px;font-weight:800;
+  letter-spacing:.15em;text-transform:uppercase;color:var(--text3);margin-bottom:6px}
+.earn-cpm{font-family:'Bebas Neue',sans-serif;font-size:32px;color:var(--lime);letter-spacing:1px}
+.earn-sub{font-size:10px;color:var(--text3)}
+
+.resource-link{
+  display:flex;align-items:center;gap:16px;
+  background:rgba(200,255,0,.04);border:1px solid rgba(200,255,0,.15);
+  border-radius:12px;padding:18px 20px;cursor:pointer;
+  text-decoration:none;transition:all .2s;
+}
+.resource-link:hover{background:rgba(200,255,0,.08);border-color:rgba(200,255,0,.3)}
+.resource-icon{
+  width:44px;height:44px;border-radius:10px;
+  background:rgba(200,255,0,.1);border:1px solid rgba(200,255,0,.2);
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+  font-size:20px;
+}
+.resource-info .r-title{font-family:'Syne',sans-serif;font-size:13px;font-weight:700;margin-bottom:3px}
+.resource-info .r-sub{font-size:12px;color:var(--text3)}
+.resource-arrow{margin-left:auto;opacity:.4}
+
+.viral-row{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.viral-card{
+  background:var(--bg2);border:1px solid var(--border);
+  border-radius:10px;overflow:hidden;
+}
+.viral-thumb{
+  aspect-ratio:9/16;background:var(--bg3);
+  display:flex;align-items:center;justify-content:center;
+  font-size:24px;position:relative;
+}
+.viral-play{
+  position:absolute;width:32px;height:32px;border-radius:50%;
+  background:rgba(0,0,0,.6);display:flex;align-items:center;justify-content:center;
+}
+.viral-meta{padding:10px}
+.viral-views{font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--lime)}
+.viral-label{font-size:10px;color:var(--text3);font-family:'Syne',sans-serif}
+
+/* RIGHT COLUMN STICKY */
+.d-sticky{position:sticky;top:0}
+.d-widget{
+  background:var(--bg1);border:1px solid var(--border);
+  border-radius:16px;padding:24px;
+  box-shadow:0 20px 60px rgba(0,0,0,.5);
+}
+.d-widget-title{
+  font-family:'Syne',sans-serif;font-size:11px;font-weight:800;
+  letter-spacing:.2em;text-transform:uppercase;color:var(--text3);
+  margin-bottom:18px;
+}
+.budget-track{margin-bottom:20px}
+.budget-nums{
+  display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px;
+}
+.budget-current{font-family:'Bebas Neue',sans-serif;font-size:36px;color:var(--lime);letter-spacing:1px}
+.budget-total{font-size:13px;color:var(--text3)}
+.budget-bar{height:6px;background:var(--bg3);border-radius:6px;overflow:hidden;margin-bottom:8px}
+.budget-fill{height:100%;background:linear-gradient(90deg,var(--lime),var(--orange));border-radius:6px}
+.budget-pct{font-family:'Syne',sans-serif;font-size:11px;color:var(--text3)}
+
+.meta-table{width:100%;border-collapse:collapse;margin-bottom:20px}
+.meta-table tr{border-bottom:1px solid var(--border)}
+.meta-table tr:last-child{border-bottom:none}
+.meta-table td{padding:10px 0;font-size:12px}
+.meta-table td:first-child{color:var(--text3);font-family:'Syne',sans-serif;
+  font-size:10px;letter-spacing:.1em;text-transform:uppercase;width:45%}
+.meta-table td:last-child{color:var(--text);font-weight:500}
+
+.submit-btn{
+  width:100%;padding:15px;border-radius:12px;border:none;cursor:pointer;
+  font-family:'Syne',sans-serif;font-size:13px;font-weight:800;
+  letter-spacing:.15em;text-transform:uppercase;
+  background:var(--lime);color:#000;
+  transition:all .2s;
+}
+.submit-btn:hover{background:#d4ff1a;transform:translateY(-1px);
+  box-shadow:0 8px 30px rgba(200,255,0,.3)}
+.submit-btn:active{transform:translateY(0)}
+
+/* ── LOADING ── */
+.loading-grid{
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px;
+}
+.skel-card{
+  background:var(--bg1);border:1px solid var(--border);border-radius:16px;overflow:hidden;
+  animation:shimmer 1.5s infinite;
+}
+.skel-thumb{aspect-ratio:16/9;background:var(--bg3)}
+.skel-body{padding:16px}
+.skel-line{height:12px;background:var(--bg3);border-radius:4px;margin-bottom:10px}
+.skel-line.w70{width:70%}
+.skel-line.w50{width:50%}
+
+@keyframes shimmer{0%,100%{opacity:1}50%{opacity:.5}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<nav id="sidebar">
+  <div class="sb-logo">
+    <div class="wordmark">Click<em>sable</em>.</div>
+    <div class="tag">Creator Rewards Hub</div>
+  </div>
+
+  <div class="sb-section">
+    <div class="sb-label">Navigate</div>
+    <a class="sb-item" href="#" data-view="announcements">
+      <svg class="sb-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <path d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+      </svg>
+      Announcements
+    </a>
+    <a class="sb-item active" href="#" data-view="rewards">
+      <svg class="sb-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <path d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+      </svg>
+      Content Rewards
+      <span class="sb-badge" id="active-count">0</span>
+    </a>
+    <a class="sb-item" href="#" data-view="support">
+      <svg class="sb-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <path d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+      </svg>
+      Support Chat
+    </a>
+  </div>
+
+  <div class="sb-section" style="border-bottom:none">
+    <div class="sb-label">Account</div>
+    <a class="sb-item" href="#" data-view="profile">
+      <svg class="sb-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+      </svg>
+      My Profile
+    </a>
+    <a class="sb-item" href="#" data-view="earnings">
+      <svg class="sb-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+      </svg>
+      My Earnings
+    </a>
+  </div>
+
+  <div class="sb-footer">
+    <div class="sb-user">
+      <div class="sb-avatar">CR</div>
+      <div class="sb-user-info">
+        <div class="name">Creator</div>
+        <div class="role">Reward Member</div>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- MAIN STAGE -->
+<main id="stage">
+
+  <!-- VIEW A: GRID -->
+  <div id="view-grid">
+    <div class="grid-header">
+      <h1 class="grid-title">Active <span>Campaigns</span></h1>
+      <p class="grid-sub">Pick a brand campaign, create content, and earn per thousand views on TikTok, Instagram, and YouTube.</p>
+      <div class="search-row">
+        <div class="search-wrap">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+          </svg>
+          <input id="search-input" type="text" placeholder="Search campaigns..."/>
+        </div>
+        <div class="filter-tabs">
+          <div class="ftab on" data-filter="all">All</div>
+          <div class="ftab" data-filter="Entertainment">Entertainment</div>
+          <div class="ftab" data-filter="Gaming">Gaming</div>
+          <div class="ftab" data-filter="Lifestyle">Lifestyle</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="stats-strip">
+      <div class="stat-pill">
+        <div class="stat-dot lime"></div>
+        <div>
+          <div class="stat-num" id="stat-active">—</div>
+          <div class="stat-lbl">Active Campaigns</div>
+        </div>
+      </div>
+      <div class="stat-pill">
+        <div class="stat-dot orange"></div>
+        <div>
+          <div class="stat-num" id="stat-budget">—</div>
+          <div class="stat-lbl">Total Budget Pool</div>
+        </div>
+      </div>
+      <div class="stat-pill">
+        <div class="stat-dot grey"></div>
+        <div>
+          <div class="stat-num" id="stat-top-cpm">—</div>
+          <div class="stat-lbl">Highest CPM Rate</div>
+        </div>
+      </div>
+    </div>
+
+    <div id="campaign-grid">
+      <!-- skeleton loaders -->
+      <div class="skel-card"><div class="skel-thumb"></div><div class="skel-body"><div class="skel-line"></div><div class="skel-line w70"></div><div class="skel-line w50"></div></div></div>
+      <div class="skel-card"><div class="skel-thumb"></div><div class="skel-body"><div class="skel-line"></div><div class="skel-line w70"></div><div class="skel-line w50"></div></div></div>
+      <div class="skel-card"><div class="skel-thumb"></div><div class="skel-body"><div class="skel-line"></div><div class="skel-line w70"></div><div class="skel-line w50"></div></div></div>
+    </div>
+  </div>
+
+  <!-- VIEW B: DETAIL -->
+  <div id="view-detail">
+    <div class="back-btn" id="back-btn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+        <path d="M19 12H5M12 5l-7 7 7 7"/>
+      </svg>
+      Back to Campaigns
+    </div>
+
+    <div class="d-banner">
+      <img id="d-banner-img" src="" alt="" class="d-banner-img" onerror="this.style.display='none'"/>
+      <div class="d-banner-overlay">
+        <div class="d-banner-cat" id="d-cat"></div>
+        <h1 class="d-banner-title" id="d-title"></h1>
+        <div class="d-banner-tags" id="d-tags"></div>
+        <div class="d-review">Avg. review time: <span>24–48 hrs</span> &nbsp;·&nbsp; Payments processed <span>weekly</span></div>
+      </div>
+    </div>
+
+    <div class="d-body">
+      <!-- LEFT -->
+      <div>
+        <div class="d-section">
+          <div class="d-section-title">📋 Requirements</div>
+          <div class="d-requirements" id="d-requirements">—</div>
+        </div>
+
+        <div class="d-section">
+          <div class="d-section-title">💰 Earnings per 1,000 Views (CPM)</div>
+          <div class="earnings-grid">
+            <div class="earn-card tiktok">
+              <div class="earn-icon">🎵</div>
+              <div class="earn-platform">TikTok</div>
+              <div class="earn-cpm" id="d-cpm-tiktok">$—</div>
+              <div class="earn-sub">per 1K views</div>
+            </div>
+            <div class="earn-card instagram">
+              <div class="earn-icon">📸</div>
+              <div class="earn-platform">Instagram</div>
+              <div class="earn-cpm" id="d-cpm-instagram">$—</div>
+              <div class="earn-sub">per 1K views</div>
+            </div>
+            <div class="earn-card youtube">
+              <div class="earn-icon">▶️</div>
+              <div class="earn-platform">YouTube</div>
+              <div class="earn-cpm" id="d-cpm-youtube">$—</div>
+              <div class="earn-sub">per 1K views</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="d-section">
+          <div class="d-section-title">📁 Campaign Resources</div>
+          <a class="resource-link" id="d-resource-link" href="#" target="_blank">
+            <div class="resource-icon">📂</div>
+            <div class="resource-info">
+              <div class="r-title">Campaign Asset Pack</div>
+              <div class="r-sub">Brand guidelines, logos, approved audio &amp; overlays</div>
+            </div>
+            <svg class="resource-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M7 17L17 7M17 7H7M17 7v10"/>
+            </svg>
+          </a>
+        </div>
+
+        <div class="d-section">
+          <div class="d-section-title">🔥 Top Performing Videos</div>
+          <div class="viral-row">
+            <div class="viral-card">
+              <div class="viral-thumb">🎬<div class="viral-play">▶</div></div>
+              <div class="viral-meta">
+                <div class="viral-views">2.4M</div>
+                <div class="viral-label">Views · 3 days ago</div>
+              </div>
+            </div>
+            <div class="viral-card">
+              <div class="viral-thumb">🎥<div class="viral-play">▶</div></div>
+              <div class="viral-meta">
+                <div class="viral-views">1.8M</div>
+                <div class="viral-label">Views · 5 days ago</div>
+              </div>
+            </div>
+            <div class="viral-card">
+              <div class="viral-thumb">📹<div class="viral-play">▶</div></div>
+              <div class="viral-meta">
+                <div class="viral-views">980K</div>
+                <div class="viral-label">Views · 1 week ago</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT STICKY -->
+      <div class="d-sticky">
+        <div class="d-widget">
+          <div class="d-widget-title">Campaign Budget Tracker</div>
+          <div class="budget-track">
+            <div class="budget-nums">
+              <div>
+                <div style="font-size:10px;color:var(--text3);font-family:'Syne',sans-serif;text-transform:uppercase;letter-spacing:.1em;margin-bottom:2px">Paid Out</div>
+                <div class="budget-current" id="d-payout">$0</div>
+              </div>
+              <div style="text-align:right">
+                <div style="font-size:10px;color:var(--text3);font-family:'Syne',sans-serif;text-transform:uppercase;letter-spacing:.1em;margin-bottom:2px">Total Budget</div>
+                <div class="budget-total" id="d-budget">$0</div>
+              </div>
+            </div>
+            <div class="budget-bar"><div class="budget-fill" id="d-budget-fill" style="width:0%"></div></div>
+            <div class="budget-pct" id="d-budget-pct">0% distributed</div>
+          </div>
+
+          <table class="meta-table">
+            <tr><td>Category</td><td id="m-category">—</td></tr>
+            <tr><td>Type</td><td>UGC / Organic</td></tr>
+            <tr><td>Platforms</td><td id="m-platforms">—</td></tr>
+            <tr><td>Status</td><td id="m-status">—</td></tr>
+            <tr><td>Last Updated</td><td id="m-updated">—</td></tr>
+          </table>
+
+          <div style="margin:18px 0;padding:14px;border:1px solid var(--border);border-radius:12px;background:rgba(255,255,255,.025)">
+            <div style="font-family:'Syne',sans-serif;font-size:10px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:var(--text3);margin-bottom:10px">Submit Video Link</div>
+            <select id="submit-platform" style="width:100%;background:var(--bg2);border:1px solid var(--border2);border-radius:9px;padding:10px 12px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:13px;margin-bottom:10px">
+              <option value="TikTok">TikTok</option>
+              <option value="Instagram">Instagram</option>
+              <option value="YouTube">YouTube</option>
+            </select>
+            <input id="submit-video-url" type="url" placeholder="Paste your public video URL" style="width:100%;background:var(--bg2);border:1px solid var(--border2);border-radius:9px;padding:10px 12px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:13px;outline:none"/>
+          </div>
+          <button class="submit-btn" onclick="submitVideo()">Submit Your Video</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- VIEW C: ANNOUNCEMENTS -->
+  <div id="view-announcements" style="display:none;animation:fadeUp .35s ease">
+    <div class="grid-header">
+      <h1 class="grid-title">Announce<span>ments</span></h1>
+      <p class="grid-sub">Platform updates, campaign drops, review windows, and payout notices for Clicksable creators.</p>
+    </div>
+
+    <div style="display:grid;gap:14px;max-width:900px">
+      <div style="background:var(--bg1);border:1px solid rgba(200,255,0,.2);border-left:3px solid var(--lime);border-radius:16px;padding:24px">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+          <span style="background:rgba(200,255,0,.1);color:var(--lime);font-family:'Syne',sans-serif;font-size:9px;font-weight:800;letter-spacing:.15em;text-transform:uppercase;padding:4px 10px;border-radius:20px;border:1px solid rgba(200,255,0,.25)">New</span>
+          <span style="font-size:11px;color:var(--text3);font-family:'Syne',sans-serif">Today</span>
+        </div>
+        <div style="font-family:'Syne',sans-serif;font-size:16px;font-weight:800;margin-bottom:8px">Creator Rewards is live</div>
+        <div style="font-size:13px;color:var(--text2);line-height:1.7">Browse active campaigns, create approved content, submit your video, and earn CPM-based payouts across TikTok, Instagram, and YouTube.</div>
+      </div>
+
+      <div style="background:var(--bg1);border:1px solid var(--border);border-radius:16px;padding:24px">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+          <span style="background:rgba(255,90,31,.08);color:var(--orange);font-family:'Syne',sans-serif;font-size:9px;font-weight:800;letter-spacing:.15em;text-transform:uppercase;padding:4px 10px;border-radius:20px;border:1px solid rgba(255,90,31,.25)">Policy</span>
+          <span style="font-size:11px;color:var(--text3);font-family:'Syne',sans-serif">This week</span>
+        </div>
+        <div style="font-family:'Syne',sans-serif;font-size:16px;font-weight:800;margin-bottom:8px">Review guidelines updated</div>
+        <div style="font-size:13px;color:var(--text2);line-height:1.7">Average review time is 24-48 hours. Content must follow each campaign brief and include the required disclosures before payout approval.</div>
+      </div>
+
+      <div style="background:var(--bg1);border:1px solid var(--border);border-radius:16px;padding:24px">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+          <span style="background:rgba(255,255,255,.05);color:var(--text2);font-family:'Syne',sans-serif;font-size:9px;font-weight:800;letter-spacing:.15em;text-transform:uppercase;padding:4px 10px;border-radius:20px;border:1px solid var(--border)">Payouts</span>
+          <span style="font-size:11px;color:var(--text3);font-family:'Syne',sans-serif">Weekly</span>
+        </div>
+        <div style="font-family:'Syne',sans-serif;font-size:16px;font-weight:800;margin-bottom:8px">Payouts process every Friday</div>
+        <div style="font-size:13px;color:var(--text2);line-height:1.7">Approved earnings are batched weekly. Keep your payment details current and make sure every submission has the correct campaign reference.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- VIEW D: SUPPORT -->
+  <div id="view-support" style="display:none;animation:fadeUp .35s ease">
+    <div class="grid-header">
+      <h1 class="grid-title">Support <span>Chat</span></h1>
+      <p class="grid-sub">Ask about content reviews, campaign requirements, payouts, or account issues.</p>
+    </div>
+
+    <div style="max-width:720px">
+      <div style="background:var(--bg1);border:1px solid var(--border);border-radius:20px;overflow:hidden">
+        <div style="padding:20px 24px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px">
+          <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--lime),var(--orange));display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:13px;font-weight:800;color:#000">CS</div>
+          <div>
+            <div style="font-family:'Syne',sans-serif;font-size:13px;font-weight:800">Clicksable Support</div>
+            <div style="font-size:11px;color:var(--lime)">Online - typical reply within 2 hours</div>
+          </div>
+        </div>
+        <div id="chat-messages" style="padding:24px;min-height:300px;display:flex;flex-direction:column;gap:12px">
+          <div style="display:flex;gap:10px">
+            <div style="width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,var(--lime),var(--orange));display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:#000;flex-shrink:0">CS</div>
+            <div style="background:var(--bg2);border:1px solid var(--border);border-radius:0 12px 12px 12px;padding:12px 16px;max-width:80%">
+              <div style="font-size:13px;color:var(--text);line-height:1.6">Welcome to Clicksable Support. Send us your question and our team will help with campaigns, submissions, or payouts.</div>
+              <div style="font-size:10px;color:var(--text3);margin-top:6px;font-family:'Syne',sans-serif">Just now</div>
+            </div>
+          </div>
+        </div>
+        <div style="padding:16px 24px;border-top:1px solid var(--border);display:flex;gap:10px">
+          <input id="chat-input" type="text" placeholder="Type your message..." style="flex:1;background:var(--bg2);border:1px solid var(--border2);border-radius:10px;padding:11px 16px;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--text);outline:none"/>
+          <button onclick="sendChat()" style="padding:11px 20px;border-radius:10px;border:none;background:var(--lime);color:#000;font-family:'Syne',sans-serif;font-size:12px;font-weight:800;cursor:pointer;letter-spacing:.08em">Send</button>
+        </div>
+      </div>
+
+      <div style="margin-top:18px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px">
+        <button onclick="quickMsg('How do I submit a video?')" style="text-align:left;background:var(--bg1);border:1px solid var(--border);border-radius:12px;padding:16px;color:var(--text);cursor:pointer">
+          <div style="font-family:'Syne',sans-serif;font-size:11px;font-weight:800;margin-bottom:4px">Submit a video</div>
+          <div style="font-size:11px;color:var(--text3)">Submission steps and required links</div>
+        </button>
+        <button onclick="quickMsg('When do I get paid?')" style="text-align:left;background:var(--bg1);border:1px solid var(--border);border-radius:12px;padding:16px;color:var(--text);cursor:pointer">
+          <div style="font-family:'Syne',sans-serif;font-size:11px;font-weight:800;margin-bottom:4px">Payout timing</div>
+          <div style="font-size:11px;color:var(--text3)">Weekly payout schedule</div>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- VIEW E: PROFILE -->
+  <div id="view-profile" style="display:none;animation:fadeUp .35s ease">
+    <div class="grid-header">
+      <h1 class="grid-title">My <span>Profile</span></h1>
+      <p class="grid-sub">Create your creator ID once, then add your social handles so HQ can match submissions to the right account.</p>
+    </div>
+    <div style="max-width:760px;background:var(--bg1);border:1px solid var(--border);border-radius:20px;padding:28px">
+      <div style="font-family:'Syne',sans-serif;font-size:10px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:var(--text3);margin-bottom:8px">Creator ID</div>
+      <div id="creator-id-label" style="font-family:'Syne',sans-serif;font-size:13px;color:var(--lime);word-break:break-all;margin-bottom:22px"></div>
+
+      <div style="display:grid;gap:14px">
+        <input id="profile-name" type="text" placeholder="Your name" style="background:var(--bg2);border:1px solid var(--border2);border-radius:10px;padding:12px 14px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:13px;outline:none"/>
+        <input id="profile-email" type="email" placeholder="Email for payout/contact" style="background:var(--bg2);border:1px solid var(--border2);border-radius:10px;padding:12px 14px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:13px;outline:none"/>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+          <input id="profile-tiktok" type="text" placeholder="TikTok handle" style="background:var(--bg2);border:1px solid var(--border2);border-radius:10px;padding:12px 14px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:13px;outline:none"/>
+          <input id="profile-tiktok-url" type="url" placeholder="TikTok profile URL" style="background:var(--bg2);border:1px solid var(--border2);border-radius:10px;padding:12px 14px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:13px;outline:none"/>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+          <input id="profile-instagram" type="text" placeholder="Instagram handle" style="background:var(--bg2);border:1px solid var(--border2);border-radius:10px;padding:12px 14px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:13px;outline:none"/>
+          <input id="profile-instagram-url" type="url" placeholder="Instagram profile URL" style="background:var(--bg2);border:1px solid var(--border2);border-radius:10px;padding:12px 14px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:13px;outline:none"/>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+          <input id="profile-youtube" type="text" placeholder="YouTube handle/channel" style="background:var(--bg2);border:1px solid var(--border2);border-radius:10px;padding:12px 14px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:13px;outline:none"/>
+          <input id="profile-youtube-url" type="url" placeholder="YouTube channel URL" style="background:var(--bg2);border:1px solid var(--border2);border-radius:10px;padding:12px 14px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:13px;outline:none"/>
+        </div>
+        <button class="submit-btn" onclick="saveCreatorProfile()" style="max-width:260px">Save Profile</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- VIEW F: EARNINGS -->
+  <div id="view-earnings" style="display:none;animation:fadeUp .35s ease">
+    <div class="grid-header">
+      <h1 class="grid-title">My <span>Earnings</span></h1>
+      <p class="grid-sub">Track submitted videos, approved views, estimated payouts, and weekly payment status.</p>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;max-width:900px;margin-bottom:18px">
+      <div class="stat-pill"><div class="stat-dot lime"></div><div><div class="stat-num" id="earn-approved">$0</div><div class="stat-lbl">Approved Earnings</div></div></div>
+      <div class="stat-pill"><div class="stat-dot orange"></div><div><div class="stat-num" id="earn-count">0</div><div class="stat-lbl">Submitted Videos</div></div></div>
+      <div class="stat-pill"><div class="stat-dot grey"></div><div><div class="stat-num" id="earn-pending">0</div><div class="stat-lbl">Pending Review</div></div></div>
+    </div>
+    <div id="creator-submissions-list" style="display:grid;gap:12px;max-width:980px"></div>
+  </div>
+
+</main>
+
+<script>
+// ── SUPABASE INIT ──
+const SUPABASE_URL  = 'https://ctwrrrnjbytnthadpksl.supabase.co';
+const SUPABASE_ANON = 'sb_publishable_GgNKeidATKP54WWXGgfduQ_sq487yx_';
+const hasSupabaseConfig = SUPABASE_URL.startsWith('https://') && !SUPABASE_URL.includes('YOUR_') && !SUPABASE_ANON.includes('YOUR_');
+const leadDb = hasSupabaseConfig ? supabase.createClient(SUPABASE_URL, SUPABASE_ANON) : null;
+
+let allCampaigns = [];
+let activeFilter = 'all';
+let selectedCampaign = null;
+const CREATOR_ID_KEY = 'clicksableCreatorId';
+const CREATOR_PROFILE_KEY = 'clicksableCreatorProfile';
+const LOCAL_SUBMISSIONS_KEY = 'clicksableCreatorSubmissions';
+const creatorId = getCreatorId();
+let creatorProfile = {};
+let creatorSubmissions = [];
+
+function getCreatorId(){
+  let id = localStorage.getItem(CREATOR_ID_KEY);
+  if(!id){
+    id = crypto?.randomUUID ? crypto.randomUUID() : 'cr_' + Date.now() + '_' + Math.random().toString(16).slice(2);
+    localStorage.setItem(CREATOR_ID_KEY, id);
+  }
+  return id;
+}
+
+function hydrateCreatorProfile(){
+  creatorProfile = JSON.parse(localStorage.getItem(CREATOR_PROFILE_KEY) || '{}');
+  document.getElementById('creator-id-label').textContent = creatorId;
+  document.getElementById('profile-name').value = creatorProfile.name || '';
+  document.getElementById('profile-email').value = creatorProfile.email || '';
+  document.getElementById('profile-tiktok').value = creatorProfile.tiktok_handle || '';
+  document.getElementById('profile-tiktok-url').value = creatorProfile.tiktok_url || '';
+  document.getElementById('profile-instagram').value = creatorProfile.instagram_handle || '';
+  document.getElementById('profile-instagram-url').value = creatorProfile.instagram_url || '';
+  document.getElementById('profile-youtube').value = creatorProfile.youtube_handle || '';
+  document.getElementById('profile-youtube-url').value = creatorProfile.youtube_url || '';
+}
+
+async function saveCreatorProfile(){
+  creatorProfile = {
+    creator_id: creatorId,
+    name: document.getElementById('profile-name').value.trim(),
+    email: document.getElementById('profile-email').value.trim(),
+    tiktok_handle: document.getElementById('profile-tiktok').value.trim(),
+    tiktok_url: document.getElementById('profile-tiktok-url').value.trim(),
+    instagram_handle: document.getElementById('profile-instagram').value.trim(),
+    instagram_url: document.getElementById('profile-instagram-url').value.trim(),
+    youtube_handle: document.getElementById('profile-youtube').value.trim(),
+    youtube_url: document.getElementById('profile-youtube-url').value.trim(),
+    updated_at: new Date().toISOString()
+  };
+  localStorage.setItem(CREATOR_PROFILE_KEY, JSON.stringify(creatorProfile));
+
+  if(leadDb){
+    const { error } = await leadDb.from('creators').upsert(creatorProfile, { onConflict: 'creator_id' });
+    if(error){ alert('Profile saved locally, but Supabase failed: ' + error.message); return; }
+  }
+  alert('Profile saved.');
+}
+
+// ── LOAD CAMPAIGNS ──
+async function loadCampaigns() {
+  if (!leadDb) { showError('Add your Supabase URL and anon key to load live campaigns.'); return; }
+  const { data, error } = await leadDb
+    .from('campaigns')
+    .select('*')
+    .eq('status', 'Active')
+    .order('created_at', { ascending: false });
+
+  if (error) { showError(); return; }
+  allCampaigns = data || [];
+  updateStats(allCampaigns);
+  renderGrid(allCampaigns);
+  document.getElementById('active-count').textContent = allCampaigns.length;
+}
+
+function updateStats(campaigns) {
+  document.getElementById('stat-active').textContent = campaigns.length;
+  const totalBudget = campaigns.reduce((s, c) => s + (c.total_budget || 0), 0);
+  document.getElementById('stat-budget').textContent = '$' + (totalBudget >= 1000
+    ? (totalBudget/1000).toFixed(0)+'K' : totalBudget.toFixed(0));
+  const topCpm = Math.max(...campaigns.flatMap(c =>
+    [c.cpm_tiktok, c.cpm_instagram, c.cpm_youtube].filter(Boolean)), 0);
+  document.getElementById('stat-top-cpm').textContent = topCpm ? '$'+topCpm.toFixed(2) : '—';
+}
+
+function renderGrid(campaigns) {
+  const grid = document.getElementById('campaign-grid');
+  if (!campaigns.length) {
+    grid.innerHTML = `<div class="empty-state">
+      <div class="empty-icon">📭</div>
+      <div class="empty-title">No Active Campaigns</div>
+      <div class="empty-sub">Check back soon — new campaigns drop regularly.</div>
+    </div>`;
+    return;
+  }
+  grid.innerHTML = campaigns.map(c => buildCard(c)).join('');
+  grid.querySelectorAll('.c-card').forEach((el, i) => {
+    el.style.animationDelay = (i * 0.05) + 's';
+    el.addEventListener('click', () => openDetail(campaigns[i]));
+  });
+}
+
+function buildCard(c) {
+  const pct = Math.min(((c.current_payout||0) / (c.total_budget||1)) * 100, 100).toFixed(1);
+  const cpms = [c.cpm_tiktok, c.cpm_instagram, c.cpm_youtube].filter(Boolean);
+  const topCpm = cpms.length ? Math.max(...cpms) : null;
+  return `<div class="c-card">
+    <div class="c-thumb">
+      ${c.thumbnail_url
+        ? `<img src="${c.thumbnail_url}" alt="${c.title}" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\\"c-thumb-fallback\\">${c.category||'Campaign'}</div>'">`
+        : `<div class="c-thumb-fallback">${c.category||'Campaign'}</div>`}
+      <div class="c-status active">Active</div>
+    </div>
+    <div class="c-body">
+      <div class="c-cat">${c.category||'Campaign'}</div>
+      <div class="c-title">${c.title}</div>
+      <div class="c-platforms">
+        ${c.cpm_tiktok ? `<div class="plt-icon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V8.69a8.18 8.18 0 004.78 1.52V6.76a4.85 4.85 0 01-1.01-.07z"/></svg>TikTok</div>` : ''}
+        ${c.cpm_instagram ? `<div class="plt-icon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>IG</div>` : ''}
+        ${c.cpm_youtube ? `<div class="plt-icon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>YT</div>` : ''}
+      </div>
+      ${topCpm ? `<div class="c-cpm"><span class="c-cpm-label">Top CPM</span><span class="c-cpm-val">$${topCpm.toFixed(2)}</span></div>` : ''}
+      <div class="c-progress-wrap">
+        <div class="c-progress-label">
+          <span>Paid Out: $${(c.current_payout||0).toLocaleString()} / $${(c.total_budget||0).toLocaleString()}</span>
+          <span>${pct}%</span>
+        </div>
+        <div class="c-progress-bar">
+          <div class="c-progress-fill" style="width:${pct}%"></div>
+        </div>
+      </div>
+    </div>
+  </div>`;
+}
+
+// ── OPEN DETAIL ──
+function openDetail(c) {
+  console.log('[Clicksable] Campaign selected:', c);
+  selectedCampaign = c;
+  setActiveNav('rewards');
+  document.getElementById('view-grid').style.display = 'none';
+  document.getElementById('view-announcements').style.display = 'none';
+  document.getElementById('view-support').style.display = 'none';
+  document.getElementById('view-profile').style.display = 'none';
+  document.getElementById('view-earnings').style.display = 'none';
+  const detail = document.getElementById('view-detail');
+  detail.classList.add('show');
+
+  document.getElementById('d-banner-img').src = c.banner_url || '';
+  document.getElementById('d-cat').textContent = c.category || '';
+  document.getElementById('d-title').textContent = c.title;
+  document.getElementById('d-requirements').textContent = c.requirements || 'No specific requirements listed.';
+
+  document.getElementById('d-tags').innerHTML = [c.category, 'UGC', 'Organic', 'Creator Program']
+    .filter(Boolean).map(t => `<span class="d-tag">${t}</span>`).join('');
+
+  document.getElementById('d-cpm-tiktok').textContent   = c.cpm_tiktok   ? '$'+c.cpm_tiktok.toFixed(2)   : '$—';
+  document.getElementById('d-cpm-instagram').textContent = c.cpm_instagram ? '$'+c.cpm_instagram.toFixed(2) : '$—';
+  document.getElementById('d-cpm-youtube').textContent  = c.cpm_youtube  ? '$'+c.cpm_youtube.toFixed(2)  : '$—';
+
+  const link = document.getElementById('d-resource-link');
+  link.href = c.drive_resource_url || '#';
+  link.style.opacity = c.drive_resource_url ? '1' : '.4';
+
+  const pct = Math.min(((c.current_payout||0)/(c.total_budget||1))*100, 100).toFixed(1);
+  document.getElementById('d-payout').textContent  = '$'+(c.current_payout||0).toLocaleString();
+  document.getElementById('d-budget').textContent  = '$'+(c.total_budget||0).toLocaleString();
+  document.getElementById('d-budget-fill').style.width = pct+'%';
+  document.getElementById('d-budget-pct').textContent  = pct+'% distributed';
+
+  document.getElementById('m-category').textContent = c.category || '—';
+  const platforms = [c.cpm_tiktok&&'TikTok', c.cpm_instagram&&'Instagram', c.cpm_youtube&&'YouTube'].filter(Boolean).join(', ');
+  document.getElementById('m-platforms').textContent = platforms || '—';
+  document.getElementById('m-status').innerHTML = `<span style="color:var(--lime)">${c.status}</span>`;
+  document.getElementById('m-updated').textContent = new Date(c.created_at).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
+
+  document.getElementById('stage').scrollTo({top:0, behavior:'smooth'});
+}
+
+// ── BACK ──
+document.getElementById('back-btn').addEventListener('click', () => {
+  showView('rewards');
+});
+
+// ── VIEW SWITCHING ──
+function setActiveNav(view){
+  document.querySelectorAll('.sb-item[data-view]').forEach(el => {
+    el.classList.toggle('active', el.dataset.view === view);
+  });
+}
+
+function showView(view){
+  document.getElementById('view-grid').style.display = 'none';
+  document.getElementById('view-detail').classList.remove('show');
+  document.getElementById('view-announcements').style.display = 'none';
+  document.getElementById('view-support').style.display = 'none';
+  document.getElementById('view-profile').style.display = 'none';
+  document.getElementById('view-earnings').style.display = 'none';
+
+  setActiveNav(view);
+
+  if(view === 'rewards'){
+    document.getElementById('view-grid').style.display = 'block';
+  } else if(view === 'announcements'){
+    document.getElementById('view-announcements').style.display = 'block';
+  } else if(view === 'support'){
+    document.getElementById('view-support').style.display = 'block';
+  } else if(view === 'profile'){
+    hydrateCreatorProfile();
+    document.getElementById('view-profile').style.display = 'block';
+  } else if(view === 'earnings'){
+    loadCreatorSubmissions();
+    document.getElementById('view-earnings').style.display = 'block';
+  }
+
+  document.getElementById('stage').scrollTo({top:0, behavior:'smooth'});
+}
+
+document.querySelectorAll('.sb-item[data-view]').forEach(item => {
+  item.addEventListener('click', e => {
+    e.preventDefault();
+    showView(item.dataset.view);
+  });
+});
+
+// ── SUPPORT CHAT ──
+function sendChat(){
+  const input = document.getElementById('chat-input');
+  const msg = input.value.trim();
+  if(!msg) return;
+  addChatMessage(msg, 'user');
+  input.value = '';
+  setTimeout(() => {
+    addChatMessage('Thanks. Clicksable Support will reply soon. For urgent payout issues, email support@clicksable.ai.', 'agent');
+  }, 700);
+}
+
+function quickMsg(msg){
+  document.getElementById('chat-input').value = msg;
+  sendChat();
+}
+
+function addChatMessage(msg, from){
+  const box = document.getElementById('chat-messages');
+  const isUser = from === 'user';
+  const safeMsg = msg.replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+  box.insertAdjacentHTML('beforeend', `<div style="display:flex;gap:10px;justify-content:${isUser?'flex-end':'flex-start'}">
+    ${!isUser ? '<div style="width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,var(--lime),var(--orange));display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:#000;flex-shrink:0">CS</div>' : ''}
+    <div style="background:${isUser?'rgba(200,255,0,.1)':'var(--bg2)'};border:1px solid ${isUser?'rgba(200,255,0,.2)':'var(--border)'};border-radius:${isUser?'12px 0 12px 12px':'0 12px 12px 12px'};padding:12px 16px;max-width:80%">
+      <div style="font-size:13px;line-height:1.6">${safeMsg}</div>
+      <div style="font-size:10px;color:var(--text3);margin-top:6px;font-family:'Syne',sans-serif">Just now</div>
+    </div>
+    ${isUser ? '<div style="width:30px;height:30px;border-radius:50%;background:var(--bg3);display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0">ME</div>' : ''}
+  </div>`);
+  box.scrollTop = box.scrollHeight;
+}
+
+document.getElementById('chat-input')?.addEventListener('keydown', e => {
+  if(e.key === 'Enter') sendChat();
+});
+
+// ── SEARCH ──
+document.getElementById('search-input').addEventListener('keyup', e => {
+  const q = e.target.value.toLowerCase();
+  const filtered = allCampaigns.filter(c =>
+    (c.title || '').toLowerCase().includes(q) &&
+    (activeFilter === 'all' || c.category === activeFilter)
+  );
+  renderGrid(filtered);
+});
+
+// ── FILTER TABS ──
+document.querySelectorAll('.ftab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.ftab').forEach(t => t.classList.remove('on'));
+    tab.classList.add('on');
+    activeFilter = tab.dataset.filter;
+    const q = document.getElementById('search-input').value.toLowerCase();
+    const filtered = allCampaigns.filter(c =>
+      (c.title || '').toLowerCase().includes(q) &&
+      (activeFilter === 'all' || c.category === activeFilter)
+    );
+    renderGrid(filtered);
+  });
+});
+
+async function submitVideo(){
+  if(!selectedCampaign){ alert('Open a campaign first.'); return; }
+  hydrateCreatorProfile();
+  if(!creatorProfile.email){
+    alert('Please save your profile email before submitting a video.');
+    showView('profile');
+    return;
+  }
+
+  const videoUrl = document.getElementById('submit-video-url').value.trim();
+  const platform = document.getElementById('submit-platform').value;
+  if(!videoUrl){ alert('Paste your public video URL first.'); return; }
+
+  const submission = {
+    creator_id: creatorId,
+    creator_name: creatorProfile.name || '',
+    creator_email: creatorProfile.email || '',
+    campaign_id: selectedCampaign.id,
+    campaign_title: selectedCampaign.title || '',
+    platform,
+    video_url: videoUrl,
+    status: 'Pending',
+    views: 0,
+    earnings: 0,
+    submitted_at: new Date().toISOString()
+  };
+
+  if(leadDb){
+    const { error } = await leadDb.from('video_submissions').insert([submission]);
+    if(error){ alert('Submission failed: ' + error.message); return; }
+  } else {
+    const local = JSON.parse(localStorage.getItem(LOCAL_SUBMISSIONS_KEY) || '[]');
+    local.unshift({...submission, id: Date.now()});
+    localStorage.setItem(LOCAL_SUBMISSIONS_KEY, JSON.stringify(local));
+  }
+
+  document.getElementById('submit-video-url').value = '';
+  alert('Video submitted. HQ can now review it.');
+  await loadCreatorSubmissions();
+  showView('earnings');
+}
+
+async function loadCreatorSubmissions(){
+  if(leadDb){
+    const { data, error } = await leadDb
+      .from('video_submissions')
+      .select('*')
+      .eq('creator_id', creatorId)
+      .order('submitted_at', { ascending: false });
+    if(error){ console.warn(error.message); creatorSubmissions = []; }
+    else creatorSubmissions = data || [];
+  } else {
+    creatorSubmissions = JSON.parse(localStorage.getItem(LOCAL_SUBMISSIONS_KEY) || '[]');
+  }
+  renderCreatorSubmissions();
+}
+
+function renderCreatorSubmissions(){
+  const approved = creatorSubmissions
+    .filter(s => s.status === 'Approved')
+    .reduce((sum, s) => sum + (Number(s.earnings) || 0), 0);
+  const pending = creatorSubmissions.filter(s => s.status === 'Pending').length;
+
+  document.getElementById('earn-approved').textContent = '$' + approved.toLocaleString(undefined, { maximumFractionDigits: 2 });
+  document.getElementById('earn-count').textContent = creatorSubmissions.length;
+  document.getElementById('earn-pending').textContent = pending;
+
+  const list = document.getElementById('creator-submissions-list');
+  if(!creatorSubmissions.length){
+    list.innerHTML = '<div class="empty-state"><div class="empty-title">No Submitted Videos Yet</div><div class="empty-sub">Open a campaign, paste your video link, and submit it for review.</div></div>';
+    return;
+  }
+
+  list.innerHTML = creatorSubmissions.map(s => {
+    const statusColor = s.status === 'Approved' ? 'var(--lime)' : s.status === 'Rejected' ? 'var(--orange)' : 'var(--text2)';
+    return `<div style="background:var(--bg1);border:1px solid var(--border);border-radius:16px;padding:18px;display:grid;grid-template-columns:1fr auto;gap:18px;align-items:center">
+      <div>
+        <div style="font-family:'Syne',sans-serif;font-size:14px;font-weight:800;margin-bottom:6px">${s.campaign_title || 'Campaign'}</div>
+        <div style="font-size:12px;color:var(--text2);line-height:1.6">${s.platform || 'Platform'} - <a href="${s.video_url}" target="_blank" style="color:var(--lime)">Original video link</a></div>
+        <div style="font-size:11px;color:var(--text3);margin-top:8px">Views: ${(Number(s.views)||0).toLocaleString()} - Earnings: $${(Number(s.earnings)||0).toLocaleString()}</div>
+      </div>
+      <div style="font-family:'Syne',sans-serif;font-size:11px;font-weight:800;color:${statusColor};text-transform:uppercase">${s.status || 'Pending'}</div>
+    </div>`;
+  }).join('');
+}
+
+function showError(message = 'Could not load campaigns. Check your Supabase credentials.') {
+  document.getElementById('campaign-grid').innerHTML = `<div class="empty-state">
+    <div class="empty-icon">⚠️</div>
+    <div class="empty-title">Connection Error</div>
+    <div class="empty-sub">${message}</div>
+  </div>`;
+}
+
+loadCampaigns();
+hydrateCreatorProfile();
+loadCreatorSubmissions();
+</script>
+</body>
+</html>
