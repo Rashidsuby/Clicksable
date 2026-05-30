@@ -287,210 +287,148 @@ html,body{height:100%;background:var(--bg0);color:var(--text);font-family:'DM Sa
   border-radius:4px;transition:width .6s ease;
 }
 
-/* ── VIEW B: DETAIL ── */
-#view-detail{display:none;animation:fadeUp .35s ease}
+/* ── VIEW B: ASYMMETRICAL DETAIL (Screenshots 2 & 3 Matching) ── */
+#view-detail{display:none;animation:fadeUp .35s ease;padding:30px 40px 60px;}
 #view-detail.show{display:block}
 
 .back-btn{
   display:inline-flex;align-items:center;gap:8px;
-  padding:20px 40px 0;cursor:pointer;
-  font-family:'Syne',sans-serif;font-size:12px;font-weight:700;
-  letter-spacing:.12em;text-transform:uppercase;color:var(--text2);
-  transition:color .2s;
+  padding:0 0 24px;cursor:pointer;
+  font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;
+  color:var(--text2);transition:color .2s;text-decoration:none;
 }
-.back-btn:hover{color:var(--lime)}
-.back-btn svg{width:16px;height:16px;transition:transform .2s}
-.back-btn:hover svg{transform:translateX(-3px)}
+.back-btn:hover{color:var(--text)}
 
-.d-banner{
-  margin:20px 40px 0;border-radius:20px;overflow:hidden;
-  position:relative;min-height:280px;
-  background:var(--bg2);border:1px solid var(--border);
+.d-header-grid {
+  display: grid;
+  grid-template-columns: 1fr 340px;
+  gap: 40px;
+  margin-bottom: 40px;
+  align-items: start;
 }
-.d-banner-img{
-  width:100%;height:100%;min-height:280px;object-fit:cover;display:block;
-  filter:brightness(.55);position:absolute;inset:0;
+.d-header-left {
+  display: flex;
+  flex-direction: column;
 }
-.d-banner-overlay{
-  position:absolute;inset:0;
-  background:linear-gradient(135deg,rgba(8,8,8,.7) 0%,transparent 60%);
-  padding:40px;display:flex;flex-direction:column;justify-content:flex-end;
+.d-banner-cat {
+  font-family:'Syne',sans-serif;font-size:11px;font-weight:800;
+  letter-spacing:.15em;text-transform:uppercase;color:var(--orange);margin-bottom:12px;
 }
-.d-banner-cat{
-  font-family:'Syne',sans-serif;font-size:10px;font-weight:800;
-  letter-spacing:.2em;text-transform:uppercase;color:var(--orange);margin-bottom:10px;
+.d-banner-title {
+  font-family:'DM Sans',sans-serif;font-weight:700;font-size:32px;
+  line-height:1.2;color:var(--text);margin-bottom:16px;
 }
-.d-banner-title{
-  font-family:'Bebas Neue',sans-serif;font-size:52px;
-  letter-spacing:2px;line-height:1;margin-bottom:12px;
+.d-overview-text {
+  font-size:14px;color:var(--text2);line-height:1.6;margin-bottom:14px;
 }
-.d-banner-tags{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}
-.d-tag{
-  font-family:'Syne',sans-serif;font-size:10px;font-weight:700;
-  letter-spacing:.1em;text-transform:uppercase;
-  padding:4px 12px;border-radius:20px;
-  border:1px solid rgba(255,255,255,.15);color:var(--text2);
+.d-expand-btn {
+  background:none;border:none;color:var(--text);font-family:'Syne',sans-serif;
+  font-size:11px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:4px;margin-bottom:18px;
 }
-.d-review{font-size:12px;color:var(--text3)}
-.d-review span{color:var(--lime)}
+.d-banner-tags {display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:4px;}
+.d-tag {
+  font-family:'Syne',sans-serif;font-size:9px;font-weight:700;
+  letter-spacing:.05em;text-transform:uppercase;
+  padding:5px 12px;border-radius:20px;background:var(--bg3);color:var(--text);
+}
+.d-review {font-size:12px;color:var(--text3);margin-left:auto;}
+.d-review span {color:var(--lime);font-weight:600;}
+
+.d-header-right-thumb {
+  width:100%;aspect-ratio:16/9;border-radius:16px;overflow:hidden;
+  background:var(--bg2);border:1px solid var(--border);box-shadow:0 20px 40px rgba(0,0,0,0.4);
+}
+.d-header-right-thumb img {width:100%;height:100%;object-fit:cover;}
 
 .d-body{
-  display:grid;grid-template-columns:1fr 340px;gap:24px;
-  padding:24px 40px 60px;
+  display:grid;grid-template-columns:1fr 340px;gap:40px;
 }
 
-/* LEFT COLUMN */
+/* LEFT COLUMN ACCORDIONS */
 .d-section{
-  background:var(--bg1);border:1px solid var(--border);
-  border-radius:16px;padding:24px;margin-bottom:16px;
+  margin-bottom:32px;
 }
 .d-section-title{
-  font-family:'Syne',sans-serif;font-size:11px;font-weight:800;
-  letter-spacing:.2em;text-transform:uppercase;color:var(--text3);
-  margin-bottom:18px;padding-bottom:14px;border-bottom:1px solid var(--border);
+  font-family:'Syne',sans-serif;font-size:16px;font-weight:700;
+  color:var(--text);margin-bottom:16px;
 }
 .d-requirements{font-size:14px;color:var(--text2);line-height:1.8;white-space:pre-wrap;}
 
-.earnings-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+/* PREMIUM GLOSSY EARNING CARDS */
+.earnings-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
 .earn-card{
-  background:var(--bg2);border:1px solid var(--border);
-  border-radius:12px;padding:16px;
-  position:relative;overflow:hidden;
+  background: linear-gradient(135deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.01) 100%);
+  border:1px solid var(--border);border-radius:16px;padding:24px;
+  position:relative;overflow:hidden;box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
 }
-.earn-card-header{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.earn-card-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
+.earn-platform{font-family:'DM Sans',sans-serif;font-size:15px;font-weight:700;color:var(--text)}
 .earn-card-icon{
-  width:32px;height:32px;border-radius:8px;
+  width:36px;height:36px;border-radius:50%;
   display:flex;align-items:center;justify-content:center;flex-shrink:0;
+  background: rgba(255,255,255,0.05);border: 1px solid rgba(255,255,255,0.1);
 }
-.earn-card.tiktok .earn-card-icon{background:rgba(105,201,208,.1)}
-.earn-card.instagram .earn-card-icon{background:rgba(228,64,95,.1)}
-.earn-card.youtube .earn-card-icon{background:rgba(255,0,0,.1)}
-.earn-platform{font-family:'Syne',sans-serif;font-size:11px;font-weight:800;
-  letter-spacing:.1em;text-transform:uppercase;color:var(--text)}
-.earn-cpm{font-family:'Bebas Neue',sans-serif;font-size:28px;color:var(--lime);letter-spacing:1px;margin-bottom:4px}
-.earn-sub{font-size:10px;color:var(--text3);font-family:'Syne',sans-serif}
+.earn-cpm{font-family:'DM Sans',sans-serif;font-size:18px;font-weight:700;color:var(--text);margin-bottom:4px}
+.earn-cpm span{color:var(--text3);font-size:13px;font-weight:400;}
+.earn-sub-badges {display:flex;gap:6px;margin-top:12px;}
+.earn-sub-pill {
+  font-family:'Syne',sans-serif;font-size:9px;color:var(--text2);
+  background:rgba(255,255,255,0.04);padding:4px 8px;border-radius:6px;border:1px solid var(--border);
+}
 
 .resource-link{
   display:flex;align-items:center;gap:16px;
-  background:rgba(200,255,0,.04);border:1px solid rgba(200,255,0,.15);
-  border-radius:12px;padding:18px 20px;cursor:pointer;
+  background:var(--bg1);border:1px solid var(--border);
+  border-radius:14px;padding:16px 20px;cursor:pointer;
   text-decoration:none;transition:all .2s;
 }
-.resource-link:hover{background:rgba(200,255,0,.08);border-color:rgba(200,255,0,.3)}
+.resource-link:hover{border-color:rgba(255,255,255,0.2)}
 .resource-icon{
-  width:44px;height:44px;border-radius:10px;
-  background:rgba(200,255,0,.1);border:1px solid rgba(200,255,0,.2);
-  display:flex;align-items:center;justify-content:center;flex-shrink:0;
-  font-size:20px;
+  width:40px;height:40px;border-radius:10px;
+  background:var(--bg2);display:flex;align-items:center;justify-content:center;flex-shrink:0;
 }
-.resource-info .r-title{font-family:'Syne',sans-serif;font-size:13px;font-weight:700;margin-bottom:3px}
+.resource-info .r-title{font-family:'DM Sans',sans-serif;font-size:14px;font-weight:500;margin-bottom:2px;color:var(--text)}
 .resource-info .r-sub{font-size:12px;color:var(--text3)}
-.resource-arrow{margin-left:auto;opacity:.4}
+.resource-arrow{margin-left:auto;opacity:.3}
 
-.viral-row{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
-.viral-card{
-  background:var(--bg2);border:1px solid var(--border);
-  border-radius:10px;overflow:hidden;
-}
-.viral-thumb{
-  aspect-ratio:9/16;background:var(--bg3);
-  display:flex;align-items:center;justify-content:center;
-  font-size:24px;position:relative;
-}
-.viral-play{
-  position:absolute;width:32px;height:32px;border-radius:50%;
-  background:rgba(0,0,0,.6);display:flex;align-items:center;justify-content:center;
-}
-.viral-meta{padding:10px}
-.viral-views{font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--lime)}
-.viral-label{font-size:10px;color:var(--text3);font-family:'Syne',sans-serif}
-
-/* RIGHT COLUMN STICKY */
-.d-sticky{position:sticky;top:80px}
+/* PREMIUM RIGHT COLUMN BUDGET CARD */
+.d-sticky{position:sticky;top:40px}
 .d-widget{
-  background:var(--bg1);border:1px solid var(--border);
-  border-radius:16px;padding:24px;
-  box-shadow:0 20px 60px rgba(0,0,0,.5);
+  background:var(--bg1);border:1px solid var(--border);border-radius:16px;padding:24px;
 }
-.d-widget-title{
-  font-family:'Syne',sans-serif;font-size:11px;font-weight:800;
-  letter-spacing:.2em;text-transform:uppercase;color:var(--text3);
-  margin-bottom:18px;
+.budget-track{
+  background: linear-gradient(135deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0) 100%);
+  border:1px solid var(--border);border-radius:14px;padding:20px;margin-bottom:24px;
 }
-.budget-track{margin-bottom:20px}
-.budget-nums{
-  display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px;
+.budget-title-wrap {
+  display:flex;align-items:baseline;gap:6px;margin-bottom:16px;
 }
-.budget-current{font-family:'Bebas Neue',sans-serif;font-size:36px;color:var(--lime);letter-spacing:1px}
-.budget-total{font-size:13px;color:var(--text3)}
-.budget-bar{height:6px;background:var(--bg3);border-radius:6px;overflow:hidden;margin-bottom:8px}
-.budget-fill{height:100%;background:linear-gradient(90deg,var(--lime),var(--orange));border-radius:6px}
-.budget-pct{font-family:'Syne',sans-serif;font-size:11px;color:var(--text3)}
+.budget-current{font-family:'DM Sans',sans-serif;font-weight:700;font-size:24px;color:var(--text)}
+.budget-total{font-size:14px;color:var(--text3);font-family:'DM Sans',sans-serif;}
+.budget-bar{height:4px;background:var(--bg3);border-radius:6px;overflow:hidden;margin-bottom:8px}
+.budget-fill{height:100%;background:var(--orange);border-radius:6px}
+.budget-pct{font-size:11px;color:var(--text3)}
 
-.meta-table{width:100%;border-collapse:collapse;margin-bottom:20px}
+.meta-table{width:100%;border-collapse:collapse;margin-bottom:24px}
 .meta-table tr{border-bottom:1px solid var(--border)}
 .meta-table tr:last-child{border-bottom:none}
-.meta-table td{padding:10px 0;font-size:12px}
-.meta-table td:first-child{color:var(--text3);font-family:'Syne',sans-serif;
-  font-size:10px;letter-spacing:.1em;text-transform:uppercase;width:45%}
-.meta-table td:last-child{color:var(--text);font-weight:500}
+.meta-table td{padding:12px 0;font-size:13px}
+.meta-table td:first-child{color:var(--text3);font-size:12px;}
+.meta-table td:last-child{color:var(--text);font-weight:500;text-align:right;}
+.meta-table td svg {vertical-align:middle;margin-left:4px;}
 
 .submit-btn{
-  width:100%;padding:15px;border-radius:12px;border:none;cursor:pointer;
-  font-family:'Syne',sans-serif;font-size:13px;font-weight:800;
-  letter-spacing:.15em;text-transform:uppercase;
-  background:var(--lime);color:#000;
+  width:100%;padding:14px;border-radius:10px;border:none;cursor:pointer;
+  font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;
+  background:rgba(200,255,0,0.15);color:var(--lime);border:1px solid rgba(200,255,0,0.3);
   transition:all .2s;
 }
-.submit-btn:hover{background:#d4ff1a;transform:translateY(-1px);
-  box-shadow:0 8px 30px rgba(200,255,0,.3)}
-.submit-btn:active{transform:translateY(0)}
+.submit-btn:hover{background:var(--lime);color:#000;}
 
-/* ── LOADING ── */
-.loading-grid{
-  display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;
-}
-.skel-card{
-  background:var(--bg1);border:1px solid var(--border);border-radius:16px;overflow:hidden;
-  animation:shimmer 1.5s infinite;
-}
-.skel-thumb{aspect-ratio:16/9;background:var(--bg3)}
-.skel-body{padding:16px}
-.skel-line{height:12px;background:var(--bg3);border-radius:4px;margin-bottom:10px}
-.skel-line.w70{width:70%}
-.skel-line.w50{width:50%}
-
-@keyframes shimmer{0%,100%{opacity:1}50%{opacity:.5}}
-@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
-
-/* ── RESPONSIVE MOBILE QUERIES ── */
 @media (max-width: 768px) {
-  #mobile-header { display: flex; }
-  
-  .auth-box { padding: 32px 24px; }
-  
-  #sidebar { transform: translateX(-100%); z-index: 1000; }
-  #sidebar.open { transform: translateX(0); }
-  #sidebar-overlay.show { display: block; }
-  
-  #stage { margin-left: 0; margin-top: 60px; height: calc(100vh - 60px); }
-  
-  #view-grid, #view-profile, #view-earnings, #view-announcements, #view-support { padding: 24px 20px 80px !important; }
-  
-  .stats-strip { grid-template-columns: 1fr; gap: 10px; }
-  .responsive-grid { grid-template-columns: 1fr; }
-  
-  .d-body { grid-template-columns: 1fr; padding: 24px 20px 80px; gap: 24px; }
-  .d-banner { margin: 20px 20px 0; min-height: 220px; }
-  .d-banner-img { min-height: 220px; }
-  .d-banner-overlay { padding: 24px; }
-  .back-btn { padding: 20px 20px 0; }
-  
-  .grid-title { font-size: 38px; }
-  .d-banner-title { font-size: 32px; }
-  
+  .d-header-grid { grid-template-columns: 1fr; gap: 20px; margin-bottom: 24px;}
+  .d-body { grid-template-columns: 1fr; gap: 24px; }
   .earnings-grid { grid-template-columns: 1fr; }
-  .viral-row { grid-template-columns: repeat(3,1fr); }
   .c-card { flex-direction: column; }
   .c-thumb { width: 100%; height: 160px; }
 }
@@ -519,7 +457,6 @@ html,body{height:100%;background:var(--bg0);color:var(--text);font-family:'DM Sa
     
     <a class="forgot-password" onclick="handleResetPassword()">Forgot Password?</a>
 
-    <!-- Password reset section - shown when user clicks recovery email link -->
     <div id="reset-password-fields" style="display:none;margin-top:20px;border-top:1px solid var(--border);padding-top:20px;">
       <div class="auth-field">
         <label>Type New Password</label>
@@ -653,122 +590,92 @@ html,body{height:100%;background:var(--bg0);color:var(--text);font-family:'DM Sa
       </div>
     </div>
 
+    <!-- ── VIEW B: UPDATED DYNAMIC ASYMMETRICAL DETAIL ── -->
     <div id="view-detail">
       <div class="back-btn" id="back-btn">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-          <path d="M19 12H5M12 5l-7 7 7 7"/>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="m15 18-6-6 6-6"/>
         </svg>
         Back to Campaigns
       </div>
 
-      <div class="d-banner">
-        <img id="d-banner-img" src="" alt="" class="d-banner-img" onerror="this.style.display='none'"/>
-        <div class="d-banner-overlay">
+      <div class="d-header-grid">
+        <div class="d-header-left">
           <div class="d-banner-cat" id="d-cat"></div>
           <h1 class="d-banner-title" id="d-title"></h1>
-          <div class="d-banner-tags" id="d-tags"></div>
-          <div class="d-review">Avg. review time: <span>24–48 hrs</span> &nbsp;·&nbsp; Payments processed <span>weekly</span></div>
+          <div class="d-overview-text" id="d-overview-summary"></div>
+          <button class="d-expand-btn" id="d-expand-toggle" onclick="toggleOverviewExpand()">Expand ▾</button>
+          
+          <div class="d-banner-tags">
+            <span id="d-dynamic-tag" class="d-tag"></span>
+            <div class="d-review">Avg. review time: <span>24–48 hrs</span> &nbsp;·&nbsp; Payments processed <span>weekly</span></div>
+          </div>
+        </div>
+        <div class="d-header-right-thumb">
+          <img id="d-banner-img" src="" alt="Campaign Visual" onerror="this.src='data:image/svg+xml;charset=UTF-8,%3Csvg xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F1200%2Fsvg%22 width%3D%22100%25%22 height%3D%22100%25%22%3E%3Crect fill%3D%22%231a1a1a%22 width%3D%22100%25%22 height%3D%22100%25%22%2F%3E%3C%27svg%3E'"/>
         </div>
       </div>
 
       <div class="d-body">
         <div>
           <div class="d-section">
-            <div class="d-section-title">📋 Requirements</div>
+            <div class="d-section-title">Requirements</div>
             <div class="d-requirements" id="d-requirements">—</div>
           </div>
 
           <div class="d-section">
-            <div class="d-section-title">Earnings per 1,000 Views (CPM)</div>
+            <div class="d-section-title">Earnings</div>
             <div class="earnings-grid">
-              <div class="earn-card tiktok">
+              <div class="earn-card tiktok" id="card-tiktok">
                 <div class="earn-card-header">
-                  <div class="earn-card-icon">
-                    <svg viewBox="0 0 24 24" width="18" height="18" fill="#69C9D0"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.34 6.34 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V8.69a8.18 8.18 0 004.78 1.52V6.76a4.85 4.85 0 01-1.01-.07z"/></svg>
-                  </div>
                   <div class="earn-platform">TikTok</div>
-                </div>
-                <div class="earn-cpm" id="d-cpm-tiktok">$—</div>
-                <div class="earn-sub">per 1,000 views</div>
-              </div>
-              <div class="earn-card instagram">
-                <div class="earn-card-header">
                   <div class="earn-card-icon">
-                    <svg viewBox="0 0 24 24" width="18" height="18" fill="#E4405F"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="#fff"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V8.69a8.18 8.18 0 004.78 1.52V6.76a4.85 4.85 0 01-1.01-.07z"/></svg>
                   </div>
+                </div>
+                <div class="earn-cpm" id="d-cpm-tiktok">$0.00 <span>/ 1K views</span></div>
+                <div class="earn-sub-badges">
+                  <div class="earn-sub-pill">$2 Min</div>
+                  <div class="earn-sub-pill">$1000 Max</div>
+                </div>
+              </div>
+              <div class="earn-card instagram" id="card-instagram">
+                <div class="earn-card-header">
                   <div class="earn-platform">Instagram</div>
-                </div>
-                <div class="earn-cpm" id="d-cpm-instagram">$—</div>
-                <div class="earn-sub">per 1,000 views</div>
-              </div>
-              <div class="earn-card youtube">
-                <div class="earn-card-header">
                   <div class="earn-card-icon">
-                    <svg viewBox="0 0 24 24" width="18" height="18" fill="#FF0000"><path d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="#fff"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
                   </div>
-                  <div class="earn-platform">YouTube</div>
                 </div>
-                <div class="earn-cpm" id="d-cpm-youtube">$—</div>
-                <div class="earn-sub">per 1,000 views</div>
+                <div class="earn-cpm" id="d-cpm-instagram">$0.00 <span>/ 1K views</span></div>
+                <div class="earn-sub-badges">
+                  <div class="earn-sub-pill">$1 Min</div>
+                  <div class="earn-sub-pill">$1000 Max</div>
+                </div>
               </div>
             </div>
           </div>
 
           <div class="d-section">
-            <div class="d-section-title">📁 Campaign Resources</div>
+            <div class="d-section-title">Resources</div>
             <a class="resource-link" id="d-resource-link" href="#" target="_blank">
-              <div class="resource-icon">📂</div>
+              <div class="resource-icon">💾</div>
               <div class="resource-info">
-                <div class="r-title">Campaign Asset Pack</div>
-                <div class="r-sub">Brand guidelines, logos, approved audio &amp; overlays</div>
+                <div class="r-title">Google Drive</div>
+                <div class="r-sub">Resource</div>
               </div>
-              <svg class="resource-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M7 17L17 7M17 7H7M17 7v10"/>
+              <svg class="resource-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6m12-3h-6m6 0v6m0-6L10 14"/>
               </svg>
             </a>
-          </div>
-
-          <div class="d-section">
-            <div class="d-section-title">🔥 Top Performing Videos</div>
-            <div class="viral-row">
-              <div class="viral-card">
-                <div class="viral-thumb">🎬<div class="viral-play">▶</div></div>
-                <div class="viral-meta">
-                  <div class="viral-views">2.4M</div>
-                  <div class="viral-label">Views · 3 days ago</div>
-                </div>
-              </div>
-              <div class="viral-card">
-                <div class="viral-thumb">🎥<div class="viral-play">▶</div></div>
-                <div class="viral-meta">
-                  <div class="viral-views">1.8M</div>
-                  <div class="viral-label">Views · 5 days ago</div>
-                </div>
-              </div>
-              <div class="viral-card">
-                <div class="viral-thumb">📹<div class="viral-play">▶</div></div>
-                <div class="viral-meta">
-                  <div class="viral-views">980K</div>
-                  <div class="viral-label">Views · 1 week ago</div>
-                </div>
-              </div>
-            </div>
           </div>
         </div>
 
         <div class="d-sticky">
           <div class="d-widget">
-            <div class="d-widget-title">Campaign Budget Tracker</div>
             <div class="budget-track">
-              <div class="budget-nums">
-                <div>
-                  <div style="font-size:10px;color:var(--text3);font-family:'Syne',sans-serif;text-transform:uppercase;letter-spacing:.1em;margin-bottom:2px">Paid Out</div>
-                  <div class="budget-current" id="d-payout">$0</div>
-                </div>
-                <div style="text-align:right">
-                  <div style="font-size:10px;color:var(--text3);font-family:'Syne',sans-serif;text-transform:uppercase;letter-spacing:.1em;margin-bottom:2px">Total Budget</div>
-                  <div class="budget-total" id="d-budget">$0</div>
-                </div>
+              <div class="budget-title-wrap">
+                <div class="budget-current" id="d-payout">$0</div>
+                <div class="budget-total" id="d-budget">budget</div>
               </div>
               <div class="budget-bar"><div class="budget-fill" id="d-budget-fill" style="width:0%"></div></div>
               <div class="budget-pct" id="d-budget-pct">0% distributed</div>
@@ -776,14 +683,13 @@ html,body{height:100%;background:var(--bg0);color:var(--text);font-family:'DM Sa
 
             <table class="meta-table">
               <tr><td>Category</td><td id="m-category">—</td></tr>
-              <tr><td>Type</td><td>UGC / Organic</td></tr>
+              <tr><td>Type</td><td id="m-type">Clipping</td></tr>
               <tr><td>Platforms</td><td id="m-platforms">—</td></tr>
-              <tr><td>Status</td><td id="m-status">—</td></tr>
-              <tr><td>Last Updated</td><td id="m-updated">—</td></tr>
+              <tr><td>Last updated</td><td id="m-updated">—</td></tr>
             </table>
 
-            <div style="margin:18px 0;padding:14px;border:1px solid var(--border);border-radius:12px;background:rgba(255,255,255,.025)">
-              <div style="font-family:'Syne',sans-serif;font-size:10px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:var(--text3);margin-bottom:10px">Submit Video Link</div>
+            <div style="margin:0 0 18px;padding:14px;border:1px solid var(--border);border-radius:12px;background:rgba(255,255,255,.01)">
+              <div style="font-family:'Syne',sans-serif;font-size:10px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--text3);margin-bottom:10px">Submit Video Link</div>
               <select id="submit-platform" style="width:100%;background:var(--bg2);border:1px solid var(--border2);border-radius:9px;padding:10px 12px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:13px;margin-bottom:10px">
                 <option value="TikTok">TikTok</option>
                 <option value="Instagram">Instagram</option>
@@ -791,7 +697,7 @@ html,body{height:100%;background:var(--bg0);color:var(--text);font-family:'DM Sa
               </select>
               <input id="submit-video-url" type="url" placeholder="Paste your public video URL" style="width:100%;background:var(--bg2);border:1px solid var(--border2);border-radius:9px;padding:10px 12px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:13px;outline:none"/>
             </div>
-            <button class="submit-btn" onclick="submitVideo()">Submit Your Video</button>
+            <button class="submit-btn" onclick="submitVideo()">Submit Video</button>
           </div>
         </div>
       </div>
@@ -806,12 +712,12 @@ html,body{height:100%;background:var(--bg0);color:var(--text);font-family:'DM Sa
         <div style="text-align:center;padding:40px;color:var(--text3)">Loading announcements...</div>
       </div>
     </div>
+
     <div id="view-support" style="display:none;">
       <div class="grid-header">
         <h1 class="grid-title">Support <span>Chat</span></h1>
         <p class="grid-sub">Ask about content reviews, campaign requirements, payouts, or account issues.</p>
       </div>
-
       <div style="max-width:720px">
         <div style="background:var(--bg1);border:1px solid var(--border);border-radius:20px;overflow:hidden">
           <div style="padding:20px 24px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px">
@@ -835,17 +741,6 @@ html,body{height:100%;background:var(--bg0);color:var(--text);font-family:'DM Sa
             <button onclick="sendChat()" style="padding:11px 20px;border-radius:10px;border:none;background:var(--lime);color:#000;font-family:'Syne',sans-serif;font-size:12px;font-weight:800;cursor:pointer;letter-spacing:.08em">Send</button>
           </div>
         </div>
-
-        <div style="margin-top:18px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px">
-          <button onclick="quickMsg('How do I submit a video?')" style="text-align:left;background:var(--bg1);border:1px solid var(--border);border-radius:12px;padding:16px;color:var(--text);cursor:pointer">
-            <div style="font-family:'Syne',sans-serif;font-size:11px;font-weight:800;margin-bottom:4px">Submit a video</div>
-            <div style="font-size:11px;color:var(--text3)">Submission steps and required links</div>
-          </button>
-          <button onclick="quickMsg('When do I get paid?')" style="text-align:left;background:var(--bg1);border:1px solid var(--border);border-radius:12px;padding:16px;color:var(--text);cursor:pointer">
-            <div style="font-family:'Syne',sans-serif;font-size:11px;font-weight:800;margin-bottom:4px">Payout timing</div>
-            <div style="font-size:11px;color:var(--text3)">Weekly payout schedule</div>
-          </button>
-        </div>
       </div>
     </div>
 
@@ -855,11 +750,9 @@ html,body{height:100%;background:var(--bg0);color:var(--text);font-family:'DM Sa
         <p class="grid-sub">Add your social handles so HQ can match submissions to your secure account.</p>
       </div>
       <div style="max-width:760px;background:var(--bg1);border:1px solid var(--border);border-radius:20px;padding:28px">
-
         <div style="display:grid;gap:14px">
           <input id="profile-name" type="text" placeholder="Your name" style="background:var(--bg2);border:1px solid var(--border2);border-radius:10px;padding:12px 14px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:13px;outline:none"/>
           <input id="profile-email" type="email" placeholder="Email (Used for login)" disabled style="background:var(--bg0);border:1px solid var(--border);border-radius:10px;padding:12px 14px;color:var(--text3);font-family:'DM Sans',sans-serif;font-size:13px;outline:none;cursor:not-allowed;"/>
-          
           <div class="responsive-grid">
             <input id="profile-tiktok" type="text" placeholder="TikTok handle" style="background:var(--bg2);border:1px solid var(--border2);border-radius:10px;padding:12px 14px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:13px;outline:none"/>
             <input id="profile-tiktok-url" type="url" placeholder="TikTok profile URL" style="background:var(--bg2);border:1px solid var(--border2);border-radius:10px;padding:12px 14px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:13px;outline:none"/>
@@ -919,6 +812,7 @@ let activeFilter = 'all';
 let selectedCampaign = null;
 let creatorProfile = {};
 let creatorSubmissions = [];
+let isOverviewExpanded = false;
 
 // ── AUTHENTICATION ──
 const authGate = document.getElementById('auth-gate');
@@ -992,15 +886,17 @@ async function handleResetPassword() {
   document.getElementById('auth-error').style.color = "var(--lime)";
   showAuthError("Sending reset link...");
 
-  const { error } = await leadDb.auth.resetPasswordForEmail(email);
+  // FIX: Provide dynamic, explicit redirection parameters matching your allowed site configuration URLs
+  const { error } = await leadDb.auth.resetPasswordForEmail(email, {
+    redirectTo: window.location.origin + window.location.pathname
+  });
 
   if (error) {
     document.getElementById('auth-error').style.color = "var(--danger)";
-    showAuthError(error.message);
+    showAuthError("Error sending recovery email: " + error.message);
   } else {
     document.getElementById('auth-error').style.color = "var(--lime)";
     showAuthError("Password recovery email sent! Check your inbox.");
-    setTimeout(() => { document.getElementById('auth-error').style.color = "var(--danger)"; }, 5000);
   }
 }
 
@@ -1103,17 +999,19 @@ function buildCard(c) {
       <div class="c-status active">Active</div>
     </div>
     <div class="c-body">
-      <div class="c-cat">${c.category||'Campaign'}</div>
-      <div class="c-title">${c.title}</div>
-      <div class="c-platforms">
-        ${c.cpm_tiktok ? `<div class="plt-icon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V8.69a8.18 8.18 0 004.78 1.52V6.76a4.85 4.85 0 01-1.01-.07z"/></svg>TikTok</div>` : ''}
-        ${c.cpm_instagram ? `<div class="plt-icon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>IG</div>` : ''}
-        ${c.cpm_youtube ? `<div class="plt-icon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>YT</div>` : ''}
+      <div>
+        <div class="c-cat">${c.category||'Campaign'}</div>
+        <div class="c-title">${c.title}</div>
+        <div class="c-platforms">
+          ${c.cpm_tiktok ? `<div class="plt-icon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V8.69a8.18 8.18 0 004.78 1.52V6.76a4.85 4.85 0 01-1.01-.07z"/></svg>TikTok</div>` : ''}
+          ${c.cpm_instagram ? `<div class="plt-icon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>IG</div>` : ''}
+          ${c.cpm_youtube ? `<div class="plt-icon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>YT</div>` : ''}
+        </div>
+        ${topCpm ? `<div class="c-cpm"><span class="c-cpm-label">Top CPM</span><span class="c-cpm-val">$${topCpm.toFixed(2)}</span></div>` : ''}
       </div>
-      ${topCpm ? `<div class="c-cpm"><span class="c-cpm-label">Top CPM</span><span class="c-cpm-val">$${topCpm.toFixed(2)}</span></div>` : ''}
       <div class="c-progress-wrap">
         <div class="c-progress-label">
-          <span>Paid Out: $${(c.current_payout||0).toLocaleString()} / $${(c.total_budget||0).toLocaleString()}</span>
+          <span>Paid Out: $${(c.current_payout||0).toLocaleString()}</span>
           <span>${pct}%</span>
         </div>
         <div class="c-progress-bar">
@@ -1124,7 +1022,7 @@ function buildCard(c) {
   </div>`;
 }
 
-// ── OPEN DETAIL ──
+// ── OPEN PREMIUM ASYMMETRICAL VIEW DETAILS ──
 function openDetail(c) {
   selectedCampaign = c;
   setActiveNav('rewards');
@@ -1133,38 +1031,73 @@ function openDetail(c) {
   document.getElementById('view-support').style.display = 'none';
   document.getElementById('view-profile').style.display = 'none';
   document.getElementById('view-earnings').style.display = 'none';
+  
   const detail = document.getElementById('view-detail');
   detail.classList.add('show');
 
-  document.getElementById('d-banner-img').src = c.banner_url || '';
-  document.getElementById('d-cat').textContent = c.category || '';
+  // Load right hand visual thumbnail element
+  document.getElementById('d-banner-img').src = c.thumbnail_url || '';
+  document.getElementById('d-cat').textContent = c.category || 'Campaign';
   document.getElementById('d-title').textContent = c.title;
-  document.getElementById('d-requirements').textContent = c.requirements || 'No specific requirements listed.';
+  document.getElementById('d-requirements').textContent = c.requirements || 'Refer to the Google Docs for the campaign requirements';
+  document.getElementById('d-dynamic-tag').textContent = c.category || 'UGC';
 
-  document.getElementById('d-tags').innerHTML = [c.category, 'UGC', 'Organic', 'Creator Program']
-    .filter(Boolean).map(t => `<span class="d-tag">${t}</span>`).join('');
+  // Toggle expanded summary text area
+  isOverviewExpanded = false;
+  const overviewSummary = document.getElementById('d-overview-summary');
+  const expandToggle = document.getElementById('d-expand-toggle');
+  const rawDesc = c.description || "We are running a clipping campaign. Your role is to transform official episodes into engaging, high-energy short-form content.";
+  
+  if (rawDesc.length > 180) {
+    overviewSummary.textContent = rawDesc.substring(0, 180) + "...";
+    expandToggle.style.display = "block";
+    expandToggle.textContent = "Expand ▾";
+  } else {
+    overviewSummary.textContent = rawDesc;
+    expandToggle.style.display = "none";
+  }
 
-  document.getElementById('d-cpm-tiktok').textContent   = c.cpm_tiktok   ? '$'+c.cpm_tiktok.toFixed(2)   : '$—';
-  document.getElementById('d-cpm-instagram').textContent = c.cpm_instagram ? '$'+c.cpm_instagram.toFixed(2) : '$—';
-  document.getElementById('d-cpm-youtube').textContent  = c.cpm_youtube  ? '$'+c.cpm_youtube.toFixed(2)  : '$—';
+  // Update glossy container metrics
+  document.getElementById('d-cpm-tiktok').innerHTML = c.cpm_tiktok ? `$${c.cpm_tiktok.toFixed(2)} <span>/ 1K views</span>` : '$—';
+  document.getElementById('d-cpm-instagram').innerHTML = c.cpm_instagram ? `$${c.cpm_instagram.toFixed(2)} <span>/ 1K views</span>` : '$—';
+  
+  // Hide inactive platforms dynamically if rate isn't set
+  document.getElementById('card-tiktok').style.display = c.cpm_tiktok ? "block" : "none";
+  document.getElementById('card-instagram').style.display = c.cpm_instagram ? "block" : "none";
 
   const link = document.getElementById('d-resource-link');
   link.href = c.drive_resource_url || '#';
   link.style.opacity = c.drive_resource_url ? '1' : '.4';
 
+  // Sidebar widget updates
   const pct = Math.min(((c.current_payout||0)/(c.total_budget||1))*100, 100).toFixed(1);
-  document.getElementById('d-payout').textContent  = '$'+(c.current_payout||0).toLocaleString();
-  document.getElementById('d-budget').textContent  = '$'+(c.total_budget||0).toLocaleString();
+  document.getElementById('d-payout').textContent = '$' + (c.current_payout||0).toLocaleString();
+  document.getElementById('d-budget').textContent = 'of $' + (c.total_budget||0).toLocaleString() + ' budget';
   document.getElementById('d-budget-fill').style.width = pct+'%';
-  document.getElementById('d-budget-pct').textContent  = pct+'% distributed';
+  document.getElementById('d-budget-pct').textContent = pct+'% distributed';
 
   document.getElementById('m-category').textContent = c.category || '—';
   const platforms = [c.cpm_tiktok&&'TikTok', c.cpm_instagram&&'Instagram', c.cpm_youtube&&'YouTube'].filter(Boolean).join(', ');
   document.getElementById('m-platforms').textContent = platforms || '—';
-  document.getElementById('m-status').innerHTML = `<span style="color:var(--lime)">${c.status}</span>`;
   document.getElementById('m-updated').textContent = new Date(c.created_at).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
 
   document.getElementById('stage').scrollTo({top:0, behavior:'smooth'});
+}
+
+function toggleOverviewExpand() {
+  if(!selectedCampaign) return;
+  const overviewSummary = document.getElementById('d-overview-summary');
+  const expandToggle = document.getElementById('d-expand-toggle');
+  const rawDesc = selectedCampaign.description || "";
+  
+  if(isOverviewExpanded) {
+    overviewSummary.textContent = rawDesc.substring(0, 180) + "...";
+    expandToggle.textContent = "Expand ▾";
+  } else {
+    overviewSummary.textContent = rawDesc;
+    expandToggle.textContent = "Read less ▴";
+  }
+  isOverviewExpanded = !isOverviewExpanded;
 }
 
 // ── BACK ──
@@ -1204,7 +1137,6 @@ function showView(view){
     document.getElementById('view-earnings').style.display = 'block';
   }
   
-  // Auto-close sidebar on mobile after clicking a link
   if(window.innerWidth <= 768) {
     sidebar.classList.remove('open');
     overlay.classList.remove('show');
