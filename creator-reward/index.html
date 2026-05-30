@@ -22,7 +22,7 @@ html,body{height:100%;background:var(--bg0);color:var(--text);font-family:'DM Sa
 /* ── AUTH GATE ── */
 #auth-gate{
   position:fixed;inset:0;background:var(--bg0);z-index:2000;
-  display:flex;align-items:center;justify-content:center;
+  display:flex;align-items:center;justify-content:center;padding:20px;
 }
 .auth-box{
   background:var(--bg1);border:1px solid var(--border2);
@@ -64,18 +64,26 @@ html,body{height:100%;background:var(--bg0);color:var(--text);font-family:'DM Sa
   color:var(--danger);font-size:12px;margin-bottom:16px;
   font-family:'Syne',sans-serif;display:none;text-align:center;
 }
-.logout-btn{
-  margin-top: 12px; width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--border2);
-  background: transparent; color: var(--text2); cursor: pointer; font-family: 'Syne', sans-serif;
-  font-size: 10px; font-weight: 700; text-transform: uppercase; transition: all .2s;
-}
-.logout-btn:hover{color: var(--text); border-color: var(--border);}
 
-/* ── ORIGINAL SIDEBAR ── */
+/* ── MOBILE HEADER (Hidden on Desktop) ── */
+#mobile-header {
+  display: none; position: fixed; top: 0; left: 0; right: 0; height: 60px;
+  background: var(--bg1); border-bottom: 1px solid var(--border); z-index: 99;
+  align-items: center; padding: 0 20px; gap: 16px;
+}
+#mobile-menu-btn {
+  background: transparent; border: none; color: var(--text); padding: 4px; cursor: pointer; display: flex; align-items: center;
+}
+#sidebar-overlay {
+  display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 998; backdrop-filter: blur(4px);
+}
+
+/* ── SIDEBAR ── */
 #sidebar{
   position:fixed;top:0;left:0;width:var(--sidebar);height:100vh;
   background:var(--bg1);border-right:1px solid var(--border);
-  display:flex;flex-direction:column;z-index:100;
+  display:flex;flex-direction:column;z-index:999;
+  transition: transform 0.3s ease;
 }
 .sb-logo{
   padding:28px 24px 24px;border-bottom:1px solid var(--border);
@@ -119,12 +127,18 @@ html,body{height:100%;background:var(--bg0);color:var(--text);font-family:'DM Sa
   width:32px;height:32px;border-radius:50%;
   background:linear-gradient(135deg,var(--lime),var(--orange));
   display:flex;align-items:center;justify-content:center;
-  font-family:'Syne',sans-serif;font-size:12px;font-weight:800;color:#000;
+  font-family:'Syne',sans-serif;font-size:12px;font-weight:800;color:#000;flex-shrink:0;
 }
-.sb-user-info .name{font-family:'Syne',sans-serif;font-size:12px;font-weight:700}
+.sb-user-info .name{font-family:'Syne',sans-serif;font-size:12px;font-weight:700;word-break:break-all}
 .sb-user-info .role{font-size:11px;color:var(--text3)}
+.logout-btn{
+  margin-top: 16px; width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--border2);
+  background: transparent; color: var(--text2); cursor: pointer; font-family: 'Syne', sans-serif;
+  font-size: 10px; font-weight: 700; text-transform: uppercase; transition: all .2s;
+}
+.logout-btn:hover{color: var(--text); border-color: var(--border);}
 
-/* ── ORIGINAL MAIN STAGE ── */
+/* ── MAIN STAGE ── */
 #stage{
   margin-left:var(--sidebar);height:100vh;
   overflow-y:auto;background:var(--bg0);
@@ -143,9 +157,9 @@ html,body{height:100%;background:var(--bg0);color:var(--text);font-family:'DM Sa
 .grid-title span{color:var(--lime)}
 .grid-sub{font-size:14px;color:var(--text2);margin-top:8px;max-width:500px}
 
-.search-row{display:flex;align-items:center;gap:12px;margin-top:24px}
+.search-row{display:flex;flex-wrap:wrap;align-items:center;gap:12px;margin-top:24px}
 .search-wrap{
-  flex:1;max-width:400px;position:relative;
+  flex:1;min-width:260px;max-width:400px;position:relative;
 }
 .search-wrap svg{
   position:absolute;left:14px;top:50%;transform:translateY(-50%);
@@ -158,9 +172,8 @@ html,body{height:100%;background:var(--bg0);color:var(--text);font-family:'DM Sa
   outline:none;transition:border-color .2s;
 }
 #search-input:focus{border-color:rgba(200,255,0,.4)}
-#search-input::placeholder{color:var(--text3)}
 
-.filter-tabs{display:flex;gap:6px}
+.filter-tabs{display:flex;gap:6px;flex-wrap:wrap;}
 .ftab{
   padding:8px 16px;border-radius:8px;border:1px solid var(--border2);
   font-family:'Syne',sans-serif;font-size:11px;font-weight:700;
@@ -170,10 +183,15 @@ html,body{height:100%;background:var(--bg0);color:var(--text);font-family:'DM Sa
 .ftab:hover{border-color:rgba(200,255,0,.3);color:var(--lime)}
 .ftab.on{background:rgba(200,255,0,.1);border-color:var(--lime);color:var(--lime)}
 
+/* Responsive Grids */
 .stats-strip{
   display:grid;grid-template-columns:repeat(3,1fr);gap:12px;
   margin-bottom:32px;
 }
+.responsive-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
+}
+
 .stat-pill{
   background:var(--bg2);border:1px solid var(--border);border-radius:12px;
   padding:16px 20px;display:flex;align-items:center;gap:14px;
@@ -186,7 +204,7 @@ html,body{height:100%;background:var(--bg0);color:var(--text);font-family:'DM Sa
 .stat-lbl{font-size:11px;color:var(--text3);font-family:'Syne',sans-serif;letter-spacing:.1em;text-transform:uppercase}
 
 #campaign-grid{
-  display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px;
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;
 }
 .empty-state{
   grid-column:1/-1;text-align:center;padding:80px 20px;
@@ -231,7 +249,7 @@ html,body{height:100%;background:var(--bg0);color:var(--text);font-family:'DM Sa
   font-family:'Syne',sans-serif;font-size:15px;font-weight:700;
   line-height:1.4;margin-bottom:12px;
 }
-.c-platforms{display:flex;align-items:center;gap:8px;margin-bottom:14px}
+.c-platforms{display:flex;align-items:center;gap:8px;margin-bottom:14px;flex-wrap:wrap;}
 .plt-icon{
   display:flex;align-items:center;gap:4px;
   font-family:'Syne',sans-serif;font-size:10px;font-weight:600;color:var(--text3);
@@ -280,8 +298,8 @@ html,body{height:100%;background:var(--bg0);color:var(--text);font-family:'DM Sa
   background:var(--bg2);border:1px solid var(--border);
 }
 .d-banner-img{
-  width:100%;height:280px;object-fit:cover;display:block;
-  filter:brightness(.55);
+  width:100%;height:100%;min-height:280px;object-fit:cover;display:block;
+  filter:brightness(.55);position:absolute;inset:0;
 }
 .d-banner-overlay{
   position:absolute;inset:0;
@@ -321,7 +339,7 @@ html,body{height:100%;background:var(--bg0);color:var(--text);font-family:'DM Sa
   letter-spacing:.2em;text-transform:uppercase;color:var(--text3);
   margin-bottom:18px;padding-bottom:14px;border-bottom:1px solid var(--border);
 }
-.d-requirements{font-size:14px;color:var(--text2);line-height:1.8}
+.d-requirements{font-size:14px;color:var(--text2);line-height:1.8;white-space:pre-wrap;}
 
 .earnings-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
 .earn-card{
@@ -377,7 +395,7 @@ html,body{height:100%;background:var(--bg0);color:var(--text);font-family:'DM Sa
 .viral-label{font-size:10px;color:var(--text3);font-family:'Syne',sans-serif}
 
 /* RIGHT COLUMN STICKY */
-.d-sticky{position:sticky;top:0}
+.d-sticky{position:sticky;top:80px}
 .d-widget{
   background:var(--bg1);border:1px solid var(--border);
   border-radius:16px;padding:24px;
@@ -419,7 +437,7 @@ html,body{height:100%;background:var(--bg0);color:var(--text);font-family:'DM Sa
 
 /* ── LOADING ── */
 .loading-grid{
-  display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px;
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;
 }
 .skel-card{
   background:var(--bg1);border:1px solid var(--border);border-radius:16px;overflow:hidden;
@@ -433,11 +451,40 @@ html,body{height:100%;background:var(--bg0);color:var(--text);font-family:'DM Sa
 
 @keyframes shimmer{0%,100%{opacity:1}50%{opacity:.5}}
 @keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+
+/* ── RESPONSIVE MOBILE QUERIES ── */
+@media (max-width: 768px) {
+  #mobile-header { display: flex; }
+  
+  .auth-box { padding: 32px 24px; }
+  
+  #sidebar { transform: translateX(-100%); z-index: 1000; }
+  #sidebar.open { transform: translateX(0); }
+  #sidebar-overlay.show { display: block; }
+  
+  #stage { margin-left: 0; margin-top: 60px; height: calc(100vh - 60px); }
+  
+  #view-grid, #view-profile, #view-earnings, #view-announcements, #view-support { padding: 24px 20px 80px !important; }
+  
+  .stats-strip { grid-template-columns: 1fr; gap: 10px; }
+  .responsive-grid { grid-template-columns: 1fr; }
+  
+  .d-body { grid-template-columns: 1fr; padding: 24px 20px 80px; gap: 24px; }
+  .d-banner { margin: 20px 20px 0; min-height: 220px; }
+  .d-banner-img { min-height: 220px; }
+  .d-banner-overlay { padding: 24px; }
+  .back-btn { padding: 20px 20px 0; }
+  
+  .grid-title { font-size: 38px; }
+  .d-banner-title { font-size: 32px; }
+  
+  .earnings-grid, .viral-row { grid-template-columns: 1fr; }
+  .c-platforms { flex-wrap: wrap; }
+}
 </style>
 </head>
 <body>
 
-<!-- AUTH GATE -->
 <div id="auth-gate">
   <div class="auth-box">
     <div class="auth-logo">Click<em>sable</em>.</div>
@@ -459,9 +506,19 @@ html,body{height:100%;background:var(--bg0);color:var(--text);font-family:'DM Sa
   </div>
 </div>
 
-<!-- APP WRAPPER (Hidden until logged in) -->
 <div id="app-wrapper" style="display:none;">
-  <!-- SIDEBAR -->
+  
+  <div id="mobile-header">
+    <button id="mobile-menu-btn">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M3 12h18M3 6h18M3 18h18"/>
+      </svg>
+    </button>
+    <div class="auth-logo" style="margin:0; font-size:24px;">Click<em>sable</em>.</div>
+  </div>
+  
+  <div id="sidebar-overlay"></div>
+
   <nav id="sidebar">
     <div class="sb-logo">
       <div class="wordmark">Click<em>sable</em>.</div>
@@ -519,10 +576,8 @@ html,body{height:100%;background:var(--bg0);color:var(--text);font-family:'DM Sa
     </div>
   </nav>
 
-  <!-- MAIN STAGE -->
   <main id="stage">
 
-    <!-- VIEW A: GRID -->
     <div id="view-grid">
       <div class="grid-header">
         <h1 class="grid-title">Active <span>Campaigns</span></h1>
@@ -568,14 +623,12 @@ html,body{height:100%;background:var(--bg0);color:var(--text);font-family:'DM Sa
       </div>
 
       <div id="campaign-grid">
-        <!-- skeleton loaders -->
         <div class="skel-card"><div class="skel-thumb"></div><div class="skel-body"><div class="skel-line"></div><div class="skel-line w70"></div><div class="skel-line w50"></div></div></div>
         <div class="skel-card"><div class="skel-thumb"></div><div class="skel-body"><div class="skel-line"></div><div class="skel-line w70"></div><div class="skel-line w50"></div></div></div>
         <div class="skel-card"><div class="skel-thumb"></div><div class="skel-body"><div class="skel-line"></div><div class="skel-line w70"></div><div class="skel-line w50"></div></div></div>
       </div>
     </div>
 
-    <!-- VIEW B: DETAIL -->
     <div id="view-detail">
       <div class="back-btn" id="back-btn">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
@@ -595,7 +648,6 @@ html,body{height:100%;background:var(--bg0);color:var(--text);font-family:'DM Sa
       </div>
 
       <div class="d-body">
-        <!-- LEFT -->
         <div>
           <div class="d-section">
             <div class="d-section-title">📋 Requirements</div>
@@ -668,7 +720,6 @@ html,body{height:100%;background:var(--bg0);color:var(--text);font-family:'DM Sa
           </div>
         </div>
 
-        <!-- RIGHT STICKY -->
         <div class="d-sticky">
           <div class="d-widget">
             <div class="d-widget-title">Campaign Budget Tracker</div>
@@ -710,7 +761,6 @@ html,body{height:100%;background:var(--bg0);color:var(--text);font-family:'DM Sa
       </div>
     </div>
 
-    <!-- VIEW C: ANNOUNCEMENTS -->
     <div id="view-announcements" style="display:none;animation:fadeUp .35s ease">
       <div class="grid-header">
         <h1 class="grid-title">Announce<span>ments</span></h1>
@@ -747,7 +797,6 @@ html,body{height:100%;background:var(--bg0);color:var(--text);font-family:'DM Sa
       </div>
     </div>
 
-    <!-- VIEW D: SUPPORT -->
     <div id="view-support" style="display:none;animation:fadeUp .35s ease">
       <div class="grid-header">
         <h1 class="grid-title">Support <span>Chat</span></h1>
@@ -791,11 +840,10 @@ html,body{height:100%;background:var(--bg0);color:var(--text);font-family:'DM Sa
       </div>
     </div>
 
-    <!-- VIEW E: PROFILE -->
     <div id="view-profile" style="display:none;animation:fadeUp .35s ease">
       <div class="grid-header">
         <h1 class="grid-title">My <span>Profile</span></h1>
-        <p class="grid-sub">Add your social handles so HQ can match submissions to the right account.</p>
+        <p class="grid-sub">Add your social handles so HQ can match submissions to your secure account.</p>
       </div>
       <div style="max-width:760px;background:var(--bg1);border:1px solid var(--border);border-radius:20px;padding:28px">
         <div style="font-family:'Syne',sans-serif;font-size:10px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:var(--text3);margin-bottom:8px">Creator ID</div>
@@ -804,30 +852,30 @@ html,body{height:100%;background:var(--bg0);color:var(--text);font-family:'DM Sa
         <div style="display:grid;gap:14px">
           <input id="profile-name" type="text" placeholder="Your name" style="background:var(--bg2);border:1px solid var(--border2);border-radius:10px;padding:12px 14px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:13px;outline:none"/>
           <input id="profile-email" type="email" placeholder="Email (Used for login)" disabled style="background:var(--bg0);border:1px solid var(--border);border-radius:10px;padding:12px 14px;color:var(--text3);font-family:'DM Sans',sans-serif;font-size:13px;outline:none;cursor:not-allowed;"/>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+          
+          <div class="responsive-grid">
             <input id="profile-tiktok" type="text" placeholder="TikTok handle" style="background:var(--bg2);border:1px solid var(--border2);border-radius:10px;padding:12px 14px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:13px;outline:none"/>
             <input id="profile-tiktok-url" type="url" placeholder="TikTok profile URL" style="background:var(--bg2);border:1px solid var(--border2);border-radius:10px;padding:12px 14px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:13px;outline:none"/>
           </div>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+          <div class="responsive-grid">
             <input id="profile-instagram" type="text" placeholder="Instagram handle" style="background:var(--bg2);border:1px solid var(--border2);border-radius:10px;padding:12px 14px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:13px;outline:none"/>
             <input id="profile-instagram-url" type="url" placeholder="Instagram profile URL" style="background:var(--bg2);border:1px solid var(--border2);border-radius:10px;padding:12px 14px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:13px;outline:none"/>
           </div>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+          <div class="responsive-grid">
             <input id="profile-youtube" type="text" placeholder="YouTube handle/channel" style="background:var(--bg2);border:1px solid var(--border2);border-radius:10px;padding:12px 14px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:13px;outline:none"/>
             <input id="profile-youtube-url" type="url" placeholder="YouTube channel URL" style="background:var(--bg2);border:1px solid var(--border2);border-radius:10px;padding:12px 14px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:13px;outline:none"/>
           </div>
-          <button class="submit-btn" onclick="saveCreatorProfile()" style="max-width:260px">Save Profile</button>
+          <button class="submit-btn" onclick="saveCreatorProfile()" style="max-width:260px; margin-top:10px;">Save Profile</button>
         </div>
       </div>
     </div>
 
-    <!-- VIEW F: EARNINGS -->
     <div id="view-earnings" style="display:none;animation:fadeUp .35s ease">
       <div class="grid-header">
         <h1 class="grid-title">My <span>Earnings</span></h1>
         <p class="grid-sub">Track submitted videos, approved views, estimated payouts, and weekly payment status.</p>
       </div>
-      <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;max-width:900px;margin-bottom:18px">
+      <div class="stats-strip" style="max-width:900px;margin-bottom:18px">
         <div class="stat-pill"><div class="stat-dot lime"></div><div><div class="stat-num" id="earn-approved">$0</div><div class="stat-lbl">Approved Earnings</div></div></div>
         <div class="stat-pill"><div class="stat-dot orange"></div><div><div class="stat-num" id="earn-count">0</div><div class="stat-lbl">Submitted Videos</div></div></div>
         <div class="stat-pill"><div class="stat-dot grey"></div><div><div class="stat-num" id="earn-pending">0</div><div class="stat-lbl">Pending Review</div></div></div>
@@ -839,6 +887,18 @@ html,body{height:100%;background:var(--bg0);color:var(--text);font-family:'DM Sa
 </div>
 
 <script>
+// ── MOBILE MENU LOGIC ──
+const sidebar = document.getElementById('sidebar');
+const overlay = document.getElementById('sidebar-overlay');
+const menuBtn = document.getElementById('mobile-menu-btn');
+
+function toggleSidebar() {
+  sidebar.classList.toggle('open');
+  overlay.classList.toggle('show');
+}
+menuBtn.addEventListener('click', toggleSidebar);
+overlay.addEventListener('click', toggleSidebar);
+
 // ── SUPABASE INIT ──
 const SUPABASE_URL  = 'https://ctwrrrnjbytnthadpksl.supabase.co';
 const SUPABASE_ANON = 'sb_publishable_GgNKeidATKP54WWXGgfduQ_sq487yx_';
@@ -1113,6 +1173,12 @@ function showView(view){
   } else if(view === 'earnings'){
     loadCreatorSubmissions();
     document.getElementById('view-earnings').style.display = 'block';
+  }
+  
+  // Auto-close sidebar on mobile after clicking a link
+  if(window.innerWidth <= 768) {
+    sidebar.classList.remove('open');
+    overlay.classList.remove('show');
   }
 
   document.getElementById('stage').scrollTo({top:0, behavior:'smooth'});
