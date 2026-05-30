@@ -137,13 +137,13 @@ html,body{height:100%;background:var(--bg0);color:var(--text);font-family:'DM Sa
 }
 .c-card:hover{border-color:rgba(200,255,0,.25);transform:translateY(-2px);box-shadow:0 12px 40px rgba(0,0,0,.5)}
 .c-card:hover .c-thumb img{transform:scale(1.05)}
-.c-thumb{width:220px;flex-shrink:0;overflow:hidden;background:var(--bg3);position:relative;pointer-events:none;}
+.c-thumb{width:220px;flex-shrink:0;overflow:hidden;background:var(--bg3);position:relative;}
 .c-thumb img{width:100%;height:100%;object-fit:cover;transition:transform .4s;display:block;}
 .c-thumb-fallback{width:100%;height:100%;min-height:130px;display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--text3);}
 .c-status{position:absolute;top:8px;left:8px;font-family:'Syne',sans-serif;font-size:8px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;padding:3px 8px;border-radius:20px;}
 .c-status.active{background:rgba(200,255,0,.2);color:var(--lime);border:1px solid rgba(200,255,0,.4)}
 .c-status.paused{background:rgba(255,255,255,.08);color:var(--text3);border:1px solid var(--border)}
-.c-body{padding:16px 18px;flex:1;display:flex;flex-direction:column;justify-content:space-between;min-width:0;pointer-events:none;}
+.c-body{padding:16px 18px;flex:1;display:flex;flex-direction:column;justify-content:space-between;min-width:0;}
 .c-cat{font-family:'Syne',sans-serif;font-size:9px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--orange);margin-bottom:6px;}
 .c-title{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;line-height:1.4;margin-bottom:10px;}
 .c-platforms{display:flex;align-items:center;gap:6px;margin-bottom:10px;flex-wrap:wrap;}
@@ -177,9 +177,10 @@ html,body{height:100%;background:var(--bg0);color:var(--text);font-family:'DM Sa
   font-family:'Syne',sans-serif;font-size:11px;font-weight:800;
   letter-spacing:.15em;text-transform:uppercase;color:var(--orange);margin-bottom:12px;
 }
+/* Updated Readable Title Size */
 .d-banner-title {
-  font-family:'DM Sans',sans-serif;font-weight:700;font-size:26px; /* Optimized Size */
-  line-height:1.3;color:var(--text);margin-bottom:14px;
+  font-family:'DM Sans',sans-serif;font-weight:700;font-size:28px; 
+  line-height:1.2;color:var(--text);margin-bottom:14px;
 }
 .d-overview-text { font-size:14px;color:var(--text2);line-height:1.6;margin-bottom:14px; }
 .d-expand-btn {
@@ -212,7 +213,7 @@ html,body{height:100%;background:var(--bg0);color:var(--text);font-family:'DM Sa
 .d-requirements{font-size:14px;color:var(--text2);line-height:1.8;white-space:pre-wrap;}
 
 /* PREMIUM GLOSSY EARNING CARDS */
-.earnings-grid{display:grid;grid-template-columns:repeat(auto-fit, minmax(150px, 1fr));gap:16px}
+.earnings-grid{display:grid;grid-template-columns:repeat(3, 1fr);gap:16px}
 .earn-card{
   background: linear-gradient(135deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.01) 100%);
   border:1px solid var(--border);border-radius:16px;padding:24px;
@@ -249,7 +250,7 @@ html,body{height:100%;background:var(--bg0);color:var(--text);font-family:'DM Sa
 .resource-arrow{margin-left:auto;opacity:.3}
 
 /* VIRAL ROW (Reference Videos) */
-.viral-row{display:grid;grid-template-columns:repeat(auto-fit, minmax(140px, 1fr));gap:10px}
+.viral-row{display:grid;grid-template-columns:repeat(3, 1fr);gap:10px}
 .viral-card{background:var(--bg2);border:1px solid var(--border);border-radius:10px;overflow:hidden;}
 .viral-thumb{aspect-ratio:9/16;background:var(--bg3);display:flex;align-items:center;justify-content:center;font-size:24px;position:relative;}
 .viral-play{position:absolute;width:32px;height:32px;border-radius:50%;background:rgba(0,0,0,.6);display:flex;align-items:center;justify-content:center;}
@@ -329,15 +330,28 @@ html,body{height:100%;background:var(--bg0);color:var(--text);font-family:'DM Sa
   <div class="auth-box">
     <div class="auth-logo">Click<em>sable</em>.</div>
     <div class="auth-sub">Creator Rewards Hub</div>
+    
     <div id="auth-error" class="auth-error"></div>
-    <div class="auth-field"><label>Email Address</label><input type="email" id="auth-email" class="auth-input" placeholder="creator@example.com"/></div>
-    <div class="auth-field"><label>Password</label><input type="password" id="auth-password" class="auth-input" placeholder="••••••••"/></div>
+
+    <div class="auth-field">
+      <label>Email Address</label>
+      <input type="email" id="auth-email" class="auth-input" placeholder="creator@example.com"/>
+    </div>
+    <div class="auth-field">
+      <label>Password</label>
+      <input type="password" id="auth-password" class="auth-input" placeholder="••••••••"/>
+    </div>
+
     <button class="auth-btn" onclick="handleLogin()" id="btn-login">Log In</button>
     <button class="auth-btn secondary" onclick="handleSignUp()" id="btn-signup">Create Account</button>
+    
     <a class="forgot-password" onclick="handleResetPassword()">Forgot Password?</a>
 
     <div id="reset-password-fields" style="display:none;margin-top:20px;border-top:1px solid var(--border);padding-top:20px;">
-      <div class="auth-field"><label>Type New Password</label><input type="password" id="new-password-input" class="auth-input" placeholder="••••••••"/></div>
+      <div class="auth-field">
+        <label>Type New Password</label>
+        <input type="password" id="new-password-input" class="auth-input" placeholder="••••••••"/>
+      </div>
       <button class="auth-btn" onclick="submitNewPassword()">Update Password</button>
     </div>
   </div>
@@ -402,7 +416,6 @@ html,body{height:100%;background:var(--bg0);color:var(--text);font-family:'DM Sa
       <div id="campaign-grid"></div>
     </div>
 
-    <!-- ── VIEW B: UPDATED DYNAMIC ASYMMETRICAL DETAIL ── -->
     <div id="view-detail">
       <div class="back-btn" id="back-btn">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 18-6-6 6-6"/></svg> Back to Campaigns
@@ -467,18 +480,30 @@ html,body{height:100%;background:var(--bg0);color:var(--text);font-family:'DM Sa
             <a class="resource-link" id="d-resource-link" href="#" target="_blank">
               <div class="resource-icon">📂</div>
               <div class="resource-info">
-                <div class="r-title">Google Drive</div>
-                <div class="r-sub">Campaign Asset Pack</div>
+                <div class="r-title">Campaign Asset Pack</div>
+                <div class="r-sub">Brand guidelines, logos, approved audio &amp; overlays</div>
               </div>
+              <svg class="resource-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M7 17L17 7M17 7H7M17 7v10"/>
+              </svg>
             </a>
           </div>
 
           <div class="d-section">
             <div class="d-section-title">Top Performing Videos</div>
             <div class="viral-row">
-              <div class="viral-card"><div class="viral-thumb">🎬<div class="viral-play">▶</div></div><div class="viral-meta"><div class="viral-views">2.4M</div><div class="viral-label">Views · 3 days ago</div></div></div>
-              <div class="viral-card"><div class="viral-thumb">🎥<div class="viral-play">▶</div></div><div class="viral-meta"><div class="viral-views">1.8M</div><div class="viral-label">Views · 5 days ago</div></div></div>
-              <div class="viral-card"><div class="viral-thumb">📹<div class="viral-play">▶</div></div><div class="viral-meta"><div class="viral-views">980K</div><div class="viral-label">Views · 1 week ago</div></div></div>
+              <div class="viral-card">
+                <div class="viral-thumb">🎬<div class="viral-play">▶</div></div>
+                <div class="viral-meta"><div class="viral-views">2.4M</div><div class="viral-label">Views · 3 days ago</div></div>
+              </div>
+              <div class="viral-card">
+                <div class="viral-thumb">🎥<div class="viral-play">▶</div></div>
+                <div class="viral-meta"><div class="viral-views">1.8M</div><div class="viral-label">Views · 5 days ago</div></div>
+              </div>
+              <div class="viral-card">
+                <div class="viral-thumb">📹<div class="viral-play">▶</div></div>
+                <div class="viral-meta"><div class="viral-views">980K</div><div class="viral-label">Views · 1 week ago</div></div>
+              </div>
             </div>
           </div>
         </div>
@@ -496,13 +521,14 @@ html,body{height:100%;background:var(--bg0);color:var(--text);font-family:'DM Sa
 
             <table class="meta-table">
               <tr><td>Category</td><td id="m-category">—</td></tr>
-              <tr><td>Type</td><td id="m-type">Clipping</td></tr>
+              <tr><td>Type</td><td id="m-type">UGC / Organic</td></tr>
               <tr><td>Platforms</td><td id="m-platforms">—</td></tr>
-              <tr><td>Last updated</td><td id="m-updated">—</td></tr>
+              <tr><td>Status</td><td id="m-status">—</td></tr>
+              <tr><td>Last Updated</td><td id="m-updated">—</td></tr>
             </table>
 
-            <div style="margin:0 0 18px;padding:14px;border:1px solid var(--border);border-radius:12px;background:rgba(255,255,255,.01)">
-              <div style="font-family:'Syne',sans-serif;font-size:10px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--text3);margin-bottom:10px">Submit Video Link</div>
+            <div style="margin:18px 0;padding:14px;border:1px solid var(--border);border-radius:12px;background:rgba(255,255,255,.025)">
+              <div style="font-family:'Syne',sans-serif;font-size:10px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:var(--text3);margin-bottom:10px">Submit Video Link</div>
               <select id="submit-platform" style="width:100%;background:var(--bg2);border:1px solid var(--border2);border-radius:9px;padding:10px 12px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:13px;margin-bottom:10px">
                 <option value="TikTok">TikTok</option>
                 <option value="Instagram">Instagram</option>
@@ -510,13 +536,12 @@ html,body{height:100%;background:var(--bg0);color:var(--text);font-family:'DM Sa
               </select>
               <input id="submit-video-url" type="url" placeholder="Paste your public video URL" style="width:100%;background:var(--bg2);border:1px solid var(--border2);border-radius:9px;padding:10px 12px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:13px;outline:none"/>
             </div>
-            <button class="submit-btn" onclick="submitVideo()">Submit Video</button>
+            <button class="submit-btn" onclick="submitVideo()">Submit Your Video</button>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- VIEW C, D, E, F remain standard -->
     <div id="view-announcements" style="display:none;"><div class="grid-header"><h1 class="grid-title">Announce<span>ments</span></h1></div><div id="announcements-list" style="display:grid;gap:14px;max-width:900px"><div style="text-align:center;padding:40px;color:var(--text3)">Loading...</div></div></div>
     
     <div id="view-support" style="display:none;">
@@ -622,8 +647,9 @@ async function handleResetPassword() {
   document.getElementById('auth-error').style.color = "var(--lime)";
   showAuthError("Sending reset link...");
 
-  // Simply requesting password reset without exact redirection fallback. Avoids stringent mismatches.
-  const { error } = await leadDb.auth.resetPasswordForEmail(email);
+  const { error } = await leadDb.auth.resetPasswordForEmail(email, {
+    redirectTo: 'https://clicksable.com/creator-reward'
+  });
 
   if (error) {
     document.getElementById('auth-error').style.color = "var(--danger)";
