@@ -690,6 +690,64 @@ function renderDirectory(campaigns){
     </div>
   `).join('');
 }
+  function renderSubmissions(){
+  const list = document.getElementById('submission-list');
+  if(!allSubmissions.length){
+    list.innerHTML = '<div class="dir-empty">No creator videos submitted yet.</div>';
+    return;
+  }
+
+  list.innerHTML = allSubmissions.map(s => {
+    // Find the full creator profile for this submission
+    const creator = allCreators.find(c => c.creator_id === s.creator_id) || {};
+    const status = s.status || 'Pending';
+    const statusColor = status === 'Approved' ? 'var(--lime)' : status === 'Rejected' ? 'var(--danger)' : 'var(--orange)';
+    
+    // Build clickable social links based on what the creator filled out
+    const tiktokHtml = creator.tiktok_handle ? `<a href="${creator.tiktok_url || '#'}" target="_blank" style="color:var(--text); text-decoration:none; background:var(--bg3); padding:4px 8px; border-radius:6px; font-size:11px;">🎵 ${creator.tiktok_handle}</a>` : '';
+    const instaHtml = creator.instagram_handle ? `<a href="${creator.instagram_url || '#'}" target="_blank" style="color:var(--text); text-decoration:none; background:var(--bg3); padding:4px 8px; border-radius:6px; font-size:11px;">📸 ${creator.instagram_handle}</a>` : '';
+    const youtubeHtml = creator.youtube_handle ? `<a href="${creator.youtube_url || '#'}" target="_blank" style="color:var(--text); text-decoration:none; background:var(--bg3); padding:4px 8px; border-radius:6px; font-size:11px;">▶️ ${creator.youtube_handle}</a>` : '';
+    const socialLinks = [tiktokHtml, instaHtml, youtubeHtml].filter(Boolean).join(' ') || '<span style="color:var(--text3)">No social handles saved</span>';
+
+    return `<div style="background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:16px">
+      <div style="display:grid;grid-template-columns:1fr auto;gap:16px;align-items:start">
+        <div>
+          <div style="font-family:'Syne',sans-serif;font-size:13px;font-weight:800;margin-bottom:6px">${s.campaign_title || 'Campaign submission'}</div>
+          
+          <!-- FULL CREATOR PROFILE CARD -->
+          <div style="background:var(--bg1); border:1px solid var(--border); border-radius:10px; padding:12px; margin-bottom:12px;">
+            <div style="font-size:13px; font-weight:700; color:var(--text); margin-bottom:4px;">👤 ${creator.name || s.creator_name || 'Unknown Creator'}</div>
+            <div style="font-size:12px; color:var(--text2); margin-bottom:10px;">✉️ ${creator.email || s.creator_email || 'No email provided'}</div>
+            <div style="display:flex; gap:8px; flex-wrap:wrap;">
+              ${socialLinks}
+            </div>
+            <div style="font-size:9px; color:var(--text3); font-family:'Syne',sans-serif; margin-top:10px; text-transform:uppercase;">Creator ID: ${s.creator_id || 'N/A'}</div>
+          </div>
+          
+          <div style="font-size:12px; color:var(--text2); line-height:1.7">
+            Submitted for: <strong style="color:var(--text)">${s.platform || 'Platform'}</strong><br>
+            Video Link: <a href="${s.video_url}" target="_blank" style="color:var(--lime)">Open Original Video</a>
+          </div>
+        </div>
+        <div style="font-family:'Syne',sans-serif;font-size:10px;font-weight:800;color:${statusColor};text-transform:uppercase; background:var(--bg1); padding:6px 12px; border-radius:20px; border:1px solid ${statusColor};">
+          ${status}
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr auto auto;gap:10px;margin-top:14px;align-items:end; padding-top:14px; border-top:1px solid var(--border);">
+        <div class="form-field">
+          <label>Approved Views</label>
+          <input id="sub-views-${s.id}" type="number" min="0" value="${Number(s.views)||0}">
+        </div>
+        <div class="form-field">
+          <label>Earnings ($)</label>
+          <input id="sub-earnings-${s.id}" type="number" min="0" step="0.01" value="${Number(s.earnings)||0}">
+        </div>
+        <button class="tb-btn" onclick="reviewSubmission(${s.id}, 'Approved')" style="color:var(--lime); border-color:var(--lime);">Approve</button>
+        <button class="tb-btn danger" onclick="reviewSubmission(${s.id}, 'Rejected')">Reject</button>
+      </div>
+    </div>`;
+  }).join('');
+}
 
 // ── LOAD EDIT ──
 function loadEdit(id){
