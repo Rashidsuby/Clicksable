@@ -147,8 +147,12 @@ html,body{height:100%;background:var(--bg0);color:var(--text);font-family:'DM Sa
 #stage::-webkit-scrollbar-track{background:transparent}
 #stage::-webkit-scrollbar-thumb{background:var(--border2);border-radius:4px}
 
-/* ── VIEW A: GRID ── */
-#view-grid{padding:40px 40px 60px;animation:fadeUp .4s ease}
+/* ── UNIFORM PADDING FOR ALL VIEWS ── */
+#view-grid, #view-announcements, #view-support, #view-profile, #view-earnings {
+  padding: 40px 40px 60px;
+  animation: fadeUp .4s ease;
+}
+
 .grid-header{margin-bottom:32px}
 .grid-title{
   font-family:'Bebas Neue',sans-serif;font-size:52px;
@@ -485,6 +489,7 @@ html,body{height:100%;background:var(--bg0);color:var(--text);font-family:'DM Sa
 </head>
 <body>
 
+<!-- AUTH GATE -->
 <div id="auth-gate">
   <div class="auth-box">
     <div class="auth-logo">Click<em>sable</em>.</div>
@@ -506,8 +511,10 @@ html,body{height:100%;background:var(--bg0);color:var(--text);font-family:'DM Sa
   </div>
 </div>
 
+<!-- APP WRAPPER (Hidden until logged in) -->
 <div id="app-wrapper" style="display:none;">
   
+  <!-- MOBILE HEADER -->
   <div id="mobile-header">
     <button id="mobile-menu-btn">
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -517,8 +524,10 @@ html,body{height:100%;background:var(--bg0);color:var(--text);font-family:'DM Sa
     <div class="auth-logo" style="margin:0; font-size:24px;">Click<em>sable</em>.</div>
   </div>
   
+  <!-- SIDEBAR OVERLAY -->
   <div id="sidebar-overlay"></div>
 
+  <!-- SIDEBAR -->
   <nav id="sidebar">
     <div class="sb-logo">
       <div class="wordmark">Click<em>sable</em>.</div>
@@ -558,7 +567,7 @@ html,body{height:100%;background:var(--bg0);color:var(--text);font-family:'DM Sa
       </a>
       <a class="sb-item" href="#" data-view="earnings">
         <svg class="sb-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-          <path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+          <path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012-2h2a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
         </svg>
         My Earnings
       </a>
@@ -576,8 +585,10 @@ html,body{height:100%;background:var(--bg0);color:var(--text);font-family:'DM Sa
     </div>
   </nav>
 
+  <!-- MAIN STAGE -->
   <main id="stage">
 
+    <!-- VIEW A: GRID -->
     <div id="view-grid">
       <div class="grid-header">
         <h1 class="grid-title">Active <span>Campaigns</span></h1>
@@ -623,12 +634,14 @@ html,body{height:100%;background:var(--bg0);color:var(--text);font-family:'DM Sa
       </div>
 
       <div id="campaign-grid">
+        <!-- skeleton loaders -->
         <div class="skel-card"><div class="skel-thumb"></div><div class="skel-body"><div class="skel-line"></div><div class="skel-line w70"></div><div class="skel-line w50"></div></div></div>
         <div class="skel-card"><div class="skel-thumb"></div><div class="skel-body"><div class="skel-line"></div><div class="skel-line w70"></div><div class="skel-line w50"></div></div></div>
         <div class="skel-card"><div class="skel-thumb"></div><div class="skel-body"><div class="skel-line"></div><div class="skel-line w70"></div><div class="skel-line w50"></div></div></div>
       </div>
     </div>
 
+    <!-- VIEW B: DETAIL -->
     <div id="view-detail">
       <div class="back-btn" id="back-btn">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
@@ -648,6 +661,7 @@ html,body{height:100%;background:var(--bg0);color:var(--text);font-family:'DM Sa
       </div>
 
       <div class="d-body">
+        <!-- LEFT -->
         <div>
           <div class="d-section">
             <div class="d-section-title">📋 Requirements</div>
@@ -720,6 +734,7 @@ html,body{height:100%;background:var(--bg0);color:var(--text);font-family:'DM Sa
           </div>
         </div>
 
+        <!-- RIGHT STICKY -->
         <div class="d-sticky">
           <div class="d-widget">
             <div class="d-widget-title">Campaign Budget Tracker</div>
@@ -761,7 +776,8 @@ html,body{height:100%;background:var(--bg0);color:var(--text);font-family:'DM Sa
       </div>
     </div>
 
-    <div id="view-announcements" style="display:none;animation:fadeUp .35s ease">
+    <!-- VIEW C: ANNOUNCEMENTS -->
+    <div id="view-announcements" style="display:none;">
       <div class="grid-header">
         <h1 class="grid-title">Announce<span>ments</span></h1>
         <p class="grid-sub">Platform updates, campaign drops, review windows, and payout notices for Clicksable creators.</p>
@@ -797,7 +813,8 @@ html,body{height:100%;background:var(--bg0);color:var(--text);font-family:'DM Sa
       </div>
     </div>
 
-    <div id="view-support" style="display:none;animation:fadeUp .35s ease">
+    <!-- VIEW D: SUPPORT -->
+    <div id="view-support" style="display:none;">
       <div class="grid-header">
         <h1 class="grid-title">Support <span>Chat</span></h1>
         <p class="grid-sub">Ask about content reviews, campaign requirements, payouts, or account issues.</p>
@@ -840,7 +857,8 @@ html,body{height:100%;background:var(--bg0);color:var(--text);font-family:'DM Sa
       </div>
     </div>
 
-    <div id="view-profile" style="display:none;animation:fadeUp .35s ease">
+    <!-- VIEW E: PROFILE -->
+    <div id="view-profile" style="display:none;">
       <div class="grid-header">
         <h1 class="grid-title">My <span>Profile</span></h1>
         <p class="grid-sub">Add your social handles so HQ can match submissions to your secure account.</p>
@@ -870,7 +888,8 @@ html,body{height:100%;background:var(--bg0);color:var(--text);font-family:'DM Sa
       </div>
     </div>
 
-    <div id="view-earnings" style="display:none;animation:fadeUp .35s ease">
+    <!-- VIEW F: EARNINGS -->
+    <div id="view-earnings" style="display:none;">
       <div class="grid-header">
         <h1 class="grid-title">My <span>Earnings</span></h1>
         <p class="grid-sub">Track submitted videos, approved views, estimated payouts, and weekly payment status.</p>
