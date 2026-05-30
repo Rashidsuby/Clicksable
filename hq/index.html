@@ -1,0 +1,849 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Clicksable HQ — Admin CMS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+:root{
+  --bg0:#080808;--bg1:#0d0d0d;--bg2:#131313;--bg3:#1a1a1a;
+  --border:rgba(255,255,255,0.06);--border2:rgba(255,255,255,0.1);
+  --lime:#C8FF00;--orange:#FF5A1F;
+  --text:#ffffff;--text2:#a0a0a0;--text3:#606060;
+  --danger:#FF3B3B;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%;background:var(--bg0);color:var(--text);font-family:'DM Sans',sans-serif;overflow:hidden}
+
+/* ── PIN GATE ── */
+#pin-gate{
+  position:fixed;inset:0;background:var(--bg0);z-index:1000;
+  display:flex;align-items:center;justify-content:center;
+}
+.pin-box{
+  background:var(--bg1);border:1px solid var(--border2);
+  border-radius:24px;padding:52px 48px;width:400px;text-align:center;
+  box-shadow:0 40px 100px rgba(0,0,0,.8);
+}
+.pin-logo{
+  font-family:'Bebas Neue',sans-serif;font-size:32px;
+  letter-spacing:3px;margin-bottom:6px;
+}
+.pin-logo em{color:var(--lime);font-style:normal}
+.pin-sub{font-size:12px;color:var(--text3);font-family:'Syne',sans-serif;
+  letter-spacing:.15em;text-transform:uppercase;margin-bottom:36px}
+.pin-label{
+  font-family:'Syne',sans-serif;font-size:10px;font-weight:700;
+  letter-spacing:.18em;text-transform:uppercase;color:var(--text3);
+  text-align:left;margin-bottom:8px;
+}
+#pin-input{
+  width:100%;background:var(--bg2);border:1px solid var(--border2);
+  border-radius:12px;padding:14px 18px;
+  font-family:'Syne',sans-serif;font-size:22px;font-weight:800;
+  letter-spacing:.4em;color:var(--text);text-align:center;
+  outline:none;transition:border-color .2s;margin-bottom:16px;
+}
+#pin-input:focus{border-color:rgba(200,255,0,.5)}
+#pin-input.err{border-color:var(--danger);animation:shake .3s ease}
+#pin-btn{
+  width:100%;padding:14px;border-radius:12px;border:none;cursor:pointer;
+  background:var(--lime);color:#000;
+  font-family:'Syne',sans-serif;font-size:13px;font-weight:800;
+  letter-spacing:.15em;text-transform:uppercase;transition:all .2s;
+}
+#pin-btn:hover{background:#d4ff1a;transform:translateY(-1px)}
+#pin-error{
+  color:var(--danger);font-size:12px;margin-top:12px;
+  font-family:'Syne',sans-serif;display:none;
+}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}
+
+/* ── MAIN APP ── */
+#app{display:none;height:100vh;overflow:hidden;flex-direction:column}
+#app.unlocked{display:flex}
+
+/* TOP BAR */
+.topbar{
+  height:56px;background:var(--bg1);border-bottom:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 28px;flex-shrink:0;
+}
+.topbar-logo{
+  font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:2px;
+}
+.topbar-logo em{color:var(--lime);font-style:normal}
+.topbar-badge{
+  font-family:'Syne',sans-serif;font-size:10px;font-weight:800;
+  letter-spacing:.15em;text-transform:uppercase;
+  padding:4px 12px;border-radius:20px;
+  background:rgba(255,90,31,.1);border:1px solid rgba(255,90,31,.3);color:var(--orange);
+}
+.topbar-right{display:flex;align-items:center;gap:16px}
+.tb-btn{
+  padding:8px 16px;border-radius:8px;border:1px solid var(--border2);
+  font-family:'Syne',sans-serif;font-size:11px;font-weight:700;
+  letter-spacing:.1em;text-transform:uppercase;color:var(--text2);
+  cursor:pointer;background:transparent;transition:all .2s;
+}
+.tb-btn:hover{color:var(--text);border-color:rgba(255,255,255,.2)}
+.tb-btn.danger{color:var(--danger);border-color:rgba(255,59,59,.25)}
+.tb-btn.danger:hover{background:rgba(255,59,59,.08)}
+
+/* LAYOUT */
+.cms-layout{
+  display:grid;grid-template-columns:380px 1fr;
+  height:calc(100vh - 56px);overflow:hidden;
+}
+
+/* ── LEFT: DIRECTORY ── */
+.dir-panel{
+  background:var(--bg1);border-right:1px solid var(--border);
+  display:flex;flex-direction:column;overflow:hidden;
+}
+.dir-header{
+  padding:20px 24px 16px;border-bottom:1px solid var(--border);flex-shrink:0;
+}
+.dir-title{
+  font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:1.5px;margin-bottom:4px;
+}
+.dir-count{font-size:12px;color:var(--text3)}
+.dir-search{
+  margin-top:12px;position:relative;
+}
+.dir-search svg{position:absolute;left:12px;top:50%;transform:translateY(-50%);width:14px;height:14px;opacity:.4}
+#dir-search-input{
+  width:100%;background:var(--bg2);border:1px solid var(--border);
+  border-radius:8px;padding:9px 12px 9px 36px;
+  font-family:'DM Sans',sans-serif;font-size:12px;color:var(--text);
+  outline:none;
+}
+#dir-search-input::placeholder{color:var(--text3)}
+
+.dir-list{flex:1;overflow-y:auto;padding:8px}
+.dir-list::-webkit-scrollbar{width:3px}
+.dir-list::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px}
+
+.dir-item{
+  padding:12px 16px;border-radius:10px;cursor:pointer;
+  display:flex;align-items:center;gap:12px;
+  transition:background .15s;margin-bottom:2px;
+  border:1px solid transparent;
+}
+.dir-item:hover{background:var(--bg2)}
+.dir-item.selected{background:rgba(200,255,0,.05);border-color:rgba(200,255,0,.15)}
+.dir-thumb{
+  width:48px;height:36px;border-radius:6px;overflow:hidden;
+  background:var(--bg3);flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+  font-size:16px;
+}
+.dir-thumb img{width:100%;height:100%;object-fit:cover}
+.dir-info{flex:1;min-width:0}
+.dir-name{
+  font-family:'Syne',sans-serif;font-size:12px;font-weight:700;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  margin-bottom:3px;
+}
+.dir-meta{display:flex;align-items:center;gap:6px}
+.dir-badge{
+  font-family:'Syne',sans-serif;font-size:8px;font-weight:800;
+  letter-spacing:.1em;text-transform:uppercase;
+  padding:2px 7px;border-radius:20px;
+}
+.dir-badge.active{background:rgba(200,255,0,.1);color:var(--lime);border:1px solid rgba(200,255,0,.2)}
+.dir-badge.paused{background:rgba(255,255,255,.05);color:var(--text3);border:1px solid var(--border)}
+.dir-budget{font-size:10px;color:var(--text3)}
+.dir-edit{
+  flex-shrink:0;padding:5px 10px;border-radius:6px;border:1px solid var(--border2);
+  font-family:'Syne',sans-serif;font-size:9px;font-weight:700;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--text2);cursor:pointer;
+  background:transparent;transition:all .15s;
+}
+.dir-edit:hover{border-color:rgba(200,255,0,.3);color:var(--lime)}
+.dir-empty{text-align:center;padding:40px 20px;color:var(--text3);font-size:13px}
+
+/* ── RIGHT: FORM ── */
+.form-panel{
+  overflow-y:auto;background:var(--bg0);
+}
+.form-panel::-webkit-scrollbar{width:4px}
+.form-panel::-webkit-scrollbar-thumb{background:var(--border2);border-radius:4px}
+
+.form-wrap{max-width:780px;padding:32px 40px 80px}
+
+.form-mode-bar{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:28px;
+}
+.form-mode-title{
+  font-family:'Bebas Neue',sans-serif;font-size:36px;letter-spacing:2px;
+}
+.form-mode-title span{color:var(--lime)}
+.form-mode-sub{font-size:13px;color:var(--text3);margin-top:4px}
+.editing-pill{
+  display:flex;align-items:center;gap:8px;
+  background:rgba(255,90,31,.08);border:1px solid rgba(255,90,31,.25);
+  border-radius:10px;padding:8px 14px;
+  font-family:'Syne',sans-serif;font-size:11px;font-weight:700;color:var(--orange);
+}
+.editing-dot{width:6px;height:6px;border-radius:50%;background:var(--orange);animation:pulse 1.5s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+
+.form-section{
+  background:var(--bg1);border:1px solid var(--border);
+  border-radius:16px;padding:24px;margin-bottom:16px;
+}
+.form-section-title{
+  font-family:'Syne',sans-serif;font-size:10px;font-weight:800;
+  letter-spacing:.2em;text-transform:uppercase;color:var(--lime);
+  margin-bottom:20px;padding-bottom:14px;border-bottom:1px solid var(--border);
+}
+.form-row{display:grid;gap:14px;margin-bottom:14px}
+.form-row.cols2{grid-template-columns:1fr 1fr}
+.form-row.cols3{grid-template-columns:1fr 1fr 1fr}
+.form-row:last-child{margin-bottom:0}
+
+.form-field{display:flex;flex-direction:column;gap:6px}
+.form-field label{
+  font-family:'Syne',sans-serif;font-size:10px;font-weight:700;
+  letter-spacing:.15em;text-transform:uppercase;color:var(--text3);
+}
+.form-field input,
+.form-field textarea,
+.form-field select{
+  background:var(--bg2);border:1px solid var(--border2);border-radius:10px;
+  padding:11px 14px;font-family:'DM Sans',sans-serif;font-size:13px;
+  color:var(--text);outline:none;transition:border-color .2s;
+  resize:vertical;
+}
+.form-field input:focus,
+.form-field textarea:focus,
+.form-field select:focus{border-color:rgba(200,255,0,.4)}
+.form-field input::placeholder,
+.form-field textarea::placeholder{color:var(--text3)}
+.form-field select{cursor:pointer;appearance:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23606060' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 14px center;
+  padding-right:36px;
+}
+.form-field select option{background:var(--bg2)}
+.form-field textarea{min-height:90px}
+.field-hint{font-size:11px;color:var(--text3);margin-top:2px}
+
+/* CPM grid */
+.cpm-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:10px;
+}
+.cpm-card{
+  background:var(--bg2);border:1px solid var(--border);
+  border-radius:12px;padding:16px;text-align:center;
+  position:relative;overflow:hidden;
+}
+.cpm-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px}
+.cpm-card.tiktok::before{background:linear-gradient(90deg,#69C9D0,#EE1D52)}
+.cpm-card.instagram::before{background:linear-gradient(90deg,#f09433,#dc2743)}
+.cpm-card.youtube::before{background:#FF0000}
+.cpm-platform{font-family:'Syne',sans-serif;font-size:9px;font-weight:800;
+  letter-spacing:.15em;text-transform:uppercase;color:var(--text3);margin-bottom:8px}
+.cpm-input-wrap{position:relative}
+.cpm-input-wrap .prefix{
+  position:absolute;left:10px;top:50%;transform:translateY(-50%);
+  font-family:'Bebas Neue',sans-serif;font-size:16px;color:var(--lime);
+}
+.cpm-input-wrap input{
+  width:100%;padding-left:22px!important;text-align:center;
+  font-family:'Bebas Neue',sans-serif!important;font-size:22px!important;
+  color:var(--lime)!important;
+}
+
+/* ACTIONS */
+.form-actions{
+  display:flex;gap:12px;flex-wrap:wrap;margin-top:8px;
+}
+#btn-publish{
+  flex:1;padding:15px;border-radius:12px;border:none;cursor:pointer;
+  background:var(--lime);color:#000;
+  font-family:'Syne',sans-serif;font-size:13px;font-weight:800;
+  letter-spacing:.15em;text-transform:uppercase;
+  transition:all .2s;
+}
+#btn-publish:hover{background:#d4ff1a;transform:translateY(-1px);box-shadow:0 8px 30px rgba(200,255,0,.3)}
+#btn-update{
+  flex:1;padding:15px;border-radius:12px;border:none;cursor:pointer;
+  background:rgba(255,90,31,.15);border:1px solid rgba(255,90,31,.4);color:var(--orange);
+  font-family:'Syne',sans-serif;font-size:13px;font-weight:800;
+  letter-spacing:.15em;text-transform:uppercase;
+  transition:all .2s;display:none;
+}
+#btn-update:hover{background:rgba(255,90,31,.25);transform:translateY(-1px)}
+#btn-cancel{
+  padding:15px 24px;border-radius:12px;border:1px solid var(--border2);cursor:pointer;
+  background:transparent;color:var(--text2);
+  font-family:'Syne',sans-serif;font-size:13px;font-weight:700;
+  letter-spacing:.1em;text-transform:uppercase;
+  transition:all .2s;display:none;
+}
+#btn-cancel:hover{border-color:rgba(255,255,255,.2);color:var(--text)}
+#btn-delete{
+  padding:15px 20px;border-radius:12px;border:1px solid rgba(255,59,59,.25);cursor:pointer;
+  background:transparent;color:var(--danger);
+  font-family:'Syne',sans-serif;font-size:11px;font-weight:700;
+  letter-spacing:.1em;text-transform:uppercase;
+  transition:all .2s;display:none;
+}
+#btn-delete:hover{background:rgba(255,59,59,.08)}
+
+/* TOAST */
+#toast{
+  position:fixed;bottom:32px;right:32px;z-index:9999;
+  font-family:'Syne',sans-serif;font-size:12px;font-weight:700;
+  letter-spacing:.1em;text-transform:uppercase;
+  padding:14px 22px;border-radius:12px;
+  transform:translateY(20px);opacity:0;
+  transition:all .3s;pointer-events:none;
+}
+#toast.show{transform:translateY(0);opacity:1}
+#toast.success{background:rgba(200,255,0,.15);border:1px solid rgba(200,255,0,.4);color:var(--lime)}
+#toast.error{background:rgba(255,59,59,.15);border:1px solid rgba(255,59,59,.4);color:var(--danger)}
+
+/* LOADING */
+.loading-row{
+  display:flex;align-items:center;gap:10px;padding:12px 16px;
+}
+.loading-dot{width:8px;height:8px;border-radius:50%;background:var(--lime);
+  animation:blink 1.2s infinite}
+.loading-dot:nth-child(2){animation-delay:.2s}
+.loading-dot:nth-child(3){animation-delay:.4s}
+@keyframes blink{0%,100%{opacity:.2}50%{opacity:1}}
+</style>
+</head>
+<body>
+
+<!-- PIN GATE -->
+<div id="pin-gate">
+  <div class="pin-box">
+    <div class="pin-logo">Click<em>sable</em> HQ</div>
+    <div class="pin-sub">Admin Access Required</div>
+    <div class="pin-label">Enter Admin PIN</div>
+    <input id="pin-input" type="password" maxlength="6" placeholder="••••••" autocomplete="off"/>
+    <button id="pin-btn">Unlock Dashboard →</button>
+    <div id="pin-error">⚠ Incorrect PIN. Access denied.</div>
+  </div>
+</div>
+
+<!-- MAIN APP -->
+<div id="app">
+  <div class="topbar">
+    <div style="display:flex;align-items:center;gap:14px">
+      <div class="topbar-logo">Click<em>sable</em></div>
+      <div class="topbar-badge">HQ Admin</div>
+    </div>
+    <div class="topbar-right">
+      <span style="font-size:12px;color:var(--text3)" id="topbar-info">Loading...</span>
+      <button class="tb-btn" onclick="resetForm()">+ New Campaign</button>
+      <button class="tb-btn danger" onclick="lockAdmin()">Lock</button>
+    </div>
+  </div>
+
+  <div class="cms-layout">
+    <!-- LEFT: DIRECTORY -->
+    <div class="dir-panel">
+      <div class="dir-header">
+        <div class="dir-title">Campaigns</div>
+        <div class="dir-count" id="dir-count">Loading...</div>
+        <div class="dir-search">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+          </svg>
+          <input id="dir-search-input" type="text" placeholder="Search campaigns..."/>
+        </div>
+      </div>
+      <div class="dir-list" id="dir-list">
+        <div class="loading-row"><div class="loading-dot"></div><div class="loading-dot"></div><div class="loading-dot"></div></div>
+      </div>
+    </div>
+
+    <!-- RIGHT: FORM -->
+    <div class="form-panel">
+      <div class="form-wrap">
+        <div class="form-mode-bar">
+          <div>
+            <div class="form-mode-title" id="form-mode-title">New <span>Campaign</span></div>
+            <div class="form-mode-sub" id="form-mode-sub">Fill in the fields below and publish to make it live.</div>
+          </div>
+          <div class="editing-pill" id="editing-pill" style="display:none">
+            <div class="editing-dot"></div>
+            Editing Campaign
+          </div>
+        </div>
+
+        <div class="form-section">
+          <div class="form-section-title">Creator Video Submissions</div>
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:14px;margin-bottom:16px">
+            <div style="font-size:12px;color:var(--text3);line-height:1.6">Review creator links, approve/reject videos, and update earnings directly from HQ.</div>
+            <button class="tb-btn" onclick="loadSubmissions()">Refresh</button>
+          </div>
+          <div id="submission-list" style="display:grid;gap:12px">
+            <div class="dir-empty">Unlock HQ and connect Supabase to load submissions.</div>
+          </div>
+        </div>
+
+        <!-- SECTION 1: IDENTITY -->
+        <div class="form-section">
+          <div class="form-section-title">Campaign Identity</div>
+          <div class="form-row">
+            <div class="form-field">
+              <label>Campaign Title *</label>
+              <input type="text" id="f-title" placeholder="e.g. Summer Refresh Campaign"/>
+            </div>
+          </div>
+          <div class="form-row cols2">
+            <div class="form-field">
+              <label>Category *</label>
+              <select id="f-category">
+                <option value="">Select category</option>
+                <option>Entertainment</option>
+                <option>Gaming</option>
+                <option>Lifestyle</option>
+                <option>Fashion</option>
+                <option>Food & Beverage</option>
+                <option>Tech</option>
+                <option>Health & Wellness</option>
+                <option>Travel</option>
+                <option>Finance</option>
+                <option>Other</option>
+              </select>
+            </div>
+            <div class="form-field">
+              <label>Status *</label>
+              <select id="f-status">
+                <option value="Active">Active</option>
+                <option value="Paused">Paused</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-field">
+              <label>Description / Overview</label>
+              <textarea id="f-description" placeholder="Describe the campaign, brand context, and what creators should know..."></textarea>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-field">
+              <label>Requirements / Rules</label>
+              <textarea id="f-requirements" placeholder="List all content rules, dos and don'ts, mandatory disclosures..."></textarea>
+            </div>
+          </div>
+        </div>
+
+        <!-- SECTION 2: FINANCIALS -->
+        <div class="form-section">
+          <div class="form-section-title">Financials & CPM Rates</div>
+          <div class="form-row cols2">
+            <div class="form-field">
+              <label>Total Campaign Budget ($) *</label>
+              <input type="number" id="f-budget" placeholder="e.g. 50000" min="0"/>
+              <span class="field-hint">Total pool available to creators</span>
+            </div>
+            <div class="form-field">
+              <label>Current Payout Distributed ($)</label>
+              <input type="number" id="f-payout" placeholder="e.g. 12500" min="0"/>
+              <span class="field-hint">Amount already paid out to date</span>
+            </div>
+          </div>
+          <div class="form-row" style="margin-top:4px">
+            <div class="cpm-grid">
+              <div class="cpm-card tiktok">
+                <div class="cpm-platform">TikTok CPM</div>
+                <div class="cpm-input-wrap">
+                  <span class="prefix">$</span>
+                  <input type="number" id="f-cpm-tiktok" placeholder="0.00" step="0.01" min="0"/>
+                </div>
+              </div>
+              <div class="cpm-card instagram">
+                <div class="cpm-platform">Instagram CPM</div>
+                <div class="cpm-input-wrap">
+                  <span class="prefix">$</span>
+                  <input type="number" id="f-cpm-instagram" placeholder="0.00" step="0.01" min="0"/>
+                </div>
+              </div>
+              <div class="cpm-card youtube">
+                <div class="cpm-platform">YouTube CPM</div>
+                <div class="cpm-input-wrap">
+                  <span class="prefix">$</span>
+                  <input type="number" id="f-cpm-youtube" placeholder="0.00" step="0.01" min="0"/>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SECTION 3: ASSETS -->
+        <div class="form-section">
+          <div class="form-section-title">Media Assets & Links</div>
+          <div class="form-row">
+            <div class="form-field">
+              <label>Thumbnail Image URL</label>
+              <input type="url" id="f-thumbnail" placeholder="https://..."/>
+              <span class="field-hint">16:9 image shown on campaign card</span>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-field">
+              <label>Banner Image URL</label>
+              <input type="url" id="f-banner" placeholder="https://..."/>
+              <span class="field-hint">Wide banner shown in campaign detail header</span>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-field">
+              <label>Google Drive Resource Link</label>
+              <input type="url" id="f-drive" placeholder="https://drive.google.com/..."/>
+              <span class="field-hint">Brand assets, audio, guidelines folder</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- ACTIONS -->
+        <div class="form-actions">
+          <button id="btn-publish" onclick="publishCampaign()">🚀 Publish New Campaign</button>
+          <button id="btn-update" onclick="updateCampaign()">✏️ Update Campaign</button>
+          <button id="btn-cancel" onclick="resetForm()">Cancel</button>
+          <button id="btn-delete" onclick="deleteCampaign()">🗑 Delete</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+// ── CONFIG ──
+const ADMIN_PIN     = '123456'; // ← Change this to your secret PIN
+const SUPABASE_URL  = 'https://ctwrrrnjbytnthadpksl.supabase.co';
+const SUPABASE_ANON = 'sb_publishable_GgNKeidATKP54WWXGgfduQ_sq487yx_';
+const hasSupabaseConfig = SUPABASE_URL.startsWith('https://') && !SUPABASE_URL.includes('YOUR_') && !SUPABASE_ANON.includes('YOUR_');
+const leadDb = hasSupabaseConfig ? supabase.createClient(SUPABASE_URL, SUPABASE_ANON) : null;
+
+let allCampaigns = [];
+let allSubmissions = [];
+let allCreators = [];
+let editingId    = null;
+
+// ── PIN GATE ──
+const pinInput = document.getElementById('pin-input');
+const pinError = document.getElementById('pin-error');
+
+document.getElementById('pin-btn').addEventListener('click', checkPin);
+pinInput.addEventListener('keydown', e => { if(e.key==='Enter') checkPin(); });
+
+function checkPin(){
+  if(pinInput.value === ADMIN_PIN){
+    document.getElementById('pin-gate').style.display = 'none';
+    document.getElementById('app').classList.add('unlocked');
+    loadDirectory();
+    loadSubmissions();
+  } else {
+    pinInput.classList.add('err');
+    pinError.style.display = 'block';
+    setTimeout(() => pinInput.classList.remove('err'), 400);
+    pinInput.value = '';
+  }
+}
+
+function lockAdmin(){
+  document.getElementById('app').classList.remove('unlocked');
+  document.getElementById('pin-gate').style.display = 'flex';
+  pinInput.value = '';
+  pinError.style.display = 'none';
+}
+
+// ── LOAD DIRECTORY ──
+async function loadSubmissions(){
+  const list = document.getElementById('submission-list');
+  if(!leadDb){
+    list.innerHTML = '<div class="dir-empty">Add Supabase credentials to load creator submissions.</div>';
+    return;
+  }
+
+  const [{ data: submissions, error: subError }, { data: creators, error: creatorError }] = await Promise.all([
+    leadDb.from('video_submissions').select('*').order('submitted_at', { ascending: false }),
+    leadDb.from('creators').select('*')
+  ]);
+
+  if(subError){ list.innerHTML = '<div class="dir-empty">Failed to load submissions.</div>'; showToast(subError.message, 'error'); return; }
+  if(creatorError){ showToast('Creator profiles could not be loaded', 'error'); }
+
+  allSubmissions = submissions || [];
+  allCreators = creators || [];
+  renderSubmissions();
+}
+
+function renderSubmissions(){
+  const list = document.getElementById('submission-list');
+  if(!allSubmissions.length){
+    list.innerHTML = '<div class="dir-empty">No creator videos submitted yet.</div>';
+    return;
+  }
+
+  list.innerHTML = allSubmissions.map(s => {
+    const creator = allCreators.find(c => c.creator_id === s.creator_id) || {};
+    const status = s.status || 'Pending';
+    const statusColor = status === 'Approved' ? 'var(--lime)' : status === 'Rejected' ? 'var(--danger)' : 'var(--orange)';
+    const social = [
+      creator.tiktok_handle && `TikTok: ${creator.tiktok_handle}`,
+      creator.instagram_handle && `IG: ${creator.instagram_handle}`,
+      creator.youtube_handle && `YT: ${creator.youtube_handle}`
+    ].filter(Boolean).join(' - ') || 'No social handles saved';
+
+    return `<div style="background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:16px">
+      <div style="display:grid;grid-template-columns:1fr auto;gap:16px;align-items:start">
+        <div>
+          <div style="font-family:'Syne',sans-serif;font-size:13px;font-weight:800;margin-bottom:6px">${s.campaign_title || 'Campaign submission'}</div>
+          <div style="font-size:12px;color:var(--text2);line-height:1.7">
+            ${s.creator_name || creator.name || 'Creator'} - ${s.creator_email || creator.email || 'No email'}<br>
+            <span style="color:var(--text3)">${social}</span><br>
+            ${s.platform || 'Platform'} video: <a href="${s.video_url}" target="_blank" style="color:var(--lime)">open original link</a>
+          </div>
+          <div style="font-size:10px;color:var(--text3);font-family:'Syne',sans-serif;margin-top:8px;word-break:break-all">Creator ID: ${s.creator_id || ''}</div>
+        </div>
+        <div style="font-family:'Syne',sans-serif;font-size:10px;font-weight:800;color:${statusColor};text-transform:uppercase">${status}</div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr auto auto;gap:10px;margin-top:14px;align-items:end">
+        <div class="form-field">
+          <label>Approved Views</label>
+          <input id="sub-views-${s.id}" type="number" min="0" value="${Number(s.views)||0}">
+        </div>
+        <div class="form-field">
+          <label>Earnings ($)</label>
+          <input id="sub-earnings-${s.id}" type="number" min="0" step="0.01" value="${Number(s.earnings)||0}">
+        </div>
+        <button class="tb-btn" onclick="reviewSubmission(${s.id}, 'Approved')">Approve</button>
+        <button class="tb-btn danger" onclick="reviewSubmission(${s.id}, 'Rejected')">Reject</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+async function reviewSubmission(id, status){
+  if(!leadDb){ showToast('Add Supabase credentials first', 'error'); return; }
+  const views = parseFloat(document.getElementById('sub-views-'+id)?.value) || 0;
+  const earnings = parseFloat(document.getElementById('sub-earnings-'+id)?.value) || 0;
+  const { error } = await leadDb
+    .from('video_submissions')
+    .update({ status, views, earnings, reviewed_at: new Date().toISOString() })
+    .eq('id', id);
+  if(error){ showToast('Review failed: ' + error.message, 'error'); return; }
+  showToast('Submission ' + status.toLowerCase(), 'success');
+  loadSubmissions();
+}
+
+async function loadDirectory(){
+  if(!leadDb){
+    allCampaigns = [];
+    renderDirectory(allCampaigns);
+    document.getElementById('dir-count').textContent = 'Supabase not connected';
+    document.getElementById('topbar-info').textContent = 'Add Supabase credentials';
+    showToast('Add your Supabase URL and anon key first', 'error');
+    return;
+  }
+  const { data, error } = await leadDb
+    .from('campaigns')
+    .select('*')
+    .order('created_at', { ascending: false });
+
+  if(error){ showToast('Failed to load campaigns', 'error'); return; }
+  allCampaigns = data || [];
+  renderDirectory(allCampaigns);
+
+  const active = allCampaigns.filter(c => c.status==='Active').length;
+  document.getElementById('dir-count').textContent = `${allCampaigns.length} total · ${active} active`;
+  document.getElementById('topbar-info').textContent = `${allCampaigns.length} campaigns in database`;
+}
+
+function renderDirectory(campaigns){
+  const list = document.getElementById('dir-list');
+  if(!campaigns.length){
+    list.innerHTML = '<div class="dir-empty">No campaigns yet.<br>Create your first one →</div>';
+    return;
+  }
+  list.innerHTML = campaigns.map(c => `
+    <div class="dir-item ${editingId===c.id?'selected':''}" id="dir-${c.id}">
+      <div class="dir-thumb">
+        ${c.thumbnail_url
+          ? `<img src="${c.thumbnail_url}" alt="" onerror="this.style.display='none'">`
+          : '📋'}
+      </div>
+      <div class="dir-info">
+        <div class="dir-name">${c.title}</div>
+        <div class="dir-meta">
+          <span class="dir-badge ${c.status==='Active'?'active':'paused'}">${c.status}</span>
+          <span class="dir-budget">$${(c.total_budget||0).toLocaleString()}</span>
+        </div>
+      </div>
+      <button class="dir-edit" onclick="loadEdit(${c.id})">Edit</button>
+    </div>
+  `).join('');
+}
+
+// ── LOAD EDIT ──
+function loadEdit(id){
+  const c = allCampaigns.find(x => x.id === id);
+  if(!c) return;
+  editingId = id;
+
+  // Populate form
+  document.getElementById('f-title').value       = c.title        || '';
+  document.getElementById('f-category').value    = c.category     || '';
+  document.getElementById('f-status').value      = c.status       || 'Active';
+  document.getElementById('f-description').value = c.description  || '';
+  document.getElementById('f-requirements').value= c.requirements || '';
+  document.getElementById('f-budget').value      = c.total_budget || '';
+  document.getElementById('f-payout').value      = c.current_payout || '';
+  document.getElementById('f-cpm-tiktok').value  = c.cpm_tiktok   || '';
+  document.getElementById('f-cpm-instagram').value = c.cpm_instagram || '';
+  document.getElementById('f-cpm-youtube').value = c.cpm_youtube  || '';
+  document.getElementById('f-thumbnail').value   = c.thumbnail_url || '';
+  document.getElementById('f-banner').value      = c.banner_url   || '';
+  document.getElementById('f-drive').value       = c.drive_resource_url || '';
+
+  // Switch UI to edit mode
+  document.getElementById('form-mode-title').innerHTML = 'Editing <span>Campaign</span>';
+  document.getElementById('form-mode-sub').textContent = `ID #${c.id} · ${c.category || 'No category'} · Created ${new Date(c.created_at).toLocaleDateString()}`;
+  document.getElementById('editing-pill').style.display = 'flex';
+  document.getElementById('btn-publish').style.display  = 'none';
+  document.getElementById('btn-update').style.display   = 'flex';
+  document.getElementById('btn-cancel').style.display   = 'flex';
+  document.getElementById('btn-delete').style.display   = 'flex';
+
+  // Highlight in directory
+  document.querySelectorAll('.dir-item').forEach(el => el.classList.remove('selected'));
+  const item = document.getElementById('dir-'+id);
+  if(item){ item.classList.add('selected'); item.scrollIntoView({behavior:'smooth',block:'nearest'}); }
+
+  // Scroll form to top
+  document.querySelector('.form-panel').scrollTo({top:0,behavior:'smooth'});
+}
+
+// ── RESET FORM ──
+function resetForm(){
+  editingId = null;
+  ['f-title','f-description','f-requirements','f-budget','f-payout',
+   'f-cpm-tiktok','f-cpm-instagram','f-cpm-youtube','f-thumbnail','f-banner','f-drive']
+    .forEach(id => { const el=document.getElementById(id); if(el) el.value=''; });
+  document.getElementById('f-category').value = '';
+  document.getElementById('f-status').value   = 'Active';
+
+  document.getElementById('form-mode-title').innerHTML   = 'New <span>Campaign</span>';
+  document.getElementById('form-mode-sub').textContent   = 'Fill in the fields below and publish to make it live.';
+  document.getElementById('editing-pill').style.display  = 'none';
+  document.getElementById('btn-publish').style.display   = 'flex';
+  document.getElementById('btn-update').style.display    = 'none';
+  document.getElementById('btn-cancel').style.display    = 'none';
+  document.getElementById('btn-delete').style.display    = 'none';
+
+  document.querySelectorAll('.dir-item').forEach(el => el.classList.remove('selected'));
+  document.querySelector('.form-panel').scrollTo({top:0,behavior:'smooth'});
+}
+
+// ── COLLECT FORM DATA ──
+function collectForm(){
+  return {
+    title:              document.getElementById('f-title').value.trim(),
+    category:           document.getElementById('f-category').value,
+    status:             document.getElementById('f-status').value,
+    description:        document.getElementById('f-description').value.trim(),
+    requirements:       document.getElementById('f-requirements').value.trim(),
+    total_budget:       parseFloat(document.getElementById('f-budget').value)     || 0,
+    current_payout:     parseFloat(document.getElementById('f-payout').value)     || 0,
+    cpm_tiktok:         parseFloat(document.getElementById('f-cpm-tiktok').value) || null,
+    cpm_instagram:      parseFloat(document.getElementById('f-cpm-instagram').value) || null,
+    cpm_youtube:        parseFloat(document.getElementById('f-cpm-youtube').value) || null,
+    thumbnail_url:      document.getElementById('f-thumbnail').value.trim() || null,
+    banner_url:         document.getElementById('f-banner').value.trim()    || null,
+    drive_resource_url: document.getElementById('f-drive').value.trim()     || null,
+  };
+}
+
+function validateForm(data){
+  if(!data.title)    { showToast('Campaign title is required', 'error'); return false; }
+  if(!data.category) { showToast('Please select a category', 'error'); return false; }
+  if(!data.total_budget) { showToast('Total budget is required', 'error'); return false; }
+  return true;
+}
+
+// ── PUBLISH ──
+async function publishCampaign(){
+  if(!leadDb){ showToast('Add Supabase credentials before publishing', 'error'); return; }
+  const data = collectForm();
+  if(!validateForm(data)) return;
+
+  const btn = document.getElementById('btn-publish');
+  btn.textContent = 'Publishing...'; btn.disabled = true;
+
+  const { error } = await leadDb.from('campaigns').insert([data]);
+
+  btn.textContent = '🚀 Publish New Campaign'; btn.disabled = false;
+  if(error){ showToast('Error: ' + error.message, 'error'); return; }
+
+  showToast('Campaign published successfully!', 'success');
+  resetForm();
+  loadDirectory();
+}
+
+// ── UPDATE ──
+async function updateCampaign(){
+  if(!leadDb){ showToast('Add Supabase credentials before updating', 'error'); return; }
+  if(!editingId) return;
+  const data = collectForm();
+  if(!validateForm(data)) return;
+
+  const btn = document.getElementById('btn-update');
+  btn.textContent = 'Updating...'; btn.disabled = true;
+
+  const { error } = await leadDb.from('campaigns').update(data).eq('id', editingId);
+
+  btn.textContent = '✏️ Update Campaign'; btn.disabled = false;
+  if(error){ showToast('Error: ' + error.message, 'error'); return; }
+
+  showToast('Campaign updated!', 'success');
+  resetForm();
+  loadDirectory();
+}
+
+// ── DELETE ──
+async function deleteCampaign(){
+  if(!leadDb){ showToast('Add Supabase credentials before deleting', 'error'); return; }
+  if(!editingId) return;
+  const c = allCampaigns.find(x => x.id === editingId);
+  if(!confirm(`Delete "${c?.title}"? This cannot be undone.`)) return;
+
+  const { error } = await leadDb.from('campaigns').delete().eq('id', editingId);
+  if(error){ showToast('Error: ' + error.message, 'error'); return; }
+
+  showToast('Campaign deleted.', 'success');
+  resetForm();
+  loadDirectory();
+}
+
+// ── DIRECTORY SEARCH ──
+document.getElementById('dir-search-input').addEventListener('keyup', e => {
+  const q = e.target.value.toLowerCase();
+  renderDirectory(allCampaigns.filter(c => (c.title || '').toLowerCase().includes(q)));
+});
+
+// ── TOAST ──
+function showToast(msg, type='success'){
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'show ' + type;
+  setTimeout(() => { t.className = type; }, 3000);
+}
+</script>
+</body>
+</html>
