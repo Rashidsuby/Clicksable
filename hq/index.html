@@ -1295,7 +1295,7 @@ async function loadSupportInbox(){
   const list = document.getElementById('support-thread-list');
   if(!leadDb){ list.innerHTML = '<div class="dir-empty">Connect Supabase to load support chat.</div>'; return; }
   list.innerHTML = '<div class="dir-empty">Loading...</div>';
-  const [{ data: messages, error }, { data: creators }] = await Promise.all([
+  const [{ data: messages, error }, { data: creators, error: creatorsError }] = await Promise.all([
     leadDb.from('support_messages').select('*').order('created_at', { ascending: false }),
     leadDb.from('creators').select('*')
   ]);
@@ -1303,6 +1303,7 @@ async function loadSupportInbox(){
     list.innerHTML = `<div class="dir-empty" style="color:var(--danger)">Error: ${error.message}<br><small>Run the support_messages SQL table first.</small></div>`;
     return;
   }
+  if(creatorsError) console.warn('Creators lookup failed:', creatorsError.message);
   if(!messages || !messages.length){
     list.innerHTML = '<div class="dir-empty">No creator messages yet.</div>';
     document.getElementById('support-message-list').innerHTML = '<div class="dir-empty">No thread selected.</div>';
@@ -1346,17 +1347,19 @@ async function openSupportThread(index){
       <div style="font-size:10px;color:var(--text3);margin-top:6px;font-family:'Syne',sans-serif">${hqEscape(m.sender)} · ${new Date(m.created_at).toLocaleString()}</div>
     </div>`).join('');
   document.getElementById('support-message-list').scrollTop = document.getElementById('support-message-list').scrollHeight;
-  await leadDb.from('support_messages').update({ read_by_admin: true }).eq('creator_id', activeSupportCreatorId).eq('sender', 'creator');
+  const markQuery = leadDb.from('support_messages').update({ read_by_admin: true }).eq('sender', 'creator');
+  if(activeSupportCreatorId) await markQuery.eq('creator_id', activeSupportCreatorId);
 }
 
 async function sendSupportReply(){
   const input = document.getElementById('support-reply-input');
   const body = input.value.trim();
-  if(!activeSupportCreatorId){ showToast('Select a support thread first', 'error'); return; }
+  if(!activeSupportCreatorId && !supportThreads.length){ showToast('Select a support thread first', 'error'); return; }
   if(!body) return;
   const thread = supportThreads.find(t => String(t.latest.creator_id) === String(activeSupportCreatorId));
+  if(!thread){ showToast('Select a support thread first', 'error'); return; }
   const { error } = await leadDb.from('support_messages').insert([{
-    creator_id: activeSupportCreatorId,
+    creator_id: activeSupportCreatorId || null,
     creator_email: thread?.creator?.email || thread?.latest?.creator_email || '',
     sender: 'admin',
     body,
