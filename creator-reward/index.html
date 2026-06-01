@@ -1104,10 +1104,10 @@ async function loadSupportMessages(){
   }
   const { data, error } = await leadDb.from('support_messages')
     .select('*')
-    .eq('creator_id', creatorId)
+    .or(`creator_id.eq.${creatorId},creator_email.eq.${userEmail || ''}`)
     .order('created_at', { ascending: true });
   if(error){
-    addChatMessage('Support inbox is not ready yet. Ask HQ to run the support_messages SQL table first.', 'agent');
+    addChatMessage('Support inbox error: ' + error.message, 'agent');
     return;
   }
   if(!data || !data.length){
@@ -1124,7 +1124,7 @@ async function sendChat(){
   addChatMessage(msg, 'user');
   input.value = '';
   if(leadDb && creatorId){
-    await leadDb.from('support_messages').insert([{
+    const { error } = await leadDb.from('support_messages').insert([{
       creator_id: creatorId,
       creator_email: userEmail || '',
       sender: 'creator',
@@ -1132,12 +1132,16 @@ async function sendChat(){
       read_by_admin: false,
       read_by_creator: true
     }]);
+    if(error){
+      addChatMessage('Message was not saved to HQ: ' + error.message, 'agent');
+      return;
+    }
   }
   const agentReply = await getAiSupportReply(msg);
   if(agentReply){
     addChatMessage(agentReply, 'agent');
     if(leadDb && creatorId){
-      await leadDb.from('support_messages').insert([{
+      const { error } = await leadDb.from('support_messages').insert([{
         creator_id: creatorId,
         creator_email: userEmail || '',
         sender: 'agent',
@@ -1145,6 +1149,7 @@ async function sendChat(){
         read_by_admin: true,
         read_by_creator: false
       }]);
+      if(error) console.warn('Agent message save failed:', error.message);
     }
   }
 }
