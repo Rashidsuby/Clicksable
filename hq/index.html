@@ -19,339 +19,134 @@
 html,body{height:100%;background:var(--bg0);color:var(--text);font-family:'DM Sans',sans-serif;overflow:hidden}
 
 /* ── PIN GATE ── */
-#pin-gate{
-  position:fixed;inset:0;background:var(--bg0);z-index:1000;
-  display:flex;align-items:center;justify-content:center;
-}
-.pin-box{
-  background:var(--bg1);border:1px solid var(--border2);
-  border-radius:24px;padding:52px 48px;width:400px;text-align:center;
-  box-shadow:0 40px 100px rgba(0,0,0,.8);
-}
-.pin-logo{
-  font-family:'Bebas Neue',sans-serif;font-size:32px;
-  letter-spacing:3px;margin-bottom:6px;
-}
+#pin-gate{ position:fixed;inset:0;background:var(--bg0);z-index:1000; display:flex;align-items:center;justify-content:center; padding:20px; }
+.pin-box{ background:var(--bg1);border:1px solid var(--border2); border-radius:24px;padding:52px 48px;width:100%;max-width:400px;text-align:center; box-shadow:0 40px 100px rgba(0,0,0,.8); }
+.pin-logo{ font-family:'Bebas Neue',sans-serif;font-size:32px; letter-spacing:3px;margin-bottom:6px; }
 .pin-logo em{color:var(--lime);font-style:normal}
-.pin-sub{font-size:12px;color:var(--text3);font-family:'Syne',sans-serif;
-  letter-spacing:.15em;text-transform:uppercase;margin-bottom:36px}
-.pin-label{
-  font-family:'Syne',sans-serif;font-size:10px;font-weight:700;
-  letter-spacing:.18em;text-transform:uppercase;color:var(--text3);
-  text-align:left;margin-bottom:8px;
-}
-#pin-input{
-  width:100%;background:var(--bg2);border:1px solid var(--border2);
-  border-radius:12px;padding:14px 18px;
-  font-family:'Syne',sans-serif;font-size:22px;font-weight:800;
-  letter-spacing:.4em;color:var(--text);text-align:center;
-  outline:none;transition:border-color .2s;margin-bottom:16px;
-}
+.pin-sub{font-size:12px;color:var(--text3);font-family:'Syne',sans-serif; letter-spacing:.15em;text-transform:uppercase;margin-bottom:36px}
+.pin-label{ font-family:'Syne',sans-serif;font-size:10px;font-weight:700; letter-spacing:.18em;text-transform:uppercase;color:var(--text3); text-align:left;margin-bottom:8px; }
+#pin-input{ width:100%;background:var(--bg2);border:1px solid var(--border2); border-radius:12px;padding:14px 18px; font-family:'Syne',sans-serif;font-size:22px;font-weight:800; letter-spacing:.4em;color:var(--text);text-align:center; outline:none;transition:border-color .2s;margin-bottom:16px; }
 #pin-input:focus{border-color:rgba(200,255,0,.5)}
 #pin-input.err{border-color:var(--danger);animation:shake .3s ease}
-#pin-btn{
-  width:100%;padding:14px;border-radius:12px;border:none;cursor:pointer;
-  background:var(--lime);color:#000;
-  font-family:'Syne',sans-serif;font-size:13px;font-weight:800;
-  letter-spacing:.15em;text-transform:uppercase;transition:all .2s;
-}
+#pin-btn{ width:100%;padding:14px;border-radius:12px;border:none;cursor:pointer; background:var(--lime);color:#000; font-family:'Syne',sans-serif;font-size:13px;font-weight:800; letter-spacing:.15em;text-transform:uppercase;transition:all .2s; }
 #pin-btn:hover{background:#d4ff1a;transform:translateY(-1px)}
-#pin-error{
-  color:var(--danger);font-size:12px;margin-top:12px;
-  font-family:'Syne',sans-serif;display:none;
-}
+#pin-error{ color:var(--danger);font-size:12px;margin-top:12px; font-family:'Syne',sans-serif;display:none; }
 @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}
 
 /* ── MAIN APP ── */
 #app{display:none;height:100vh;overflow:hidden;flex-direction:column}
 #app.unlocked{display:flex}
 
-/* TOP BAR */
-.topbar{
-  height:56px;background:var(--bg1);border-bottom:1px solid var(--border);
-  display:flex;align-items:center;justify-content:space-between;
-  padding:0 28px;flex-shrink:0;
-}
-.topbar-logo{
-  font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:2px;
-}
+.topbar{ height:56px;background:var(--bg1);border-bottom:1px solid var(--border); display:flex;align-items:center;justify-content:space-between; padding:0 28px;flex-shrink:0; }
+.topbar-logo{ font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:2px; }
 .topbar-logo em{color:var(--lime);font-style:normal}
-.topbar-badge{
-  font-family:'Syne',sans-serif;font-size:10px;font-weight:800;
-  letter-spacing:.15em;text-transform:uppercase;
-  padding:4px 12px;border-radius:20px;
-  background:rgba(255,90,31,.1);border:1px solid rgba(255,90,31,.3);color:var(--orange);
-}
-.topbar-right{display:flex;align-items:center;gap:16px}
-.tb-btn{
-  padding:8px 16px;border-radius:8px;border:1px solid var(--border2);
-  font-family:'Syne',sans-serif;font-size:11px;font-weight:700;
-  letter-spacing:.1em;text-transform:uppercase;color:var(--text2);
-  cursor:pointer;background:transparent;transition:all .2s;
-}
+.topbar-badge{ font-family:'Syne',sans-serif;font-size:10px;font-weight:800; letter-spacing:.15em;text-transform:uppercase; padding:4px 12px;border-radius:20px; background:rgba(255,90,31,.1);border:1px solid rgba(255,90,31,.3);color:var(--orange); display:none; }
+.topbar-right{display:flex;align-items:center;gap:10px}
+.tb-btn{ padding:8px 16px;border-radius:8px;border:1px solid var(--border2); font-family:'Syne',sans-serif;font-size:11px;font-weight:700; letter-spacing:.1em;text-transform:uppercase;color:var(--text2); cursor:pointer;background:transparent;transition:all .2s; white-space:nowrap;}
 .tb-btn:hover{color:var(--text);border-color:rgba(255,255,255,.2)}
 .tb-btn.danger{color:var(--danger);border-color:rgba(255,59,59,.25)}
-.tb-btn.danger:hover{background:rgba(255,59,59,.08)}
 
 /* LAYOUT */
-.cms-layout{
-  display:grid;grid-template-columns:380px 1fr;
-  height:calc(100vh - 56px);overflow:hidden;
-}
+.cms-layout{ display:grid;grid-template-columns:380px 1fr; height:calc(100vh - 56px);overflow:hidden; position:relative; }
 
 /* ── LEFT: DIRECTORY ── */
-.dir-panel{
-  background:var(--bg1);border-right:1px solid var(--border);
-  display:flex;flex-direction:column;overflow:hidden;
-}
-.dir-header{
-  padding:20px 24px 16px;border-bottom:1px solid var(--border);flex-shrink:0;
-}
-.dir-title{
-  font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:1.5px;margin-bottom:4px;
-}
+.dir-panel{ background:var(--bg1);border-right:1px solid var(--border); display:flex;flex-direction:column;overflow:hidden; z-index:10; transition:transform 0.3s; }
+.dir-header{ padding:20px 24px 16px;border-bottom:1px solid var(--border);flex-shrink:0; }
+.dir-title{ font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:1.5px;margin-bottom:4px; }
 .dir-count{font-size:12px;color:var(--text3)}
-.dir-search{
-  margin-top:12px;position:relative;
-}
+.dir-search{ margin-top:12px;position:relative; }
 .dir-search svg{position:absolute;left:12px;top:50%;transform:translateY(-50%);width:14px;height:14px;opacity:.4}
-#dir-search-input{
-  width:100%;background:var(--bg2);border:1px solid var(--border);
-  border-radius:8px;padding:9px 12px 9px 36px;
-  font-family:'DM Sans',sans-serif;font-size:12px;color:var(--text);
-  outline:none;
-}
-#dir-search-input::placeholder{color:var(--text3)}
+#dir-search-input{ width:100%;background:var(--bg2);border:1px solid var(--border); border-radius:8px;padding:9px 12px 9px 36px; font-family:'DM Sans',sans-serif;font-size:12px;color:var(--text); outline:none; }
 
 .dir-list{flex:1;overflow-y:auto;padding:8px}
 .dir-list::-webkit-scrollbar{width:3px}
 .dir-list::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px}
 
-.dir-item{
-  padding:12px 16px;border-radius:10px;cursor:pointer;
-  display:flex;align-items:center;gap:12px;
-  transition:background .15s;margin-bottom:2px;
-  border:1px solid transparent;
-}
+.dir-item{ padding:12px 16px;border-radius:10px;cursor:pointer; display:flex;align-items:center;gap:12px; transition:background .15s;margin-bottom:2px; border:1px solid transparent; }
 .dir-item:hover{background:var(--bg2)}
 .dir-item.selected{background:rgba(200,255,0,.05);border-color:rgba(200,255,0,.15)}
-.dir-thumb{
-  width:48px;height:36px;border-radius:6px;overflow:hidden;
-  background:var(--bg3);flex-shrink:0;
-  display:flex;align-items:center;justify-content:center;
-  font-size:16px;
-}
+.dir-thumb{ width:48px;height:36px;border-radius:6px;overflow:hidden; background:var(--bg3);flex-shrink:0; display:flex;align-items:center;justify-content:center; font-size:16px; }
 .dir-thumb img{width:100%;height:100%;object-fit:cover}
 .dir-info{flex:1;min-width:0}
-.dir-name{
-  font-family:'Syne',sans-serif;font-size:12px;font-weight:700;
-  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
-  margin-bottom:3px;
-}
+.dir-name{ font-family:'Syne',sans-serif;font-size:12px;font-weight:700; white-space:nowrap;overflow:hidden;text-overflow:ellipsis; margin-bottom:3px; }
 .dir-meta{display:flex;align-items:center;gap:6px}
-.dir-badge{
-  font-family:'Syne',sans-serif;font-size:8px;font-weight:800;
-  letter-spacing:.1em;text-transform:uppercase;
-  padding:2px 7px;border-radius:20px;
-}
+.dir-badge{ font-family:'Syne',sans-serif;font-size:8px;font-weight:800; letter-spacing:.1em;text-transform:uppercase; padding:2px 7px;border-radius:20px; }
 .dir-badge.active{background:rgba(200,255,0,.1);color:var(--lime);border:1px solid rgba(200,255,0,.2)}
 .dir-badge.paused{background:rgba(255,255,255,.05);color:var(--text3);border:1px solid var(--border)}
 .dir-budget{font-size:10px;color:var(--text3)}
-.dir-edit{
-  flex-shrink:0;padding:5px 10px;border-radius:6px;border:1px solid var(--border2);
-  font-family:'Syne',sans-serif;font-size:9px;font-weight:700;letter-spacing:.1em;
-  text-transform:uppercase;color:var(--text2);cursor:pointer;
-  background:transparent;transition:all .15s;
-}
-.dir-edit:hover{border-color:rgba(200,255,0,.3);color:var(--lime)}
+.dir-edit{ flex-shrink:0;padding:5px 10px;border-radius:6px;border:1px solid var(--border2); font-family:'Syne',sans-serif;font-size:9px;font-weight:700;letter-spacing:.1em; text-transform:uppercase;color:var(--text2);cursor:pointer; background:transparent;transition:all .15s; }
 .dir-empty{text-align:center;padding:40px 20px;color:var(--text3);font-size:13px}
 
 /* ── RIGHT: FORM ── */
-.form-panel{
-  overflow-y:auto;background:var(--bg0);
-}
-.form-panel::-webkit-scrollbar{width:4px}
-.form-panel::-webkit-scrollbar-thumb{background:var(--border2);border-radius:4px}
+.form-panel{ overflow-y:auto;background:var(--bg0); }
+.form-wrap{max-width:780px;padding:32px 40px 80px;margin:0 auto;}
 
-.form-wrap{max-width:780px;padding:32px 40px 80px}
-
-.form-mode-bar{
-  display:flex;align-items:center;justify-content:space-between;
-  margin-bottom:28px;
-}
-.form-mode-title{
-  font-family:'Bebas Neue',sans-serif;font-size:36px;letter-spacing:2px;
-}
+.form-mode-bar{ display:flex;align-items:center;justify-content:space-between; margin-bottom:28px; flex-wrap:wrap; gap:12px;}
+.form-mode-title{ font-family:'Bebas Neue',sans-serif;font-size:36px;letter-spacing:2px; }
 .form-mode-title span{color:var(--lime)}
 .form-mode-sub{font-size:13px;color:var(--text3);margin-top:4px}
-.editing-pill{
-  display:flex;align-items:center;gap:8px;
-  background:rgba(255,90,31,.08);border:1px solid rgba(255,90,31,.25);
-  border-radius:10px;padding:8px 14px;
-  font-family:'Syne',sans-serif;font-size:11px;font-weight:700;color:var(--orange);
-}
-.editing-dot{width:6px;height:6px;border-radius:50%;background:var(--orange);animation:pulse 1.5s infinite}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+.editing-pill{ display:flex;align-items:center;gap:8px; background:rgba(255,90,31,.08);border:1px solid rgba(255,90,31,.25); border-radius:10px;padding:8px 14px; font-family:'Syne',sans-serif;font-size:11px;font-weight:700;color:var(--orange); }
 
-.form-section{
-  background:var(--bg1);border:1px solid var(--border);
-  border-radius:16px;padding:24px;margin-bottom:16px;
-}
-.form-section-title{
-  font-family:'Syne',sans-serif;font-size:10px;font-weight:800;
-  letter-spacing:.2em;text-transform:uppercase;color:var(--lime);
-  margin-bottom:20px;padding-bottom:14px;border-bottom:1px solid var(--border);
-}
+.form-section{ background:var(--bg1);border:1px solid var(--border); border-radius:16px;padding:24px;margin-bottom:16px; }
+.form-section-title{ font-family:'Syne',sans-serif;font-size:10px;font-weight:800; letter-spacing:.2em;text-transform:uppercase;color:var(--lime); margin-bottom:20px;padding-bottom:14px;border-bottom:1px solid var(--border); }
 .form-row{display:grid;gap:14px;margin-bottom:14px}
 .form-row.cols2{grid-template-columns:1fr 1fr}
-.form-row.cols3{grid-template-columns:1fr 1fr 1fr}
-.form-row:last-child{margin-bottom:0}
-
 .form-field{display:flex;flex-direction:column;gap:6px}
-.form-field label{
-  font-family:'Syne',sans-serif;font-size:10px;font-weight:700;
-  letter-spacing:.15em;text-transform:uppercase;color:var(--text3);
-}
-.form-field input,
-.form-field textarea,
-.form-field select{
-  background:var(--bg2);border:1px solid var(--border2);border-radius:10px;
-  padding:11px 14px;font-family:'DM Sans',sans-serif;font-size:13px;
-  color:var(--text);outline:none;transition:border-color .2s;
-  resize:vertical;
-}
-.form-field input:focus,
-.form-field textarea:focus,
-.form-field select:focus{border-color:rgba(200,255,0,.4)}
-.form-field input::placeholder,
-.form-field textarea::placeholder{color:var(--text3)}
-.form-field select{cursor:pointer;appearance:none;
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23606060' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
-  background-repeat:no-repeat;background-position:right 14px center;
-  padding-right:36px;
-}
-.form-field select option{background:var(--bg2)}
-.form-field textarea{min-height:90px}
+.form-field label{ font-family:'Syne',sans-serif;font-size:10px;font-weight:700; letter-spacing:.15em;text-transform:uppercase;color:var(--text3); }
+.form-field input, .form-field textarea, .form-field select{ background:var(--bg2);border:1px solid var(--border2);border-radius:10px; padding:11px 14px;font-family:'DM Sans',sans-serif;font-size:13px; color:var(--text);outline:none;transition:border-color .2s; }
+.form-field select{cursor:pointer;appearance:none; background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23606060' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E"); background-repeat:no-repeat;background-position:right 14px center;}
+.form-field textarea{min-height:90px;resize:vertical;}
 .field-hint{font-size:11px;color:var(--text3);margin-top:2px}
 
-/* CPM grid */
-.cpm-grid{
-  display:grid;grid-template-columns:repeat(3,1fr);gap:10px;
-}
-.cpm-card{
-  background:var(--bg2);border:1px solid var(--border);
-  border-radius:12px;padding:16px;text-align:center;
-  position:relative;overflow:hidden;
-}
+.cpm-grid{ display:grid;grid-template-columns:repeat(3,1fr);gap:10px; }
+.cpm-card{ background:var(--bg2);border:1px solid var(--border); border-radius:12px;padding:16px;text-align:center; position:relative;overflow:hidden; }
 .cpm-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px}
 .cpm-card.tiktok::before{background:linear-gradient(90deg,#69C9D0,#EE1D52)}
 .cpm-card.instagram::before{background:linear-gradient(90deg,#f09433,#dc2743)}
 .cpm-card.youtube::before{background:#FF0000}
-.cpm-platform{font-family:'Syne',sans-serif;font-size:9px;font-weight:800;
-  letter-spacing:.15em;text-transform:uppercase;color:var(--text3);margin-bottom:8px}
+.cpm-platform{font-family:'Syne',sans-serif;font-size:9px;font-weight:800; letter-spacing:.15em;text-transform:uppercase;color:var(--text3);margin-bottom:8px}
 .cpm-input-wrap{position:relative}
-.cpm-input-wrap .prefix{
-  position:absolute;left:10px;top:50%;transform:translateY(-50%);
-  font-family:'Bebas Neue',sans-serif;font-size:16px;color:var(--lime);
-}
-.cpm-input-wrap input{
-  width:100%;padding-left:22px!important;text-align:center;
-  font-family:'Bebas Neue',sans-serif!important;font-size:22px!important;
-  color:var(--lime)!important;
-}
+.cpm-input-wrap .prefix{ position:absolute;left:10px;top:50%;transform:translateY(-50%); font-family:'Bebas Neue',sans-serif;font-size:16px;color:var(--lime); }
+.cpm-input-wrap input{ width:100%;padding-left:22px!important;text-align:center; font-family:'Bebas Neue',sans-serif!important;font-size:22px!important; color:var(--lime)!important; }
 
 /* ACTIONS */
-.form-actions{
-  display:flex;gap:12px;flex-wrap:wrap;margin-top:8px;
-}
-#btn-publish{
-  flex:1;padding:15px;border-radius:12px;border:none;cursor:pointer;
-  background:var(--lime);color:#000;
-  font-family:'Syne',sans-serif;font-size:13px;font-weight:800;
-  letter-spacing:.15em;text-transform:uppercase;
-  transition:all .2s;
-}
-#btn-publish:hover{background:#d4ff1a;transform:translateY(-1px);box-shadow:0 8px 30px rgba(200,255,0,.3)}
-#btn-update{
-  flex:1;padding:15px;border-radius:12px;border:none;cursor:pointer;
-  background:rgba(255,90,31,.15);border:1px solid rgba(255,90,31,.4);color:var(--orange);
-  font-family:'Syne',sans-serif;font-size:13px;font-weight:800;
-  letter-spacing:.15em;text-transform:uppercase;
-  transition:all .2s;display:none;
-}
-#btn-update:hover{background:rgba(255,90,31,.25);transform:translateY(-1px)}
-#btn-cancel{
-  padding:15px 24px;border-radius:12px;border:1px solid var(--border2);cursor:pointer;
-  background:transparent;color:var(--text2);
-  font-family:'Syne',sans-serif;font-size:13px;font-weight:700;
-  letter-spacing:.1em;text-transform:uppercase;
-  transition:all .2s;display:none;
-}
-#btn-cancel:hover{border-color:rgba(255,255,255,.2);color:var(--text)}
-#btn-delete{
-  padding:15px 20px;border-radius:12px;border:1px solid rgba(255,59,59,.25);cursor:pointer;
-  background:transparent;color:var(--danger);
-  font-family:'Syne',sans-serif;font-size:11px;font-weight:700;
-  letter-spacing:.1em;text-transform:uppercase;
-  transition:all .2s;display:none;
-}
-#btn-delete:hover{background:rgba(255,59,59,.08)}
+.form-actions{ display:flex;gap:12px;flex-wrap:wrap;margin-top:8px; }
+#btn-publish, #btn-update { flex:1;padding:15px;border-radius:12px;border:none;cursor:pointer; font-family:'Syne',sans-serif;font-size:13px;font-weight:800; letter-spacing:.15em;text-transform:uppercase;transition:all .2s; }
+#btn-publish { background:var(--lime);color:#000; }
+#btn-update { background:rgba(255,90,31,.15);border:1px solid rgba(255,90,31,.4);color:var(--orange);display:none; }
+#btn-cancel, #btn-delete { padding:15px 20px;border-radius:12px;border:1px solid var(--border2);cursor:pointer; background:transparent;font-family:'Syne',sans-serif;font-size:11px;font-weight:700; letter-spacing:.1em;text-transform:uppercase;transition:all .2s;display:none; }
+#btn-cancel { color:var(--text2); }
+#btn-delete { border-color:rgba(255,59,59,.25);color:var(--danger); }
 
 /* TABS */
-.panel-tabs{
-  display:flex;border-bottom:1px solid var(--border);
-  background:var(--bg1);flex-shrink:0;padding:0 24px;gap:4px;
-}
-.panel-tab{
-  padding:14px 18px;font-family:'Syne',sans-serif;font-size:11px;font-weight:700;
-  letter-spacing:.12em;text-transform:uppercase;color:var(--text3);
-  cursor:pointer;border-bottom:2px solid transparent;transition:all .2s;
-  position:relative;top:1px;
-}
-.panel-tab:hover{color:var(--text)}
+.panel-tabs{ display:flex;border-bottom:1px solid var(--border); background:var(--bg1);flex-shrink:0;padding:0 24px;gap:4px;overflow-x:auto; }
+.panel-tab{ padding:14px 16px;font-family:'Syne',sans-serif;font-size:11px;font-weight:700; letter-spacing:.12em;text-transform:uppercase;color:var(--text3); cursor:pointer;border-bottom:2px solid transparent;transition:all .2s; white-space:nowrap;}
 .panel-tab.active{color:var(--lime);border-bottom-color:var(--lime)}
 
-/* ANNOUNCEMENT FORM */
-.ann-type-select{
-  display:flex;gap:8px;margin-bottom:0;
-}
-.ann-type-btn{
-  flex:1;padding:8px;border-radius:8px;border:1px solid var(--border2);
-  font-family:'Syne',sans-serif;font-size:10px;font-weight:700;
-  letter-spacing:.1em;text-transform:uppercase;
-  background:transparent;cursor:pointer;transition:all .2s;color:var(--text3);
-}
-.ann-type-btn.sel-New{background:rgba(200,255,0,.1);border-color:rgba(200,255,0,.3);color:var(--lime)}
-.ann-type-btn.sel-Policy{background:rgba(255,90,31,.08);border-color:rgba(255,90,31,.3);color:var(--orange)}
-.ann-type-btn.sel-Info{background:rgba(255,255,255,.05);border-color:var(--border);color:var(--text2)}
-
 /* TOAST */
-#toast{
-  position:fixed;bottom:32px;right:32px;z-index:9999;
-  font-family:'Syne',sans-serif;font-size:12px;font-weight:700;
-  letter-spacing:.1em;text-transform:uppercase;
-  padding:14px 22px;border-radius:12px;
-  transform:translateY(20px);opacity:0;
-  transition:all .3s;pointer-events:none;
-}
+#toast{ position:fixed;bottom:32px;right:32px;z-index:9999; font-family:'Syne',sans-serif;font-size:12px;font-weight:700; letter-spacing:.1em;text-transform:uppercase; padding:14px 22px;border-radius:12px; transform:translateY(20px);opacity:0; transition:all .3s;pointer-events:none; }
 #toast.show{transform:translateY(0);opacity:1}
 #toast.success{background:rgba(200,255,0,.15);border:1px solid rgba(200,255,0,.4);color:var(--lime)}
 #toast.error{background:rgba(255,59,59,.15);border:1px solid rgba(255,59,59,.4);color:var(--danger)}
 
-/* LOADING */
-.loading-row{
-  display:flex;align-items:center;gap:10px;padding:12px 16px;
+#mobile-toggle { display:none; }
+
+/* ── MOBILE QUERIES ── */
+@media (max-width: 900px) {
+  .cms-layout { grid-template-columns: 1fr; }
+  .dir-panel { position:absolute; left:0; width:100%; height:100%; transform:translateX(-100%); }
+  .dir-panel.open { transform:translateX(0); }
+  #mobile-toggle { display:block; }
+  .topbar-badge { display:block; }
+  .form-wrap { padding: 20px 20px 80px; }
+  .cpm-grid { grid-template-columns: 1fr; }
+  .form-row.cols2 { grid-template-columns: 1fr; }
+  .form-mode-title { font-size: 28px; }
 }
-.loading-dot{width:8px;height:8px;border-radius:50%;background:var(--lime);
-  animation:blink 1.2s infinite}
-.loading-dot:nth-child(2){animation-delay:.2s}
-.loading-dot:nth-child(3){animation-delay:.4s}
-@keyframes blink{0%,100%{opacity:.2}50%{opacity:1}}
 </style>
 </head>
 <body>
 
-<!-- PIN GATE -->
 <div id="pin-gate">
   <div class="pin-box">
     <div class="pin-logo">Click<em>sable</em> HQ</div>
@@ -363,17 +158,15 @@ html,body{height:100%;background:var(--bg0);color:var(--text);font-family:'DM Sa
   </div>
 </div>
 
-<!-- MAIN APP -->
 <div id="app">
   <div class="topbar">
     <div style="display:flex;align-items:center;gap:14px">
+      <button id="mobile-toggle" class="tb-btn" onclick="document.querySelector('.dir-panel').classList.toggle('open')">☰ Menu</button>
       <div class="topbar-logo">Click<em>sable</em></div>
       <div class="topbar-badge">HQ Admin</div>
     </div>
     <div class="topbar-right">
-      <span style="font-size:12px;color:var(--text3)" id="topbar-info">Loading...</span>
-      <button class="tb-btn" onclick="showCreatorsDirectory()">👥 View All Creators</button>
-      <button class="tb-btn" onclick="resetForm()">+ New Campaign</button>
+      <button class="tb-btn" onclick="showCreatorsDirectory()">👥 Creators</button>
       <button class="tb-btn danger" onclick="lockAdmin()">Lock</button>
     </div>
   </div>
@@ -382,18 +175,17 @@ html,body{height:100%;background:var(--bg0);color:var(--text);font-family:'DM Sa
     <!-- LEFT: DIRECTORY -->
     <div class="dir-panel">
       <div class="dir-header">
-        <div class="dir-title">Campaigns</div>
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <div class="dir-title">Campaigns</div>
+          <button class="tb-btn" onclick="resetForm(); document.querySelector('.dir-panel').classList.remove('open')" style="padding:4px 8px;font-size:9px">+ New</button>
+        </div>
         <div class="dir-count" id="dir-count">Loading...</div>
         <div class="dir-search">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
-          </svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
           <input id="dir-search-input" type="text" placeholder="Search campaigns..."/>
         </div>
       </div>
-      <div class="dir-list" id="dir-list">
-        <div class="loading-row"><div class="loading-dot"></div><div class="loading-dot"></div><div class="loading-dot"></div></div>
-      </div>
+      <div class="dir-list" id="dir-list">Loading...</div>
     </div>
 
     <!-- RIGHT: TABBED PANEL -->
@@ -402,10 +194,11 @@ html,body{height:100%;background:var(--bg0);color:var(--text);font-family:'DM Sa
       <div class="panel-tabs">
         <div class="panel-tab active" onclick="switchTab('campaigns')" id="tab-campaigns">Campaigns</div>
         <div class="panel-tab" onclick="switchTab('announcements')" id="tab-announcements">Announcements</div>
-        <div class="panel-tab" onclick="switchTab('earnings')" id="tab-earnings">Creator Earnings</div>
+        <div class="panel-tab" onclick="switchTab('earnings')" id="tab-earnings">Submissions</div>
+        <div class="panel-tab" onclick="switchTab('support')" id="tab-support">Support Chat</div>
       </div>
 
-      <!-- TAB: CAMPAIGNS (existing form) -->
+      <!-- TAB: CAMPAIGNS -->
       <div id="tabpanel-campaigns" style="flex:1;overflow-y:auto">
       <div class="form-wrap">
         <div class="form-mode-bar">
@@ -413,834 +206,268 @@ html,body{height:100%;background:var(--bg0);color:var(--text);font-family:'DM Sa
             <div class="form-mode-title" id="form-mode-title">New <span>Campaign</span></div>
             <div class="form-mode-sub" id="form-mode-sub">Fill in the fields below and publish to make it live.</div>
           </div>
-          <div class="editing-pill" id="editing-pill" style="display:none">
-            <div class="editing-dot"></div>
-            Editing Campaign
-          </div>
+          <div class="editing-pill" id="editing-pill" style="display:none"><div class="editing-dot"></div>Editing</div>
         </div>
 
-        <div class="form-section">
-          <div class="form-section-title">Creator Video Submissions</div>
-          <div style="display:flex;justify-content:space-between;align-items:center;gap:14px;margin-bottom:16px">
-            <div style="font-size:12px;color:var(--text3);line-height:1.6">Review creator links, approve/reject videos, and update earnings directly from HQ.</div>
-            <button class="tb-btn" onclick="loadSubmissions()">Refresh</button>
-          </div>
-          <div id="submission-list" style="display:grid;gap:12px">
-            <div class="dir-empty">Unlock HQ and connect Supabase to load submissions.</div>
-          </div>
-        </div>
-
-        <!-- SECTION 1: IDENTITY -->
         <div class="form-section">
           <div class="form-section-title">Campaign Identity</div>
-          <div class="form-row">
-            <div class="form-field">
-              <label>Campaign Title *</label>
-              <input type="text" id="f-title" placeholder="e.g. Summer Refresh Campaign"/>
-            </div>
-          </div>
+          <div class="form-row"><div class="form-field"><label>Campaign Title *</label><input type="text" id="f-title" placeholder="e.g. Summer Refresh Campaign"/></div></div>
           <div class="form-row cols2">
-            <div class="form-field">
-              <label>Category *</label>
-              <select id="f-category">
-                <option value="">Select category</option>
-                <option>Entertainment</option>
-                <option>Gaming</option>
-                <option>Lifestyle</option>
-                <option>Fashion</option>
-                <option>Food & Beverage</option>
-                <option>Tech</option>
-                <option>Health & Wellness</option>
-                <option>Travel</option>
-                <option>Finance</option>
-                <option>Other</option>
-              </select>
-            </div>
-            <div class="form-field">
-              <label>Status *</label>
-              <select id="f-status">
-                <option value="Active">Active</option>
-                <option value="Paused">Paused</option>
-              </select>
-            </div>
+            <div class="form-field"><label>Category *</label><select id="f-category"><option value="">Select category</option><option>Entertainment</option><option>Gaming</option><option>Lifestyle</option><option>Other</option></select></div>
+            <div class="form-field"><label>Status *</label><select id="f-status"><option value="Active">Active</option><option value="Paused">Paused</option></select></div>
           </div>
-          <div class="form-row">
-            <div class="form-field">
-              <label>Description / Overview</label>
-              <textarea id="f-description" placeholder="Describe the campaign, brand context, and what creators should know..."></textarea>
-            </div>
-          </div>
-          <div class="form-row">
-            <div class="form-field">
-              <label>Requirements / Rules</label>
-              <textarea id="f-requirements" placeholder="List all content rules, dos and don'ts, mandatory disclosures..."></textarea>
-            </div>
-          </div>
+          <div class="form-row"><div class="form-field"><label>Description / Overview</label><textarea id="f-description"></textarea></div></div>
+          <div class="form-row"><div class="form-field"><label>Requirements / Rules</label><textarea id="f-requirements"></textarea></div></div>
         </div>
 
-        <!-- SECTION 2: FINANCIALS -->
         <div class="form-section">
           <div class="form-section-title">Financials & CPM Rates</div>
           <div class="form-row cols2">
-            <div class="form-field">
-              <label>Total Campaign Budget ($) *</label>
-              <input type="number" id="f-budget" placeholder="e.g. 50000" min="0"/>
-              <span class="field-hint">Total pool available to creators</span>
-            </div>
-            <div class="form-field">
-              <label>Current Payout Distributed ($)</label>
-              <input type="number" id="f-payout" placeholder="e.g. 12500" min="0"/>
-              <span class="field-hint">Amount already paid out to date</span>
-            </div>
+            <div class="form-field"><label>Total Campaign Budget ($) *</label><input type="number" id="f-budget" min="0"/></div>
+            <div class="form-field"><label>Current Payout Distributed ($)</label><input type="number" id="f-payout" min="0"/></div>
           </div>
-          <div class="form-row" style="margin-top:4px">
+          <div class="form-row">
             <div class="cpm-grid">
-              <div class="cpm-card tiktok">
-                <div class="cpm-platform">TikTok CPM</div>
-                <div class="cpm-input-wrap">
-                  <span class="prefix">$</span>
-                  <input type="number" id="f-cpm-tiktok" placeholder="0.00" step="0.01" min="0"/>
-                </div>
-              </div>
-              <div class="cpm-card instagram">
-                <div class="cpm-platform">Instagram CPM</div>
-                <div class="cpm-input-wrap">
-                  <span class="prefix">$</span>
-                  <input type="number" id="f-cpm-instagram" placeholder="0.00" step="0.01" min="0"/>
-                </div>
-              </div>
-              <div class="cpm-card youtube">
-                <div class="cpm-platform">YouTube CPM</div>
-                <div class="cpm-input-wrap">
-                  <span class="prefix">$</span>
-                  <input type="number" id="f-cpm-youtube" placeholder="0.00" step="0.01" min="0"/>
-                </div>
-              </div>
+              <div class="cpm-card tiktok"><div class="cpm-platform">TikTok CPM</div><div class="cpm-input-wrap"><span class="prefix">$</span><input type="number" id="f-cpm-tiktok" step="0.01"/></div></div>
+              <div class="cpm-card instagram"><div class="cpm-platform">Instagram CPM</div><div class="cpm-input-wrap"><span class="prefix">$</span><input type="number" id="f-cpm-instagram" step="0.01"/></div></div>
+              <div class="cpm-card youtube"><div class="cpm-platform">YouTube CPM</div><div class="cpm-input-wrap"><span class="prefix">$</span><input type="number" id="f-cpm-youtube" step="0.01"/></div></div>
             </div>
           </div>
         </div>
 
-        <!-- SECTION 3: ASSETS -->
         <div class="form-section">
-          <div class="form-section-title">Media Assets & Links</div>
-          <div class="form-row">
-            <div class="form-field">
-              <label>Thumbnail Image URL</label>
-              <input type="url" id="f-thumbnail" placeholder="https://..."/>
-              <span class="field-hint">16:9 image shown on campaign card</span>
-            </div>
-          </div>
-          <div class="form-row">
-            <div class="form-field">
-              <label>Banner Image URL</label>
-              <input type="url" id="f-banner" placeholder="https://..."/>
-              <span class="field-hint">Wide banner shown in campaign detail header</span>
-            </div>
-          </div>
-          <div class="form-row">
-            <div class="form-field">
-              <label>Google Drive Resource Link</label>
-              <input type="url" id="f-drive" placeholder="https://drive.google.com/..."/>
-              <span class="field-hint">Brand assets, audio, guidelines folder</span>
-            </div>
+          <div class="form-section-title">Media & Top Performing Videos</div>
+          <div class="form-row"><div class="form-field"><label>Thumbnail URL</label><input type="url" id="f-thumbnail"/></div></div>
+          <div class="form-row"><div class="form-field"><label>Banner URL</label><input type="url" id="f-banner"/></div></div>
+          <div class="form-row"><div class="form-field"><label>Google Drive Resource Link</label><input type="url" id="f-drive"/></div></div>
+          <div style="border-top:1px solid var(--border); margin:16px 0; padding-top:16px;">
+            <label style="font-family:'Syne';font-size:10px;color:var(--text3);display:block;margin-bottom:8px">Top Performing Reference Video URLs (Optional)</label>
+            <div class="form-row"><input type="url" id="f-viral-1" class="auth-input" placeholder="Viral Video Link 1 (e.g. TikTok)"/></div>
+            <div class="form-row"><input type="url" id="f-viral-2" class="auth-input" placeholder="Viral Video Link 2"/></div>
+            <div class="form-row"><input type="url" id="f-viral-3" class="auth-input" placeholder="Viral Video Link 3"/></div>
           </div>
         </div>
 
-        <!-- ACTIONS -->
         <div class="form-actions">
-          <button id="btn-publish" onclick="publishCampaign()">🚀 Publish New Campaign</button>
-          <button id="btn-update" onclick="updateCampaign()">✏️ Update Campaign</button>
+          <button id="btn-publish" onclick="publishCampaign()">🚀 Publish</button>
+          <button id="btn-update" onclick="updateCampaign()">✏️ Update</button>
           <button id="btn-cancel" onclick="resetForm()">Cancel</button>
           <button id="btn-delete" onclick="deleteCampaign()">🗑 Delete</button>
         </div>
       </div>
-      </div><!-- end tabpanel-campaigns -->
+      </div>
 
       <!-- TAB: ANNOUNCEMENTS -->
       <div id="tabpanel-announcements" style="display:none;flex:1;overflow-y:auto">
         <div class="form-wrap">
           <div class="form-mode-bar" style="margin-bottom:20px">
-            <div>
-              <div class="form-mode-title">Manage <span>Announcements</span></div>
-              <div class="form-mode-sub">Push updates to the Creator Rewards announcement feed in real time.</div>
-            </div>
-          </div>
-
-          <!-- Existing announcements list -->
-          <div class="form-section" style="margin-bottom:16px">
-            <div class="form-section-title" style="display:flex;align-items:center;justify-content:space-between">
-              Published Announcements
-              <button class="tb-btn" onclick="loadAnnouncementsHQ()" style="font-size:9px;padding:5px 12px">Refresh</button>
-            </div>
-            <div id="hq-ann-list" style="display:grid;gap:10px">
-              <div class="dir-empty">Click Refresh to load announcements.</div>
-            </div>
-          </div>
-
-          <!-- Create/Edit announcement form -->
-          <div class="form-section" id="ann-form-section">
-            <div class="form-section-title" id="ann-form-title">New Announcement</div>
-            <div class="form-row">
-              <div class="form-field">
-                <label>Title *</label>
-                <input type="text" id="ann-title" placeholder="e.g. New campaign just dropped!"/>
-              </div>
-            </div>
-            <div class="form-row">
-              <div class="form-field">
-                <label>Body / Message *</label>
-                <textarea id="ann-body" style="min-height:120px" placeholder="Write the full announcement text here..."></textarea>
-              </div>
-            </div>
-            <div class="form-row cols2">
-              <div class="form-field">
-                <label>Type</label>
-                <div class="ann-type-select" id="ann-type-btns">
-                  <button class="ann-type-btn sel-New" onclick="selectAnnType('New')">New</button>
-                  <button class="ann-type-btn" onclick="selectAnnType('Policy')">Policy</button>
-                  <button class="ann-type-btn" onclick="selectAnnType('Info')">Info</button>
-                </div>
-              </div>
-              <div class="form-field">
-                <label>Visibility</label>
-                <select id="ann-published">
-                  <option value="true">Published (Visible to Creators)</option>
-                  <option value="false">Draft (Hidden)</option>
-                </select>
-              </div>
-            </div>
-            <div style="display:flex;gap:10px;margin-top:8px">
-              <button id="ann-btn-publish" onclick="publishAnnouncement()" style="flex:1;padding:14px;border-radius:12px;border:none;cursor:pointer;background:var(--lime);color:#000;font-family:'Syne',sans-serif;font-size:12px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;">📢 Publish Announcement</button>
-              <button id="ann-btn-update" onclick="updateAnnouncement()" style="display:none;flex:1;padding:14px;border-radius:12px;border:none;cursor:pointer;background:rgba(255,90,31,.15);border:1px solid rgba(255,90,31,.4);color:var(--orange);font-family:'Syne',sans-serif;font-size:12px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;">Update</button>
-              <button id="ann-btn-cancel" onclick="resetAnnForm()" style="display:none;padding:14px 20px;border-radius:12px;border:1px solid var(--border2);cursor:pointer;background:transparent;color:var(--text2);font-family:'Syne',sans-serif;font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;">Cancel</button>
-            </div>
-          </div>
-        </div>
-      </div><!-- end tabpanel-announcements -->
-
-      <!-- TAB: CREATOR EARNINGS -->
-      <div id="tabpanel-earnings" style="display:none;flex:1;overflow-y:auto">
-        <div class="form-wrap">
-          <div class="form-mode-bar" style="margin-bottom:20px">
-            <div>
-              <div class="form-mode-title">Creator <span>Earnings</span></div>
-              <div class="form-mode-sub">Review video submissions, update view counts, set earnings, approve or reject.</div>
-            </div>
-            <button class="tb-btn" onclick="loadSubmissions()" style="white-space:nowrap">Refresh</button>
+            <div><div class="form-mode-title">Manage <span>Announcements</span></div></div>
           </div>
           <div class="form-section">
-            <div class="form-section-title">All Video Submissions</div>
-            <div id="submission-list-tab" style="display:grid;gap:12px">
-              <div class="dir-empty">Click Refresh to load creator submissions.</div>
+            <div class="form-section-title" style="display:flex;justify-content:space-between">Published Announcements <button class="tb-btn" onclick="loadAnnouncementsHQ()">Refresh</button></div>
+            <div id="hq-ann-list" style="display:grid;gap:10px"><div class="dir-empty">Loading...</div></div>
+          </div>
+          <div class="form-section" id="ann-form-section">
+            <div class="form-section-title" id="ann-form-title">New Announcement</div>
+            <div class="form-row"><div class="form-field"><label>Title *</label><input type="text" id="ann-title"/></div></div>
+            <div class="form-row"><div class="form-field"><label>Body *</label><textarea id="ann-body"></textarea></div></div>
+            <button id="ann-btn-publish" onclick="publishAnnouncement()" class="tb-btn" style="background:var(--lime);color:#000;width:100%;padding:14px;border:none">Publish Announcement</button>
+            <div style="display:flex;gap:10px;margin-top:10px">
+              <button id="ann-btn-update" onclick="updateAnnouncement()" class="tb-btn" style="display:none;background:var(--orange);color:#000;flex:1;border:none">Update</button>
+              <button id="ann-btn-cancel" onclick="resetAnnForm()" class="tb-btn" style="display:none;flex:1">Cancel</button>
             </div>
           </div>
         </div>
-      </div><!-- end tabpanel-earnings -->
+      </div>
 
-    </div><!-- end form-panel -->
-  </div><!-- end cms-layout -->
-</div><!-- end app -->
+      <!-- TAB: EARNINGS -->
+      <div id="tabpanel-earnings" style="display:none;flex:1;overflow-y:auto">
+        <div class="form-wrap">
+          <div class="form-mode-bar"><div><div class="form-mode-title">Creator <span>Earnings</span></div></div><button class="tb-btn" onclick="loadSubmissionsTab()">Refresh</button></div>
+          <div class="form-section"><div id="submission-list-tab" style="display:grid;gap:12px">Loading...</div></div>
+        </div>
+      </div>
+
+      <!-- TAB: SUPPORT CHAT -->
+      <div id="tabpanel-support" style="display:none;flex:1;overflow-y:auto">
+        <div class="form-wrap">
+          <div class="form-mode-bar"><div><div class="form-mode-title">Support <span>Chat</span></div><div class="form-mode-sub">Reply to creator inquiries.</div></div><button class="tb-btn" onclick="loadSupportChats()">Refresh</button></div>
+          <div class="form-section"><div id="support-chat-list" style="display:grid;gap:16px">Loading...</div></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
 
 <!-- CREATORS DIRECTORY MODAL -->
-<div id="creators-modal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.8); z-index:2000; align-items:center; justify-content:center; backdrop-filter:blur(5px);">
-  <div style="background:var(--bg1); border:1px solid var(--border); border-radius:20px; width:90%; max-width:800px; max-height:85vh; display:flex; flex-direction:column; overflow:hidden; box-shadow:0 40px 100px rgba(0,0,0,.8);">
-    <div style="padding:24px; border-bottom:1px solid var(--border); display:flex; justify-content:space-between; align-items:center;">
-      <div>
-        <h2 style="font-family:'Bebas Neue',sans-serif; font-size:32px; letter-spacing:2px; color:var(--text);">Creator <span style="color:var(--lime);">Directory</span></h2>
-        <div style="font-size:12px; color:var(--text3); margin-top:4px;">All registered creators on the platform.</div>
-      </div>
-      <button onclick="document.getElementById('creators-modal').style.display='none'" style="background:var(--bg2); border:1px solid var(--border); color:var(--text); padding:8px 14px; border-radius:8px; cursor:pointer; font-family:'Syne',sans-serif; font-size:11px; font-weight:700; text-transform:uppercase;">Close</button>
+<div id="creators-modal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.8); z-index:2000; align-items:center; justify-content:center; padding:20px;">
+  <div style="background:var(--bg1); border:1px solid var(--border); border-radius:20px; width:100%; max-width:800px; max-height:85vh; display:flex; flex-direction:column; overflow:hidden;">
+    <div style="padding:20px; border-bottom:1px solid var(--border); display:flex; justify-content:space-between;">
+      <h2 style="font-family:'Bebas Neue'; font-size:28px; color:var(--text);">Creator <span style="color:var(--lime);">Directory</span></h2>
+      <button onclick="document.getElementById('creators-modal').style.display='none'" class="tb-btn">Close</button>
     </div>
-    <div id="creators-grid" style="padding:24px; overflow-y:auto; flex:1; display:grid; grid-template-columns:repeat(auto-fill, minmax(300px, 1fr)); gap:16px;">
-      <!-- Creator cards will load here -->
-    </div>
+    <div id="creators-grid" style="padding:20px; overflow-y:auto; display:grid; grid-template-columns:repeat(auto-fill, minmax(280px, 1fr)); gap:16px;"></div>
   </div>
 </div>
 
 <div id="toast"></div>
 
 <script>
-// ── CONFIG ──
-const ADMIN_PIN     = '123456'; // ← Change this to your secret PIN
+const ADMIN_PIN     = '123456'; 
 const SUPABASE_URL  = 'https://ctwrrrnjbytnthadpksl.supabase.co';
 const SUPABASE_ANON = 'sb_publishable_GgNKeidATKP54WWXGgfduQ_sq487yx_';
-const hasSupabaseConfig = SUPABASE_URL.startsWith('https://') && !SUPABASE_URL.includes('YOUR_') && !SUPABASE_ANON.includes('YOUR_');
-const leadDb = hasSupabaseConfig ? supabase.createClient(SUPABASE_URL, SUPABASE_ANON) : null;
+const leadDb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
 
-let allCampaigns = [];
-let allSubmissions = [];
-let allCreators = [];
-let editingId    = null;
+let allCampaigns = [], editingId = null, editingAnnId = null;
 
-// Official SVG Icons
-const iconTikTok = `<svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V8.69a8.18 8.18 0 004.78 1.52V6.76a4.85 4.85 0 01-1.01-.07z"/></svg>`;
-const iconInsta = `<svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>`;
-const iconYT = `<svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>`;
-
-// ── PIN GATE ──
-const pinInput = document.getElementById('pin-input');
-const pinError = document.getElementById('pin-error');
-
+// Auth
 document.getElementById('pin-btn').addEventListener('click', checkPin);
-pinInput.addEventListener('keydown', e => { if(e.key==='Enter') checkPin(); });
-
 function checkPin(){
-  if(pinInput.value === ADMIN_PIN){
+  if(document.getElementById('pin-input').value === ADMIN_PIN){
     document.getElementById('pin-gate').style.display = 'none';
     document.getElementById('app').classList.add('unlocked');
     loadDirectory();
-    loadSubmissions();
-  } else {
-    pinInput.classList.add('err');
-    pinError.style.display = 'block';
-    setTimeout(() => pinInput.classList.remove('err'), 400);
-    pinInput.value = '';
-  }
+  } else { showToast('Incorrect PIN','error'); }
 }
+function lockAdmin(){ document.getElementById('app').classList.remove('unlocked'); document.getElementById('pin-gate').style.display='flex'; }
 
-function lockAdmin(){
-  document.getElementById('app').classList.remove('unlocked');
-  document.getElementById('pin-gate').style.display = 'flex';
-  pinInput.value = '';
-  pinError.style.display = 'none';
-}
-
-// ── LOAD DIRECTORY & SUBMISSIONS ──
-async function loadSubmissions(){
-  const list = document.getElementById('submission-list');
-  if(!leadDb){
-    list.innerHTML = '<div class="dir-empty">Add Supabase credentials to load creator submissions.</div>';
-    return;
-  }
-
-  const [{ data: submissions, error: subError }, { data: creators, error: creatorError }] = await Promise.all([
-    leadDb.from('video_submissions').select('*').order('submitted_at', { ascending: false }),
-    leadDb.from('creators').select('*')
-  ]);
-
-  if(subError){ list.innerHTML = '<div class="dir-empty">Failed to load submissions.</div>'; showToast(subError.message, 'error'); return; }
-  
-  if(creatorError){ 
-    console.error("HQ CREATOR ERROR:", creatorError);
-    showToast('Creator profiles could not be loaded. Check RLS.', 'error'); 
-  }
-
-  allSubmissions = submissions || [];
-  allCreators = creators || [];
-  renderSubmissions();
-}
-
-function renderSubmissions(){
-  const list = document.getElementById('submission-list');
-  if(!allSubmissions.length){
-    list.innerHTML = '<div class="dir-empty">No creator videos submitted yet.</div>';
-    return;
-  }
-
-  list.innerHTML = allSubmissions.map(s => {
-    // 🛡️ BULLETPROOF MATCHING
-    const creator = allCreators.find(c => String(c.creator_id).trim() === String(s.creator_id).trim()) || {};
-    
-    const status = s.status || 'Pending';
-    const statusColor = status === 'Approved' ? 'var(--lime)' : status === 'Rejected' ? 'var(--danger)' : 'var(--orange)';
-    
-    const btnStyle = "display:inline-flex; align-items:center; gap:6px; color:var(--text); text-decoration:none; background:var(--bg3); padding:4px 10px; border-radius:6px; font-size:11px; transition:background 0.2s;";
-    const tiktokHtml = creator.tiktok_handle ? `<a href="${creator.tiktok_url || '#'}" target="_blank" style="${btnStyle}">${iconTikTok} ${creator.tiktok_handle}</a>` : '';
-    const instaHtml = creator.instagram_handle ? `<a href="${creator.instagram_url || '#'}" target="_blank" style="${btnStyle}">${iconInsta} ${creator.instagram_handle}</a>` : '';
-    const youtubeHtml = creator.youtube_handle ? `<a href="${creator.youtube_url || '#'}" target="_blank" style="${btnStyle}">${iconYT} ${creator.youtube_handle}</a>` : '';
-    const socialLinks = [tiktokHtml, instaHtml, youtubeHtml].filter(Boolean).join(' ') || '<span style="color:var(--text3)">No social handles saved</span>';
-
-    return `<div style="background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:16px">
-      <div style="display:grid;grid-template-columns:1fr auto;gap:16px;align-items:start">
-        <div>
-          <div style="font-family:'Syne',sans-serif;font-size:13px;font-weight:800;margin-bottom:6px">${s.campaign_title || 'Campaign submission'}</div>
-          
-          <div style="background:var(--bg1); border:1px solid var(--border); border-radius:10px; padding:12px; margin-bottom:12px;">
-            <div style="font-size:13px; font-weight:700; color:var(--text); margin-bottom:4px;">👤 ${creator.name || s.creator_name || 'Unknown Creator'}</div>
-            <div style="font-size:12px; color:var(--text2); margin-bottom:10px;">✉️ ${creator.email || s.creator_email || 'No email provided'}</div>
-            <div style="display:flex; gap:8px; flex-wrap:wrap;">
-              ${socialLinks}
-            </div>
-            <div style="font-size:9px; color:var(--text3); font-family:'Syne',sans-serif; margin-top:10px; text-transform:uppercase;">Creator ID: ${s.creator_id || 'N/A'}</div>
-          </div>
-          
-          <div style="font-size:12px; color:var(--text2); line-height:1.7">
-            Submitted for: <strong style="color:var(--text)">${s.platform || 'Platform'}</strong><br>
-            Video Link: <a href="${s.video_url}" target="_blank" style="color:var(--lime)">Open Original Video</a>
-          </div>
-        </div>
-        <div style="font-family:'Syne',sans-serif;font-size:10px;font-weight:800;color:${statusColor};text-transform:uppercase; background:var(--bg1); padding:6px 12px; border-radius:20px; border:1px solid ${statusColor};">
-          ${status}
-        </div>
-      </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr auto auto;gap:10px;margin-top:14px;align-items:end; padding-top:14px; border-top:1px solid var(--border);">
-        <div class="form-field">
-          <label>Approved Views</label>
-          <input id="sub-views-${s.id}" type="number" min="0" value="${Number(s.views)||0}">
-        </div>
-        <div class="form-field">
-          <label>Earnings ($)</label>
-          <input id="sub-earnings-${s.id}" type="number" min="0" step="0.01" value="${Number(s.earnings)||0}">
-        </div>
-        <button class="tb-btn" onclick="reviewSubmission(${s.id}, 'Approved')" style="color:var(--lime); border-color:var(--lime);">Approve</button>
-        <button class="tb-btn danger" onclick="reviewSubmission(${s.id}, 'Rejected')">Reject</button>
-      </div>
-    </div>`;
-  }).join('');
-}
-
-async function reviewSubmission(id, status){
-  if(!leadDb){ showToast('Add Supabase credentials first', 'error'); return; }
-  const views = parseFloat(document.getElementById('sub-views-'+id)?.value) || 0;
-  const earnings = parseFloat(document.getElementById('sub-earnings-'+id)?.value) || 0;
-  const { error } = await leadDb
-    .from('video_submissions')
-    .update({ status, views, earnings, reviewed_at: new Date().toISOString() })
-    .eq('id', id);
-  if(error){ showToast('Review failed: ' + error.message, 'error'); return; }
-  showToast('Submission ' + status.toLowerCase(), 'success');
-  loadSubmissions();
-}
-
+// Campaigns
 async function loadDirectory(){
-  if(!leadDb){
-    allCampaigns = [];
-    renderDirectory(allCampaigns);
-    document.getElementById('dir-count').textContent = 'Supabase not connected';
-    document.getElementById('topbar-info').textContent = 'Add Supabase credentials';
-    showToast('Add your Supabase URL and anon key first', 'error');
-    return;
-  }
-  const { data, error } = await leadDb
-    .from('campaigns')
-    .select('*')
-    .order('created_at', { ascending: false });
-
-  if(error){ showToast('Failed to load campaigns', 'error'); return; }
+  const { data } = await leadDb.from('campaigns').select('*').order('created_at', { ascending: false });
   allCampaigns = data || [];
   renderDirectory(allCampaigns);
-
-  const active = allCampaigns.filter(c => c.status==='Active').length;
-  document.getElementById('dir-count').textContent = `${allCampaigns.length} total · ${active} active`;
-  document.getElementById('topbar-info').textContent = `${allCampaigns.length} campaigns in database`;
 }
-
-function renderDirectory(campaigns){
-  const list = document.getElementById('dir-list');
-  if(!campaigns.length){
-    list.innerHTML = '<div class="dir-empty">No campaigns yet.<br>Create your first one →</div>';
-    return;
-  }
-  list.innerHTML = campaigns.map(c => `
-    <div class="dir-item ${editingId===c.id?'selected':''}" id="dir-${c.id}">
-      <div class="dir-thumb">
-        ${c.thumbnail_url
-          ? `<img src="${c.thumbnail_url}" alt="" onerror="this.style.display='none'">`
-          : '📋'}
-      </div>
-      <div class="dir-info">
-        <div class="dir-name">${c.title}</div>
-        <div class="dir-meta">
-          <span class="dir-badge ${c.status==='Active'?'active':'paused'}">${c.status}</span>
-          <span class="dir-budget">$${(c.total_budget||0).toLocaleString()}</span>
-        </div>
-      </div>
-      <button class="dir-edit" onclick="loadEdit(${c.id})">Edit</button>
-    </div>
-  `).join('');
+function renderDirectory(camps){
+  document.getElementById('dir-count').textContent = camps.length + ' total';
+  document.getElementById('dir-list').innerHTML = camps.map(c => `
+    <div class="dir-item" onclick="loadEdit(${c.id}); document.querySelector('.dir-panel').classList.remove('open')">
+      <div class="dir-thumb">${c.thumbnail_url ? `<img src="${c.thumbnail_url}">` : '📋'}</div>
+      <div class="dir-info"><div class="dir-name">${c.title}</div><div class="dir-budget">$${c.total_budget||0}</div></div>
+    </div>`).join('') || '<div class="dir-empty">No campaigns</div>';
 }
-
-// ── LOAD EDIT ──
 function loadEdit(id){
   const c = allCampaigns.find(x => x.id === id);
   if(!c) return;
   editingId = id;
-
-  // Populate form
-  document.getElementById('f-title').value       = c.title        || '';
-  document.getElementById('f-category').value    = c.category     || '';
-  document.getElementById('f-status').value      = c.status       || 'Active';
-  document.getElementById('f-description').value = c.description  || '';
-  document.getElementById('f-requirements').value= c.requirements || '';
-  document.getElementById('f-budget').value      = c.total_budget || '';
-  document.getElementById('f-payout').value      = c.current_payout || '';
-  document.getElementById('f-cpm-tiktok').value  = c.cpm_tiktok   || '';
+  document.getElementById('f-title').value = c.title || '';
+  document.getElementById('f-category').value = c.category || '';
+  document.getElementById('f-status').value = c.status || 'Active';
+  document.getElementById('f-description').value = c.description || '';
+  document.getElementById('f-requirements').value = c.requirements || '';
+  document.getElementById('f-budget').value = c.total_budget || '';
+  document.getElementById('f-payout').value = c.current_payout || '';
+  document.getElementById('f-cpm-tiktok').value = c.cpm_tiktok || '';
   document.getElementById('f-cpm-instagram').value = c.cpm_instagram || '';
-  document.getElementById('f-cpm-youtube').value = c.cpm_youtube  || '';
-  document.getElementById('f-thumbnail').value   = c.thumbnail_url || '';
-  document.getElementById('f-banner').value      = c.banner_url   || '';
-  document.getElementById('f-drive').value       = c.drive_resource_url || '';
+  document.getElementById('f-cpm-youtube').value = c.cpm_youtube || '';
+  document.getElementById('f-thumbnail').value = c.thumbnail_url || '';
+  document.getElementById('f-banner').value = c.banner_url || '';
+  document.getElementById('f-drive').value = c.drive_resource_url || '';
+  document.getElementById('f-viral-1').value = c.viral_url_1 || '';
+  document.getElementById('f-viral-2').value = c.viral_url_2 || '';
+  document.getElementById('f-viral-3').value = c.viral_url_3 || '';
 
-  // Switch UI to edit mode
   document.getElementById('form-mode-title').innerHTML = 'Editing <span>Campaign</span>';
-  document.getElementById('form-mode-sub').textContent = `ID #${c.id} · ${c.category || 'No category'} · Created ${new Date(c.created_at).toLocaleDateString()}`;
   document.getElementById('editing-pill').style.display = 'flex';
-  document.getElementById('btn-publish').style.display  = 'none';
-  document.getElementById('btn-update').style.display   = 'flex';
-  document.getElementById('btn-cancel').style.display   = 'flex';
-  document.getElementById('btn-delete').style.display   = 'flex';
-
-  // Highlight in directory
-  document.querySelectorAll('.dir-item').forEach(el => el.classList.remove('selected'));
-  const item = document.getElementById('dir-'+id);
-  if(item){ item.classList.add('selected'); item.scrollIntoView({behavior:'smooth',block:'nearest'}); }
-
-  // Scroll form to top
-  document.querySelector('.form-panel').scrollTo({top:0,behavior:'smooth'});
+  document.getElementById('btn-publish').style.display = 'none';
+  document.getElementById('btn-update').style.display = 'flex';
+  document.getElementById('btn-cancel').style.display = 'flex';
+  document.getElementById('btn-delete').style.display = 'flex';
+  switchTab('campaigns');
 }
-
-// ── RESET FORM ──
 function resetForm(){
   editingId = null;
-  ['f-title','f-description','f-requirements','f-budget','f-payout',
-   'f-cpm-tiktok','f-cpm-instagram','f-cpm-youtube','f-thumbnail','f-banner','f-drive']
-    .forEach(id => { const el=document.getElementById(id); if(el) el.value=''; });
-  document.getElementById('f-category').value = '';
-  document.getElementById('f-status').value   = 'Active';
-
-  document.getElementById('form-mode-title').innerHTML   = 'New <span>Campaign</span>';
-  document.getElementById('form-mode-sub').textContent   = 'Fill in the fields below and publish to make it live.';
-  document.getElementById('editing-pill').style.display  = 'none';
-  document.getElementById('btn-publish').style.display   = 'flex';
-  document.getElementById('btn-update').style.display    = 'none';
-  document.getElementById('btn-cancel').style.display    = 'none';
-  document.getElementById('btn-delete').style.display    = 'none';
-
-  document.querySelectorAll('.dir-item').forEach(el => el.classList.remove('selected'));
-  document.querySelector('.form-panel').scrollTo({top:0,behavior:'smooth'});
+  document.querySelectorAll('input, textarea, select').forEach(el => el.value='');
+  document.getElementById('f-status').value = 'Active';
+  document.getElementById('form-mode-title').innerHTML = 'New <span>Campaign</span>';
+  document.getElementById('btn-publish').style.display = 'flex';
+  document.getElementById('btn-update').style.display = 'none';
+  document.getElementById('btn-cancel').style.display = 'none';
+  document.getElementById('btn-delete').style.display = 'none';
 }
-
-// ── COLLECT FORM DATA ──
 function collectForm(){
   return {
-    title:              document.getElementById('f-title').value.trim(),
-    category:           document.getElementById('f-category').value,
-    status:             document.getElementById('f-status').value,
-    description:        document.getElementById('f-description').value.trim(),
-    requirements:       document.getElementById('f-requirements').value.trim(),
-    total_budget:       parseFloat(document.getElementById('f-budget').value)     || 0,
-    current_payout:     parseFloat(document.getElementById('f-payout').value)     || 0,
-    cpm_tiktok:         parseFloat(document.getElementById('f-cpm-tiktok').value) || null,
-    cpm_instagram:      parseFloat(document.getElementById('f-cpm-instagram').value) || null,
-    cpm_youtube:        parseFloat(document.getElementById('f-cpm-youtube').value) || null,
-    thumbnail_url:      document.getElementById('f-thumbnail').value.trim() || null,
-    banner_url:         document.getElementById('f-banner').value.trim()    || null,
-    drive_resource_url: document.getElementById('f-drive').value.trim()     || null,
+    title: document.getElementById('f-title').value, category: document.getElementById('f-category').value,
+    status: document.getElementById('f-status').value, description: document.getElementById('f-description').value,
+    requirements: document.getElementById('f-requirements').value, total_budget: document.getElementById('f-budget').value||0,
+    current_payout: document.getElementById('f-payout').value||0, cpm_tiktok: document.getElementById('f-cpm-tiktok').value||null,
+    cpm_instagram: document.getElementById('f-cpm-instagram').value||null, cpm_youtube: document.getElementById('f-cpm-youtube').value||null,
+    thumbnail_url: document.getElementById('f-thumbnail').value||null, banner_url: document.getElementById('f-banner').value||null,
+    drive_resource_url: document.getElementById('f-drive').value||null,
+    viral_url_1: document.getElementById('f-viral-1').value||null, viral_url_2: document.getElementById('f-viral-2').value||null,
+    viral_url_3: document.getElementById('f-viral-3').value||null
   };
 }
-
-function validateForm(data){
-  if(!data.title)    { showToast('Campaign title is required', 'error'); return false; }
-  if(!data.category) { showToast('Please select a category', 'error'); return false; }
-  if(!data.total_budget) { showToast('Total budget is required', 'error'); return false; }
-  return true;
-}
-
-// ── PUBLISH ──
 async function publishCampaign(){
-  if(!leadDb){ showToast('Add Supabase credentials before publishing', 'error'); return; }
-  const data = collectForm();
-  if(!validateForm(data)) return;
-
-  const btn = document.getElementById('btn-publish');
-  btn.textContent = 'Publishing...'; btn.disabled = true;
-
-  const { error } = await leadDb.from('campaigns').insert([data]);
-
-  btn.textContent = '🚀 Publish New Campaign'; btn.disabled = false;
-  if(error){ showToast('Error: ' + error.message, 'error'); return; }
-
-  showToast('Campaign published successfully!', 'success');
-  resetForm();
-  loadDirectory();
+  const { error } = await leadDb.from('campaigns').insert([collectForm()]);
+  if(!error) { showToast('Published!'); resetForm(); loadDirectory(); } else showToast(error.message,'error');
 }
-
-// ── UPDATE ──
 async function updateCampaign(){
-  if(!leadDb){ showToast('Add Supabase credentials before updating', 'error'); return; }
-  if(!editingId) return;
-  const data = collectForm();
-  if(!validateForm(data)) return;
-
-  const btn = document.getElementById('btn-update');
-  btn.textContent = 'Updating...'; btn.disabled = true;
-
-  const { error } = await leadDb.from('campaigns').update(data).eq('id', editingId);
-
-  btn.textContent = '✏️ Update Campaign'; btn.disabled = false;
-  if(error){ showToast('Error: ' + error.message, 'error'); return; }
-
-  showToast('Campaign updated!', 'success');
-  resetForm();
-  loadDirectory();
+  const { error } = await leadDb.from('campaigns').update(collectForm()).eq('id', editingId);
+  if(!error) { showToast('Updated!'); resetForm(); loadDirectory(); } else showToast(error.message,'error');
 }
-
-// ── DELETE ──
 async function deleteCampaign(){
-  if(!leadDb){ showToast('Add Supabase credentials before deleting', 'error'); return; }
-  if(!editingId) return;
-  const c = allCampaigns.find(x => x.id === editingId);
-  if(!confirm(`Delete "${c?.title}"? This cannot be undone.`)) return;
-
-  const { error } = await leadDb.from('campaigns').delete().eq('id', editingId);
-  if(error){ showToast('Error: ' + error.message, 'error'); return; }
-
-  showToast('Campaign deleted.', 'success');
-  resetForm();
-  loadDirectory();
-}
-
-// ── DIRECTORY SEARCH ──
-document.getElementById('dir-search-input').addEventListener('keyup', e => {
-  const q = e.target.value.toLowerCase();
-  renderDirectory(allCampaigns.filter(c => (c.title || '').toLowerCase().includes(q)));
-});
-
-// ── TAB SWITCHING ──
-function switchTab(tab) {
-  ['campaigns','announcements','earnings'].forEach(t => {
-    document.getElementById('tabpanel-'+t).style.display = 'none';
-    document.getElementById('tab-'+t).classList.remove('active');
-  });
-  document.getElementById('tabpanel-'+tab).style.display = 'flex';
-  document.getElementById('tabpanel-'+tab).style.flexDirection = 'column';
-  document.getElementById('tab-'+tab).classList.add('active');
-  if(tab === 'announcements') loadAnnouncementsHQ();
-  if(tab === 'earnings') loadSubmissionsTab();
-}
-
-// ── ANNOUNCEMENTS MANAGEMENT ──
-let editingAnnId = null;
-let selectedAnnType = 'New';
-
-function selectAnnType(type) {
-  selectedAnnType = type;
-  document.querySelectorAll('.ann-type-btn').forEach(b => {
-    b.className = 'ann-type-btn';
-    if(b.textContent === type) b.classList.add('sel-'+type);
-  });
-}
-
-async function loadAnnouncementsHQ() {
-  const list = document.getElementById('hq-ann-list');
-  if(!leadDb){ list.innerHTML = '<div class="dir-empty">Connect Supabase to manage announcements.</div>'; return; }
-  list.innerHTML = '<div class="dir-empty">Loading...</div>';
-
-  const { data, error } = await leadDb.from('announcements').select('*').order('created_at', { ascending: false });
-  if(error){ list.innerHTML = `<div class="dir-empty" style="color:var(--danger)">Error: ${error.message}<br><small>Make sure the "announcements" table exists in Supabase.</small></div>`; return; }
-  if(!data || !data.length){ list.innerHTML = '<div class="dir-empty">No announcements yet. Create the first one below.</div>'; return; }
-
-  const typeColors = {
-    'New':'var(--lime)', 'Policy':'var(--orange)', 'Info':'var(--text2)'
-  };
-
-  list.innerHTML = data.map(a => `
-    <div style="background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:14px;display:flex;align-items:flex-start;gap:12px">
-      <div style="flex:1;min-width:0">
-        <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
-          <span style="font-family:'Syne',sans-serif;font-size:9px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:${typeColors[a.type]||'var(--text2)'}">${a.type||'Info'}</span>
-          <span style="font-size:10px;color:var(--text3)">${new Date(a.created_at).toLocaleDateString()}</span>
-          ${!a.published ? '<span style="font-size:9px;color:var(--text3);font-family:Syne,sans-serif;text-transform:uppercase">· Draft</span>' : ''}
-        </div>
-        <div style="font-family:Syne,sans-serif;font-size:13px;font-weight:700;margin-bottom:4px">${a.title}</div>
-        <div style="font-size:12px;color:var(--text2);line-height:1.5">${a.body.length > 100 ? a.body.substring(0,100)+'...' : a.body}</div>
-      </div>
-      <div style="display:flex;gap:6px;flex-shrink:0">
-        <button onclick="loadAnnEdit(${a.id})" class="dir-edit">Edit</button>
-        <button onclick="deleteAnn(${a.id})" style="flex-shrink:0;padding:5px 10px;border-radius:6px;border:1px solid rgba(255,59,59,.25);font-family:'Syne',sans-serif;font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--danger);cursor:pointer;background:transparent">Del</button>
-      </div>
-    </div>`).join('');
-}
-
-function loadAnnEdit(id) {
-  const ann = (window._hqAnns || []).find(a => a.id === id);
-  if(!ann) { loadAnnouncementsHQ(); return; }
-  editingAnnId = id;
-  document.getElementById('ann-title').value = ann.title || '';
-  document.getElementById('ann-body').value = ann.body || '';
-  document.getElementById('ann-published').value = ann.published ? 'true' : 'false';
-  selectAnnType(ann.type || 'New');
-  document.getElementById('ann-form-title').textContent = 'Edit Announcement';
-  document.getElementById('ann-btn-publish').style.display = 'none';
-  document.getElementById('ann-btn-update').style.display = 'flex';
-  document.getElementById('ann-btn-cancel').style.display = 'flex';
-  document.getElementById('ann-form-section').scrollIntoView({behavior:'smooth'});
-}
-
-// Patch loadAnnouncementsHQ to store data for edit
-const _origLoadAnn = loadAnnouncementsHQ;
-
-function resetAnnForm() {
-  editingAnnId = null;
-  document.getElementById('ann-title').value = '';
-  document.getElementById('ann-body').value = '';
-  document.getElementById('ann-published').value = 'true';
-  selectAnnType('New');
-  document.getElementById('ann-form-title').textContent = 'New Announcement';
-  document.getElementById('ann-btn-publish').style.display = 'flex';
-  document.getElementById('ann-btn-update').style.display = 'none';
-  document.getElementById('ann-btn-cancel').style.display = 'none';
-}
-
-function collectAnnForm() {
-  return {
-    title:     document.getElementById('ann-title').value.trim(),
-    body:      document.getElementById('ann-body').value.trim(),
-    type:      selectedAnnType,
-    published: document.getElementById('ann-published').value === 'true',
-  };
-}
-
-async function publishAnnouncement() {
-  if(!leadDb){ showToast('Connect Supabase first', 'error'); return; }
-  const data = collectAnnForm();
-  if(!data.title || !data.body){ showToast('Title and body required', 'error'); return; }
-  const btn = document.getElementById('ann-btn-publish');
-  btn.textContent = 'Publishing...'; btn.disabled = true;
-  const { error } = await leadDb.from('announcements').insert([data]);
-  btn.textContent = '📢 Publish Announcement'; btn.disabled = false;
-  if(error){ showToast(error.message, 'error'); return; }
-  showToast('Announcement published!', 'success');
-  resetAnnForm();
-  loadAnnouncementsHQ();
-}
-
-async function updateAnnouncement() {
-  if(!leadDb || !editingAnnId) return;
-  const data = collectAnnForm();
-  if(!data.title || !data.body){ showToast('Title and body required', 'error'); return; }
-  const btn = document.getElementById('ann-btn-update');
-  btn.textContent = 'Updating...'; btn.disabled = true;
-  const { error } = await leadDb.from('announcements').update(data).eq('id', editingAnnId);
-  btn.textContent = 'Update'; btn.disabled = false;
-  if(error){ showToast(error.message, 'error'); return; }
-  showToast('Announcement updated!', 'success');
-  resetAnnForm();
-  loadAnnouncementsHQ();
-}
-
-async function deleteAnn(id) {
-  if(!confirm('Delete this announcement? Creators will no longer see it.')) return;
-  const { error } = await leadDb.from('announcements').delete().eq('id', id);
-  if(error){ showToast(error.message, 'error'); return; }
-  showToast('Deleted.', 'success');
-  loadAnnouncementsHQ();
-}
-
-// ── CREATOR EARNINGS TAB (mirrors existing submissions) ──
-async function loadSubmissionsTab() {
-  const list = document.getElementById('submission-list-tab');
-  if(!leadDb){ list.innerHTML = '<div class="dir-empty">Connect Supabase to manage earnings.</div>'; return; }
-  list.innerHTML = '<div class="dir-empty">Loading...</div>';
-
-  const [{ data: subs }, { data: creators }] = await Promise.all([
-    leadDb.from('video_submissions').select('*').order('submitted_at', { ascending: false }),
-    leadDb.from('creators').select('*')
-  ]);
-
-  if(!subs || !subs.length){ list.innerHTML = '<div class="dir-empty">No submissions yet.</div>'; return; }
-
-  list.innerHTML = subs.map(s => {
-    const creator = (creators||[]).find(c => String(c.creator_id) === String(s.creator_id)) || {};
-    const statusColor = s.status === 'Approved' ? 'var(--lime)' : s.status === 'Rejected' ? 'var(--danger)' : 'var(--orange)';
-    return `<div style="background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:16px">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:12px">
-        <div>
-          <div style="font-family:'Syne',sans-serif;font-size:13px;font-weight:800;margin-bottom:4px">${s.campaign_title||'Campaign'}</div>
-          <div style="font-size:12px;color:var(--text2)">👤 ${creator.name||s.creator_name||'Unknown'} &nbsp;·&nbsp; ${s.platform||'Platform'}</div>
-          <div style="margin-top:6px"><a href="${s.video_url||'#'}" target="_blank" style="font-size:11px;color:var(--lime)">View Video →</a></div>
-        </div>
-        <span style="font-family:'Syne',sans-serif;font-size:10px;font-weight:800;color:${statusColor};text-transform:uppercase;flex-shrink:0">${s.status||'Pending'}</span>
-      </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px">
-        <div>
-          <label style="font-family:'Syne',sans-serif;font-size:9px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--text3);display:block;margin-bottom:4px">Views</label>
-          <input type="number" id="views-${s.id}" value="${s.views||0}" min="0"
-            style="width:100%;background:var(--bg1);border:1px solid var(--border2);border-radius:8px;padding:8px 10px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:13px;outline:none"/>
-        </div>
-        <div>
-          <label style="font-family:'Syne',sans-serif;font-size:9px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--text3);display:block;margin-bottom:4px">Earnings ($)</label>
-          <input type="number" id="earn-${s.id}" value="${s.earnings||0}" min="0" step="0.01"
-            style="width:100%;background:var(--bg1);border:1px solid var(--border2);border-radius:8px;padding:8px 10px;color:var(--lime);font-family:'DM Sans',sans-serif;font-size:13px;outline:none"/>
-        </div>
-      </div>
-      <div style="display:flex;gap:8px;flex-wrap:wrap">
-        <button onclick="saveEarnings('${s.id}')" style="flex:1;padding:9px;border-radius:8px;border:none;cursor:pointer;background:rgba(200,255,0,.1);border:1px solid rgba(200,255,0,.25);color:var(--lime);font-family:'Syne',sans-serif;font-size:10px;font-weight:800;letter-spacing:.1em;text-transform:uppercase">Save Views & Earnings</button>
-        <button onclick="setStatus('${s.id}','Approved')" style="padding:9px 14px;border-radius:8px;border:1px solid rgba(200,255,0,.25);cursor:pointer;background:transparent;color:var(--lime);font-family:'Syne',sans-serif;font-size:10px;font-weight:700;text-transform:uppercase">✓ Approve</button>
-        <button onclick="setStatus('${s.id}','Rejected')" style="padding:9px 14px;border-radius:8px;border:1px solid rgba(255,59,59,.25);cursor:pointer;background:transparent;color:var(--danger);font-family:'Syne',sans-serif;font-size:10px;font-weight:700;text-transform:uppercase">✗ Reject</button>
-      </div>
-    </div>`;
-  }).join('');
-}
-
-async function saveEarnings(id) {
-  if(!leadDb) return;
-  const views = parseInt(document.getElementById('views-'+id).value) || 0;
-  const earnings = parseFloat(document.getElementById('earn-'+id).value) || 0;
-  const { error } = await leadDb.from('video_submissions').update({ views, earnings }).eq('id', id);
-  if(error){ showToast(error.message, 'error'); return; }
-  showToast('Earnings saved!', 'success');
-}
-
-async function setStatus(id, status) {
-  if(!leadDb) return;
-  const { error } = await leadDb.from('video_submissions').update({ status }).eq('id', id);
-  if(error){ showToast(error.message, 'error'); return; }
-  showToast('Status updated to '+status, 'success');
-  loadSubmissionsTab();
-}
-
-// ── TOAST ──
-function showToast(msg, type='success'){
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.className = 'show ' + type;
-  setTimeout(() => { t.className = type; }, 3000);
-}
-
-// ── MODAL DIRECTORY JS ──
-async function showCreatorsDirectory() {
-  const modal = document.getElementById('creators-modal');
-  const grid = document.getElementById('creators-grid');
-  modal.style.display = 'flex';
-  grid.innerHTML = '<div style="color:var(--text3); font-size:13px;">Loading creators...</div>';
-
-  if (!leadDb) {
-    grid.innerHTML = '<div style="color:var(--danger); font-size:13px;">Supabase not connected. Cannot load creators.</div>';
-    return;
+  if(confirm('Delete campaign?')){
+    await leadDb.from('campaigns').delete().eq('id', editingId);
+    showToast('Deleted'); resetForm(); loadDirectory();
   }
+}
 
-  const { data, error } = await leadDb.from('creators').select('*').order('updated_at', { ascending: false });
+// Announcements
+async function loadAnnouncementsHQ(){
+  const { data } = await leadDb.from('announcements').select('*').order('created_at',{ascending:false});
+  document.getElementById('hq-ann-list').innerHTML = (data||[]).map(a => `
+    <div style="background:var(--bg2);padding:14px;border:1px solid var(--border);border-radius:10px;display:flex;justify-content:space-between">
+      <div><div style="font-family:'Syne';color:var(--lime);font-size:10px">${a.type||'Info'}</div><div>${a.title}</div></div>
+      <button class="tb-btn danger" onclick="leadDb.from('announcements').delete().eq('id',${a.id}); loadAnnouncementsHQ();">Del</button>
+    </div>`).join('') || '<div class="dir-empty">No announcements</div>';
+}
+async function publishAnnouncement(){
+  await leadDb.from('announcements').insert([{ title: document.getElementById('ann-title').value, body: document.getElementById('ann-body').value }]);
+  document.getElementById('ann-title').value = ''; document.getElementById('ann-body').value = ''; loadAnnouncementsHQ(); showToast('Announced');
+}
+
+// Support Chats
+async function loadSupportChats(){
+  const { data } = await leadDb.from('support_messages').select('*').order('created_at',{ascending:true});
+  const grouped = (data||[]).reduce((acc, msg) => {
+    (acc[msg.creator_id] = acc[msg.creator_id] || []).push(msg); return acc;
+  }, {});
   
-  if (error) {
-    grid.innerHTML = `<div style="color:var(--danger); font-size:13px;">Error: ${error.message}</div>`;
-    return;
-  }
-
-  if (!data || data.length === 0) {
-    grid.innerHTML = '<div style="color:var(--text3); font-size:13px;">No creators have registered yet.</div>';
-    return;
-  }
-
-  grid.innerHTML = data.map(c => {
-    const btnStyle = "display:inline-flex; align-items:center; gap:6px; color:var(--text); text-decoration:none; background:var(--bg3); padding:4px 10px; border-radius:6px; font-size:11px; transition:background 0.2s;";
-    const tiktokHtml = c.tiktok_handle ? `<a href="${c.tiktok_url || '#'}" target="_blank" style="${btnStyle}">${iconTikTok} ${c.tiktok_handle}</a>` : '';
-    const instaHtml = c.instagram_handle ? `<a href="${c.instagram_url || '#'}" target="_blank" style="${btnStyle}">${iconInsta} ${c.instagram_handle}</a>` : '';
-    const youtubeHtml = c.youtube_handle ? `<a href="${c.youtube_url || '#'}" target="_blank" style="${btnStyle}">${iconYT} ${c.youtube_handle}</a>` : '';
-    const socialLinks = [tiktokHtml, instaHtml, youtubeHtml].filter(Boolean).join(' ') || '<span style="color:var(--text3); font-size:11px;">No handles provided</span>';
-
-    return `
-      <div style="background:var(--bg2); border:1px solid var(--border); border-radius:12px; padding:16px;">
-        <div style="font-size:15px; font-weight:700; color:var(--lime); margin-bottom:4px;">${c.name || 'Unnamed Creator'}</div>
-        <div style="font-size:12px; color:var(--text2); margin-bottom:12px;">✉️ ${c.email || 'No email'}</div>
-        <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:12px;">
-          ${socialLinks}
-        </div>
-        <div style="font-size:9px; color:var(--text3); font-family:'Syne',sans-serif; text-transform:uppercase; border-top:1px solid var(--border); padding-top:10px;">ID: ${c.creator_id}</div>
+  const list = document.getElementById('support-chat-list');
+  list.innerHTML = Object.keys(grouped).map(cid => `
+    <div style="background:var(--bg2);border:1px solid var(--border);padding:16px;border-radius:12px;">
+      <div style="font-family:'Bebas Neue';color:var(--lime);font-size:20px;margin-bottom:10px">Creator: ${grouped[cid][0].creator_name || cid.substring(0,8)}</div>
+      <div style="max-height:200px;overflow-y:auto;margin-bottom:10px;font-size:13px;display:flex;flex-direction:column;gap:8px">
+        ${grouped[cid].map(m => `<div style="text-align:${m.is_admin?'right':'left'};color:${m.is_admin?'var(--text2)':'var(--text)'}"><b>${m.is_admin?'HQ':'Creator'}:</b> ${m.message}</div>`).join('')}
       </div>
-    `;
-  }).join('');
+      <div style="display:flex;gap:8px"><input type="text" id="reply-${cid}" style="flex:1;background:var(--bg1);border:1px solid var(--border);color:var(--text);padding:8px;border-radius:6px" placeholder="Type reply..."><button class="tb-btn" onclick="replyToChat('${cid}')">Reply</button></div>
+    </div>
+  `).join('') || '<div class="dir-empty">No messages</div>';
 }
+async function replyToChat(creatorId){
+  const msg = document.getElementById('reply-'+creatorId).value;
+  await leadDb.from('support_messages').insert([{ creator_id: creatorId, message: msg, is_admin: true }]);
+  loadSupportChats(); showToast('Reply sent');
+}
+
+// Submissions
+async function loadSubmissionsTab(){
+  const { data } = await leadDb.from('video_submissions').select('*').order('submitted_at',{ascending:false});
+  document.getElementById('submission-list-tab').innerHTML = (data||[]).map(s => `
+    <div style="background:var(--bg2);border:1px solid var(--border);padding:16px;border-radius:12px;">
+      <div style="font-family:'Bebas Neue';font-size:20px">${s.campaign_title}</div>
+      <div style="font-size:12px;color:var(--text2)">${s.creator_name||'Unknown'} · <a href="${s.video_url}" style="color:var(--lime)" target="_blank">View Video</a></div>
+      <div style="margin-top:10px;display:flex;gap:10px">
+        <button class="tb-btn" onclick="leadDb.from('video_submissions').update({status:'Approved'}).eq('id',${s.id}); loadSubmissionsTab()">Approve</button>
+        <button class="tb-btn danger" onclick="leadDb.from('video_submissions').update({status:'Rejected'}).eq('id',${s.id}); loadSubmissionsTab()">Reject</button>
+      </div>
+    </div>`).join('') || '<div class="dir-empty">No submissions</div>';
+}
+
+function switchTab(t){ document.querySelectorAll('.panel-tab').forEach(x=>x.classList.remove('active')); document.getElementById('tab-'+t).classList.add('active'); document.querySelectorAll('[id^=tabpanel-]').forEach(x=>x.style.display='none'); document.getElementById('tabpanel-'+t).style.display='flex'; if(t==='announcements') loadAnnouncementsHQ(); if(t==='earnings') loadSubmissionsTab(); if(t==='support') loadSupportChats(); }
+function showToast(m,t='success'){ const x=document.getElementById('toast'); x.textContent=m; x.className='show '+t; setTimeout(()=>x.className='',3000); }
+async function showCreatorsDirectory(){ document.getElementById('creators-modal').style.display='flex'; const {data} = await leadDb.from('creators').select('*'); document.getElementById('creators-grid').innerHTML=(data||[]).map(c=>`<div style="background:var(--bg2);border:1px solid var(--border);padding:16px;border-radius:12px"><b style="color:var(--lime)">${c.name||'Creator'}</b><br><small>${c.email}</small></div>`).join(''); }
 </script>
 </body>
 </html>
