@@ -407,6 +407,7 @@ html,body{height:100%;background:var(--bg0);color:var(--text);font-family:'DM Sa
 .skel-line.w50{width:50%}
 @keyframes shimmer{0%,100%{opacity:1}50%{opacity:.5}}
 @keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+@keyframes onlinePing{0%{transform:scale(1);opacity:0.6}70%{transform:scale(2.2);opacity:0}100%{transform:scale(2.2);opacity:0}}
 </style>
 </head>
 <body>
@@ -488,7 +489,17 @@ html,body{height:100%;background:var(--bg0);color:var(--text);font-family:'DM Sa
 
     <div id="view-grid">
       <div class="grid-header">
-        <h1 class="grid-title">Active <span>Campaigns</span></h1>
+        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:4px;">
+          <h1 class="grid-title">Active <span>Campaigns</span></h1>
+          <div id="online-counter" style="display:flex;align-items:center;gap:8px;background:rgba(200,255,0,0.07);border:1px solid rgba(200,255,0,0.18);border-radius:20px;padding:6px 14px;">
+            <span style="position:relative;display:flex;align-items:center;justify-content:center;width:10px;height:10px;">
+              <span style="position:absolute;width:10px;height:10px;border-radius:50%;background:var(--lime);animation:onlinePing 1.8s ease-in-out infinite;opacity:0.6;"></span>
+              <span style="width:7px;height:7px;border-radius:50%;background:var(--lime);position:relative;z-index:1;box-shadow:0 0 6px var(--lime);"></span>
+            </span>
+            <span id="online-count" style="font-family:'Syne',sans-serif;font-size:12px;font-weight:800;color:var(--lime);">—</span>
+            <span style="font-family:'Syne',sans-serif;font-size:11px;color:var(--text2);">online</span>
+          </div>
+        </div>
         <p class="grid-sub">Pick a brand campaign, create content, and earn per thousand views on TikTok, Instagram, and YouTube.</p>
         <div class="search-row">
           <div class="search-wrap">
@@ -893,7 +904,11 @@ async function saveCreatorProfile(){
 
 async function loadCampaigns() {
   if (!leadDb) return;
-  const { data, error } = await leadDb.from('campaigns').select('*').eq('status', 'Active').order('created_at', { ascending: false });
+  let data, error;
+  ({ data, error } = await leadDb.from('campaigns').select('*').eq('status', 'Active').order('sort_order', { ascending: true, nullsFirst: false }));
+  if (error) {
+    ({ data, error } = await leadDb.from('campaigns').select('*').eq('status', 'Active').order('created_at', { ascending: false }));
+  }
   if (error) return;
   allCampaigns = data || [];
   updateStats(allCampaigns);
@@ -1042,6 +1057,12 @@ function resourceIcon(type){
   return '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M7.7 4h5.1l7.2 12.5L17.4 21 10.2 8.5 7.7 4z" opacity=".95"/><path d="M4 16.5L11.2 4h5.1L9.1 16.5H4z" opacity=".7"/><path d="M6.6 21L4 16.5h14.4L21 21H6.6z" opacity=".55"/></svg>';
 }
 
+function getYouTubeId(url) {
+  if (!url) return null;
+  const m = url.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?.*v=|embed\/|shorts\/))([a-zA-Z0-9_-]{11})/);
+  return m ? m[1] : null;
+}
+
 function renderTopVideos(c){
   const box = document.getElementById('d-top-videos');
   if(!box) return;
@@ -1050,8 +1071,7 @@ function renderTopVideos(c){
     {url:c.top_video_2_url, label:c.top_video_2_label},
     {url:c.top_video_3_url, label:c.top_video_3_label}
   ].filter(v => v.url);
-  const urls = videos.map(v => v.url);
-  if(!urls.length){
+  if(!videos.length){
     box.innerHTML = `
       <div class="viral-card"><div class="viral-thumb"><div class="viral-placeholder">PLAY</div><div class="viral-play">&#9658;</div></div><div class="viral-meta"><div class="viral-views">2.4M</div><div class="viral-label">Reference clip</div></div></div>
       <div class="viral-card"><div class="viral-thumb"><div class="viral-placeholder">HOOK</div><div class="viral-play">&#9658;</div></div><div class="viral-meta"><div class="viral-views">1.8M</div><div class="viral-label">Reference clip</div></div></div>
@@ -1060,13 +1080,20 @@ function renderTopVideos(c){
   }
   box.innerHTML = videos.map((item, i) => {
     const url = item.url;
-    const playable = isDirectVideoUrl(url);
     const label = item.label || `Video ${i+1}`;
+    const ytId = getYouTubeId(url);
+    const playable = isDirectVideoUrl(url);
+    let mediaHtml;
+    if (ytId) {
+      mediaHtml = `<iframe src="https://www.youtube.com/embed/${ytId}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="width:100%;height:100%;border:0;display:block;background:#000;"></iframe>`;
+    } else if (playable) {
+      mediaHtml = `<video src="${escapeAttr(url)}" controls playsinline preload="metadata" style="width:100%;height:100%;object-fit:cover;display:block;background:#000;"></video>`;
+    } else {
+      mediaHtml = `<a href="${escapeAttr(url)}" target="_blank" rel="noopener" style="display:flex;flex-direction:column;align-items:center;justify-content:center;width:100%;height:100%;text-decoration:none;gap:8px;"><div class="viral-placeholder">#${i+1}</div><div class="viral-play">&#9658;</div></a>`;
+    }
     return `
       <div class="viral-card">
-        <div class="viral-thumb">
-          ${playable ? `<video src="${escapeAttr(url)}" controls playsinline preload="metadata"></video>` : `<div class="viral-placeholder">#${i+1}</div><div class="viral-play">&#9658;</div>`}
-        </div>
+        <div class="viral-thumb">${mediaHtml}</div>
         <div class="viral-meta">
           <div class="viral-views">${escapeHtml(label)}</div>
         </div>
@@ -1077,6 +1104,30 @@ function renderTopVideos(c){
 function isDirectVideoUrl(url){
   return /\.(mp4|webm|ogg|mov)(\?|#|$)/i.test(url || '') || /cdn\.contentrewards\.com/i.test(url || '');
 }
+
+// — Online counter: realistic fluctuation between 10-220 based on time-of-day —
+(function initOnlineCounter(){
+  function getOnlineCount() {
+    const now = new Date();
+    const hour = now.getHours() + now.getMinutes() / 60;
+    // Peak hours: 18-23 (evening). Low: 2-7 (night)
+    let base;
+    if (hour >= 18 && hour < 23) base = 160;
+    else if (hour >= 12 && hour < 18) base = 110;
+    else if (hour >= 7 && hour < 12) base = 70;
+    else if (hour >= 23 || hour < 2) base = 50;
+    else base = 20; // 2-7am
+    // Add small random jitter ±15
+    const jitter = Math.floor((Math.sin(now.getTime() / 37000) * 15) + (Math.random() * 10 - 5));
+    return Math.max(10, Math.min(220, base + jitter));
+  }
+  function updateCounter() {
+    const el = document.getElementById('online-count');
+    if (el) el.textContent = getOnlineCount();
+  }
+  updateCounter();
+  setInterval(updateCounter, 28000 + Math.random() * 14000);
+})();
 
 function toggleOverviewExpand() {
   if(!selectedCampaign) return;
