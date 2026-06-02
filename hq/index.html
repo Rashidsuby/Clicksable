@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<title>Clicksable HQ â€” Admin CMS</title>
+<title>Clicksable HQ - Admin CMS</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -18,7 +18,7 @@
 *{margin:0;padding:0;box-sizing:border-box}
 html,body{height:100%;background:var(--bg0);color:var(--text);font-family:'DM Sans',sans-serif;overflow:hidden}
 
-/* â”€â”€ PIN GATE â”€â”€ */
+
 #pin-gate{
   position:fixed;inset:0;background:var(--bg0);z-index:1000;
   display:flex;align-items:center;justify-content:center;
@@ -62,7 +62,7 @@ html,body{height:100%;background:var(--bg0);color:var(--text);font-family:'DM Sa
 }
 @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}
 
-/* â”€â”€ MAIN APP â”€â”€ */
+
 #app{display:none;height:100vh;overflow:hidden;flex-direction:column}
 #app.unlocked{display:flex}
 
@@ -99,7 +99,7 @@ html,body{height:100%;background:var(--bg0);color:var(--text);font-family:'DM Sa
   height:calc(100vh - 56px);overflow:hidden;
 }
 
-/* â”€â”€ LEFT: DIRECTORY â”€â”€ */
+
 .dir-panel{
   background:var(--bg1);border-right:1px solid var(--border);
   display:flex;flex-direction:column;overflow:hidden;
@@ -166,7 +166,7 @@ html,body{height:100%;background:var(--bg0);color:var(--text);font-family:'DM Sa
 .dir-edit:hover{border-color:rgba(200,255,0,.3);color:var(--lime)}
 .dir-empty{text-align:center;padding:40px 20px;color:var(--text3);font-size:13px}
 
-/* â”€â”€ RIGHT: FORM â”€â”€ */
+
 .form-panel{
   overflow-y:auto;background:var(--bg0);
 }
@@ -320,6 +320,12 @@ html,body{height:100%;background:var(--bg0);color:var(--text);font-family:'DM Sa
 .support-bubble.admin,.support-bubble.agent{background:rgba(200,255,0,.09);border-color:rgba(200,255,0,.22);align-self:flex-end}
 
 /* ANNOUNCEMENT FORM */
+.ann-editor-toolbar{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px}
+.ann-editor-toolbar button,.ann-editor-toolbar select{background:var(--bg2);border:1px solid var(--border2);border-radius:8px;color:var(--text);padding:8px 10px;font-family:'Syne',sans-serif;font-size:10px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;cursor:pointer}
+.ann-editor-toolbar button:hover,.ann-editor-toolbar select:hover{border-color:rgba(200,255,0,.35);color:var(--lime)}
+.ann-editor{min-height:150px;background:var(--bg2);border:1px solid var(--border2);border-radius:12px;padding:14px 16px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:14px;line-height:1.7;outline:none;overflow-y:auto}
+.ann-editor:focus{border-color:rgba(200,255,0,.45)}
+.ann-editor:empty:before{content:attr(data-placeholder);color:var(--text3)}
 .ann-type-select{
   display:flex;gap:8px;margin-bottom:0;
 }
@@ -381,9 +387,9 @@ html,body{height:100%;background:var(--bg0);color:var(--text);font-family:'DM Sa
     <div class="pin-logo">Click<em>sable</em> HQ</div>
     <div class="pin-sub">Admin Access Required</div>
     <div class="pin-label">Enter Admin PIN</div>
-    <input id="pin-input" type="password" maxlength="6" placeholder="â€¢â€¢â€¢â€¢â€¢â€¢" autocomplete="off"/>
-    <button id="pin-btn">Unlock Dashboard â†’</button>
-    <div id="pin-error">âš  Incorrect PIN. Access denied.</div>
+    <input id="pin-input" type="password" maxlength="6" placeholder="******" autocomplete="off"/>
+    <button id="pin-btn">Unlock Dashboard</button>
+    <div id="pin-error">Incorrect PIN. Access denied.</div>
   </div>
 </div>
 
@@ -396,7 +402,7 @@ html,body{height:100%;background:var(--bg0);color:var(--text);font-family:'DM Sa
     </div>
     <div class="topbar-right">
       <span style="font-size:12px;color:var(--text3)" id="topbar-info">Loading...</span>
-      <button class="tb-btn" onclick="showCreatorsDirectory()">ðŸ‘¥ View All Creators</button>
+      <button class="tb-btn" onclick="showCreatorsDirectory()"> View All Creators</button>
       <button class="tb-btn" onclick="resetForm()">+ New Campaign</button>
       <button class="tb-btn danger" onclick="lockAdmin()">Lock</button>
     </div>
@@ -586,6 +592,7 @@ html,body{height:100%;background:var(--bg0);color:var(--text);font-family:'DM Sa
             <div class="form-field">
               <label>Reference Video URL 2</label>
               <input type="url" id="f-top-video-2" placeholder="https://..."/>
+
               <input type="text" id="f-top-video-2-label" placeholder="Display text, e.g. Best Opening" style="margin-top:8px"/>
             </div>
           </div>
@@ -593,6 +600,7 @@ html,body{height:100%;background:var(--bg0);color:var(--text);font-family:'DM Sa
             <div class="form-field">
               <label>Reference Video URL 3</label>
               <input type="url" id="f-top-video-3" placeholder="https://..."/>
+
               <input type="text" id="f-top-video-3-label" placeholder="Display text, e.g. Strong CTA" style="margin-top:8px"/>
             </div>
           </div>
@@ -600,10 +608,10 @@ html,body{height:100%;background:var(--bg0);color:var(--text);font-family:'DM Sa
 
         <!-- ACTIONS -->
         <div class="form-actions">
-          <button id="btn-publish" onclick="publishCampaign()">ðŸš€ Publish New Campaign</button>
-          <button id="btn-update" onclick="updateCampaign()">âœï¸ Update Campaign</button>
+          <button id="btn-publish" onclick="publishCampaign()">Publish New Campaign</button>
+          <button id="btn-update" onclick="updateCampaign()">Update Campaign</button>
           <button id="btn-cancel" onclick="resetForm()">Cancel</button>
-          <button id="btn-delete" onclick="deleteCampaign()">ðŸ—‘ Delete</button>
+          <button id="btn-delete" onclick="deleteCampaign()">Delete</button>
         </div>
       </div>
       </div><!-- end tabpanel-campaigns -->
@@ -641,7 +649,20 @@ html,body{height:100%;background:var(--bg0);color:var(--text);font-family:'DM Sa
             <div class="form-row">
               <div class="form-field">
                 <label>Body / Message *</label>
-                <textarea id="ann-body" style="min-height:120px" placeholder="Write the full announcement text here..."></textarea>
+                <input type="hidden" id="ann-body"/>
+                <div class="ann-editor-toolbar">
+                  <button type="button" onclick="formatAnn('bold')">Bold</button>
+                  <select id="ann-font-size" onchange="setAnnSize(this.value)">
+                    <option value="">Text size</option>
+                    <option value="12px">Small</option>
+                    <option value="14px">Normal</option>
+                    <option value="18px">Large</option>
+                    <option value="24px">Headline</option>
+                  </select>
+                  <button type="button" onclick="formatAnn('insertUnorderedList')">Bullets</button>
+                  <button type="button" onclick="clearAnnFormat()">Clear</button>
+                </div>
+                <div id="ann-editor" class="ann-editor" contenteditable="true" data-placeholder="Write the full announcement text here..."></div>
               </div>
             </div>
             <div class="form-row cols2">
@@ -662,7 +683,7 @@ html,body{height:100%;background:var(--bg0);color:var(--text);font-family:'DM Sa
               </div>
             </div>
             <div style="display:flex;gap:10px;margin-top:8px">
-              <button id="ann-btn-publish" onclick="publishAnnouncement()" style="flex:1;padding:14px;border-radius:12px;border:none;cursor:pointer;background:var(--lime);color:#000;font-family:'Syne',sans-serif;font-size:12px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;">ðŸ“¢ Publish Announcement</button>
+              <button id="ann-btn-publish" onclick="publishAnnouncement()" style="flex:1;padding:14px;border-radius:12px;border:none;cursor:pointer;background:var(--lime);color:#000;font-family:'Syne',sans-serif;font-size:12px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;">Publish Announcement</button>
               <button id="ann-btn-update" onclick="updateAnnouncement()" style="display:none;flex:1;padding:14px;border-radius:12px;border:none;cursor:pointer;background:rgba(255,90,31,.15);border:1px solid rgba(255,90,31,.4);color:var(--orange);font-family:'Syne',sans-serif;font-size:12px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;">Update</button>
               <button id="ann-btn-cancel" onclick="resetAnnForm()" style="display:none;padding:14px 20px;border-radius:12px;border:1px solid var(--border2);cursor:pointer;background:transparent;color:var(--text2);font-family:'Syne',sans-serif;font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;">Cancel</button>
             </div>
@@ -746,8 +767,7 @@ html,body{height:100%;background:var(--bg0);color:var(--text);font-family:'DM Sa
 <div id="toast"></div>
 
 <script>
-// â”€â”€ CONFIG â”€â”€
-const ADMIN_PIN     = '123456'; // â† Change this to your secret PIN
+const ADMIN_PIN     = '123456'; // <- Change this to your secret PIN
 const SUPABASE_URL  = 'https://ctwrrrnjbytnthadpksl.supabase.co';
 const SUPABASE_ANON = 'sb_publishable_GgNKeidATKP54WWXGgfduQ_sq487yx_';
 const hasSupabaseConfig = SUPABASE_URL.startsWith('https://') && !SUPABASE_URL.includes('YOUR_') && !SUPABASE_ANON.includes('YOUR_');
@@ -763,7 +783,6 @@ const iconTikTok = `<svg viewBox="0 0 24 24" width="12" height="12" fill="curren
 const iconInsta = `<svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>`;
 const iconYT = `<svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>`;
 
-// â”€â”€ PIN GATE â”€â”€
 const pinInput = document.getElementById('pin-input');
 const pinError = document.getElementById('pin-error');
 
@@ -791,7 +810,6 @@ function lockAdmin(){
   pinError.style.display = 'none';
 }
 
-// â”€â”€ LOAD DIRECTORY & SUBMISSIONS â”€â”€
 async function loadSubmissions(){
   const list = document.getElementById('submission-list');
   if(!leadDb){
@@ -824,7 +842,6 @@ function renderSubmissions(){
   }
 
   list.innerHTML = allSubmissions.map(s => {
-    // ðŸ›¡ï¸ BULLETPROOF MATCHING
     const creator = allCreators.find(c => String(c.creator_id).trim() === String(s.creator_id).trim()) || {};
     
     const status = s.status || 'Pending';
@@ -842,8 +859,8 @@ function renderSubmissions(){
           <div style="font-family:'Syne',sans-serif;font-size:13px;font-weight:800;margin-bottom:6px">${s.campaign_title || 'Campaign submission'}</div>
           
           <div style="background:var(--bg1); border:1px solid var(--border); border-radius:10px; padding:12px; margin-bottom:12px;">
-            <div style="font-size:13px; font-weight:700; color:var(--text); margin-bottom:4px;">ðŸ‘¤ ${creator.name || s.creator_name || 'Unknown Creator'}</div>
-            <div style="font-size:12px; color:var(--text2); margin-bottom:10px;">âœ‰ï¸ ${creator.email || s.creator_email || 'No email provided'}</div>
+            <div style="font-size:13px; font-weight:700; color:var(--text); margin-bottom:4px;">Creator: ${creator.name || s.creator_name || 'Unknown Creator'}</div>
+            <div style="font-size:12px; color:var(--text2); margin-bottom:10px;">Email: ${creator.email || s.creator_email || 'No email provided'}</div>
             <div style="display:flex; gap:8px; flex-wrap:wrap;">
               ${socialLinks}
             </div>
@@ -907,14 +924,14 @@ async function loadDirectory(){
   renderDirectory(allCampaigns);
 
   const active = allCampaigns.filter(c => c.status==='Active').length;
-  document.getElementById('dir-count').textContent = `${allCampaigns.length} total Â· ${active} active`;
+  document.getElementById('dir-count').textContent = `${allCampaigns.length} total - ${active} active`;
   document.getElementById('topbar-info').textContent = `${allCampaigns.length} campaigns in database`;
 }
 
 function renderDirectory(campaigns){
   const list = document.getElementById('dir-list');
   if(!campaigns.length){
-    list.innerHTML = '<div class="dir-empty">No campaigns yet.<br>Create your first one â†’</div>';
+    list.innerHTML = '<div class="dir-empty">No campaigns yet.<br>Create your first one</div>';
     return;
   }
   list.innerHTML = campaigns.map(c => `
@@ -922,7 +939,7 @@ function renderDirectory(campaigns){
       <div class="dir-thumb">
         ${c.thumbnail_url
           ? `<img src="${c.thumbnail_url}" alt="" onerror="this.style.display='none'">`
-          : 'ðŸ“‹'}
+          : 'Campaign'}
       </div>
       <div class="dir-info">
         <div class="dir-name">${c.title}</div>
@@ -936,7 +953,6 @@ function renderDirectory(campaigns){
   `).join('');
 }
 
-// â”€â”€ LOAD EDIT â”€â”€
 function loadEdit(id){
   const c = allCampaigns.find(x => x.id === id);
   if(!c) return;
@@ -965,7 +981,7 @@ function loadEdit(id){
 
   // Switch UI to edit mode
   document.getElementById('form-mode-title').innerHTML = 'Editing <span>Campaign</span>';
-  document.getElementById('form-mode-sub').textContent = `ID #${c.id} Â· ${c.category || 'No category'} Â· Created ${new Date(c.created_at).toLocaleDateString()}`;
+  document.getElementById('form-mode-sub').textContent = `ID #${c.id} - ${c.category || 'No category'} - Created ${new Date(c.created_at).toLocaleDateString()}`;
   document.getElementById('editing-pill').style.display = 'flex';
   document.getElementById('btn-publish').style.display  = 'none';
   document.getElementById('btn-update').style.display   = 'flex';
@@ -981,7 +997,6 @@ function loadEdit(id){
   document.querySelector('.form-panel').scrollTo({top:0,behavior:'smooth'});
 }
 
-// â”€â”€ RESET FORM â”€â”€
 function resetForm(){
   editingId = null;
   ['f-title','f-description','f-requirements','f-budget','f-payout',
@@ -1003,7 +1018,6 @@ function resetForm(){
   document.querySelector('.form-panel').scrollTo({top:0,behavior:'smooth'});
 }
 
-// â”€â”€ COLLECT FORM DATA â”€â”€
 function collectForm(){
   return {
     title:              document.getElementById('f-title').value.trim(),
@@ -1035,7 +1049,6 @@ function validateForm(data){
   return true;
 }
 
-// â”€â”€ PUBLISH â”€â”€
 async function publishCampaign(){
   if(!leadDb){ showToast('Add Supabase credentials before publishing', 'error'); return; }
   const data = collectForm();
@@ -1046,7 +1059,7 @@ async function publishCampaign(){
 
   const { error } = await leadDb.from('campaigns').insert([data]);
 
-  btn.textContent = 'ðŸš€ Publish New Campaign'; btn.disabled = false;
+  btn.textContent = 'Publish New Campaign'; btn.disabled = false;
   if(error){ showToast('Error: ' + error.message, 'error'); return; }
 
   showToast('Campaign published successfully!', 'success');
@@ -1054,7 +1067,6 @@ async function publishCampaign(){
   loadDirectory();
 }
 
-// â”€â”€ UPDATE â”€â”€
 async function updateCampaign(){
   if(!leadDb){ showToast('Add Supabase credentials before updating', 'error'); return; }
   if(!editingId) return;
@@ -1066,7 +1078,7 @@ async function updateCampaign(){
 
   const { error } = await leadDb.from('campaigns').update(data).eq('id', editingId);
 
-  btn.textContent = 'âœï¸ Update Campaign'; btn.disabled = false;
+  btn.textContent = 'Update Campaign'; btn.disabled = false;
   if(error){ showToast('Error: ' + error.message, 'error'); return; }
 
   showToast('Campaign updated!', 'success');
@@ -1074,7 +1086,6 @@ async function updateCampaign(){
   loadDirectory();
 }
 
-// â”€â”€ DELETE â”€â”€
 async function deleteCampaign(){
   if(!leadDb){ showToast('Add Supabase credentials before deleting', 'error'); return; }
   if(!editingId) return;
@@ -1089,13 +1100,11 @@ async function deleteCampaign(){
   loadDirectory();
 }
 
-// â”€â”€ DIRECTORY SEARCH â”€â”€
 document.getElementById('dir-search-input').addEventListener('keyup', e => {
   const q = e.target.value.toLowerCase();
   renderDirectory(allCampaigns.filter(c => (c.title || '').toLowerCase().includes(q)));
 });
 
-// â”€â”€ TAB SWITCHING â”€â”€
 function switchTab(tab) {
   ['campaigns','announcements','earnings','support'].forEach(t => {
     document.getElementById('tabpanel-'+t).style.display = 'none';
@@ -1109,7 +1118,6 @@ function switchTab(tab) {
   if(tab === 'support') loadSupportInbox();
 }
 
-// â”€â”€ ANNOUNCEMENTS MANAGEMENT â”€â”€
 let editingAnnId = null;
 let selectedAnnType = 'New';
 
@@ -1141,10 +1149,10 @@ async function loadAnnouncementsHQ() {
         <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
           <span style="font-family:'Syne',sans-serif;font-size:9px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:${typeColors[a.type]||'var(--text2)'}">${a.type||'Info'}</span>
           <span style="font-size:10px;color:var(--text3)">${new Date(a.created_at).toLocaleDateString()}</span>
-          ${!a.published ? '<span style="font-size:9px;color:var(--text3);font-family:Syne,sans-serif;text-transform:uppercase">Â· Draft</span>' : ''}
+          ${!a.published ? '<span style="font-size:9px;color:var(--text3);font-family:Syne,sans-serif;text-transform:uppercase">- Draft</span>' : ''}
         </div>
         <div style="font-family:Syne,sans-serif;font-size:13px;font-weight:700;margin-bottom:4px">${a.title}</div>
-        <div style="font-size:12px;color:var(--text2);line-height:1.5">${a.body.length > 100 ? a.body.substring(0,100)+'...' : a.body}</div>
+        <div style="font-size:12px;color:var(--text2);line-height:1.5">${plainText(a.body).length > 100 ? plainText(a.body).substring(0,100)+'...' : plainText(a.body)}</div>
       </div>
       <div style="display:flex;gap:6px;flex-shrink:0">
         <button onclick="loadAnnEdit(${a.id})" class="dir-edit">Edit</button>
@@ -1158,7 +1166,7 @@ function loadAnnEdit(id) {
   if(!ann) { loadAnnouncementsHQ(); return; }
   editingAnnId = id;
   document.getElementById('ann-title').value = ann.title || '';
-  document.getElementById('ann-body').value = ann.body || '';
+  setAnnEditorHtml(ann.body || '');
   document.getElementById('ann-published').value = ann.published ? 'true' : 'false';
   selectAnnType(ann.type || 'New');
   document.getElementById('ann-form-title').textContent = 'Edit Announcement';
@@ -1174,7 +1182,7 @@ const _origLoadAnn = loadAnnouncementsHQ;
 function resetAnnForm() {
   editingAnnId = null;
   document.getElementById('ann-title').value = '';
-  document.getElementById('ann-body').value = '';
+  setAnnEditorHtml('');
   document.getElementById('ann-published').value = 'true';
   selectAnnType('New');
   document.getElementById('ann-form-title').textContent = 'New Announcement';
@@ -1183,10 +1191,54 @@ function resetAnnForm() {
   document.getElementById('ann-btn-cancel').style.display = 'none';
 }
 
+
+function formatAnn(command){
+  document.getElementById('ann-editor')?.focus();
+  document.execCommand(command, false, null);
+}
+
+function setAnnSize(size){
+  if(!size) return;
+  document.getElementById('ann-editor')?.focus();
+  document.execCommand('fontSize', false, '4');
+  document.querySelectorAll('#ann-editor font[size="4"]').forEach(el => {
+    const span = document.createElement('span');
+    span.style.fontSize = size;
+    span.innerHTML = el.innerHTML;
+    el.replaceWith(span);
+  });
+  document.getElementById('ann-font-size').value = '';
+}
+
+function clearAnnFormat(){
+  const editor = document.getElementById('ann-editor');
+  if(!editor) return;
+  editor.innerHTML = plainText(editor.innerHTML);
+}
+
+function getAnnEditorHtml(){
+  const html = (document.getElementById('ann-editor')?.innerHTML || '').trim();
+  document.getElementById('ann-body').value = html;
+  return html;
+}
+
+function setAnnEditorHtml(html){
+  const editor = document.getElementById('ann-editor');
+  if(editor) editor.innerHTML = html || '';
+  const hidden = document.getElementById('ann-body');
+  if(hidden) hidden.value = html || '';
+}
+
+function plainText(html){
+  const div = document.createElement('div');
+  div.innerHTML = html || '';
+  return div.textContent || div.innerText || '';
+}
+
 function collectAnnForm() {
   return {
     title:     document.getElementById('ann-title').value.trim(),
-    body:      document.getElementById('ann-body').value.trim(),
+    body:      getAnnEditorHtml(),
     type:      selectedAnnType,
     published: document.getElementById('ann-published').value === 'true',
   };
@@ -1199,7 +1251,7 @@ async function publishAnnouncement() {
   const btn = document.getElementById('ann-btn-publish');
   btn.textContent = 'Publishing...'; btn.disabled = true;
   const { error } = await leadDb.from('announcements').insert([data]);
-  btn.textContent = 'ðŸ“¢ Publish Announcement'; btn.disabled = false;
+  btn.textContent = 'Publish Announcement'; btn.disabled = false;
   if(error){ showToast(error.message, 'error'); return; }
   showToast('Announcement published!', 'success');
   resetAnnForm();
@@ -1228,7 +1280,6 @@ async function deleteAnn(id) {
   loadAnnouncementsHQ();
 }
 
-// â”€â”€ CREATOR EARNINGS TAB (mirrors existing submissions) â”€â”€
 async function loadSubmissionsTab() {
   const list = document.getElementById('submission-list-tab');
   if(!leadDb){ list.innerHTML = '<div class="dir-empty">Connect Supabase to manage earnings.</div>'; return; }
@@ -1248,8 +1299,8 @@ async function loadSubmissionsTab() {
       <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:12px">
         <div>
           <div style="font-family:'Syne',sans-serif;font-size:13px;font-weight:800;margin-bottom:4px">${s.campaign_title||'Campaign'}</div>
-          <div style="font-size:12px;color:var(--text2)">ðŸ‘¤ ${creator.name||s.creator_name||'Unknown'} &nbsp;Â·&nbsp; ${s.platform||'Platform'}</div>
-          <div style="margin-top:6px"><a href="${s.video_url||'#'}" target="_blank" style="font-size:11px;color:var(--lime)">View Video â†’</a></div>
+          <div style="font-size:12px;color:var(--text2)">Creator: ${creator.name||s.creator_name||'Unknown'}  -  ${s.platform||'Platform'}</div>
+          <div style="margin-top:6px"><a href="${s.video_url||'#'}" target="_blank" style="font-size:11px;color:var(--lime)">View Video</a></div>
         </div>
         <span style="font-family:'Syne',sans-serif;font-size:10px;font-weight:800;color:${statusColor};text-transform:uppercase;flex-shrink:0">${s.status||'Pending'}</span>
       </div>
@@ -1267,8 +1318,8 @@ async function loadSubmissionsTab() {
       </div>
       <div style="display:flex;gap:8px;flex-wrap:wrap">
         <button onclick="saveEarnings('${s.id}')" style="flex:1;padding:9px;border-radius:8px;border:none;cursor:pointer;background:rgba(200,255,0,.1);border:1px solid rgba(200,255,0,.25);color:var(--lime);font-family:'Syne',sans-serif;font-size:10px;font-weight:800;letter-spacing:.1em;text-transform:uppercase">Save Views & Earnings</button>
-        <button onclick="setStatus('${s.id}','Approved')" style="padding:9px 14px;border-radius:8px;border:1px solid rgba(200,255,0,.25);cursor:pointer;background:transparent;color:var(--lime);font-family:'Syne',sans-serif;font-size:10px;font-weight:700;text-transform:uppercase">âœ“ Approve</button>
-        <button onclick="setStatus('${s.id}','Rejected')" style="padding:9px 14px;border-radius:8px;border:1px solid rgba(255,59,59,.25);cursor:pointer;background:transparent;color:var(--danger);font-family:'Syne',sans-serif;font-size:10px;font-weight:700;text-transform:uppercase">âœ— Reject</button>
+        <button onclick="setStatus('${s.id}','Approved')" style="padding:9px 14px;border-radius:8px;border:1px solid rgba(200,255,0,.25);cursor:pointer;background:transparent;color:var(--lime);font-family:'Syne',sans-serif;font-size:10px;font-weight:700;text-transform:uppercase">Approve</button>
+        <button onclick="setStatus('${s.id}','Rejected')" style="padding:9px 14px;border-radius:8px;border:1px solid rgba(255,59,59,.25);cursor:pointer;background:transparent;color:var(--danger);font-family:'Syne',sans-serif;font-size:10px;font-weight:700;text-transform:uppercase">Reject</button>
       </div>
     </div>`;
   }).join('');
@@ -1291,7 +1342,6 @@ async function setStatus(id, status) {
   loadSubmissionsTab();
 }
 
-// â”€â”€ TOAST â”€â”€
 // SUPPORT INBOX
 let supportThreads = [];
 let activeSupportCreatorId = null;
@@ -1353,7 +1403,7 @@ async function openSupportThread(index){
   document.getElementById('support-message-list').innerHTML = thread.rows.map(m => `
     <div class="support-bubble ${m.sender === 'creator' ? 'creator' : 'admin'}">
       <div>${hqEscape(m.body)}</div>
-      <div style="font-size:10px;color:var(--text3);margin-top:6px;font-family:'Syne',sans-serif">${hqEscape(m.sender)} Â· ${new Date(m.created_at).toLocaleString()}</div>
+      <div style="font-size:10px;color:var(--text3);margin-top:6px;font-family:'Syne',sans-serif">${hqEscape(m.sender)} - ${new Date(m.created_at).toLocaleString()}</div>
     </div>`).join('');
   document.getElementById('support-message-list').scrollTop = document.getElementById('support-message-list').scrollHeight;
   const markQuery = leadDb.from('support_messages').update({ read_by_admin: true }).eq('sender', 'creator');
@@ -1388,7 +1438,6 @@ function showToast(msg, type='success'){
   setTimeout(() => { t.className = type; }, 3000);
 }
 
-// â”€â”€ MODAL DIRECTORY JS â”€â”€
 async function showCreatorsDirectory() {
   const modal = document.getElementById('creators-modal');
   const grid = document.getElementById('creators-grid');
@@ -1422,7 +1471,7 @@ async function showCreatorsDirectory() {
     return `
       <div style="background:var(--bg2); border:1px solid var(--border); border-radius:12px; padding:16px;">
         <div style="font-size:15px; font-weight:700; color:var(--lime); margin-bottom:4px;">${c.name || 'Unnamed Creator'}</div>
-        <div style="font-size:12px; color:var(--text2); margin-bottom:12px;">âœ‰ï¸ ${c.email || 'No email'}</div>
+        <div style="font-size:12px; color:var(--text2); margin-bottom:12px;">Email: ${c.email || 'No email'}</div>
         <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:12px;">
           ${socialLinks}
         </div>
