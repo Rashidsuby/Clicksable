@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<title>Clicksable â€” Creator Rewards</title>
+<title>Clicksable - Creator Rewards</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -19,7 +19,7 @@
 *{margin:0;padding:0;box-sizing:border-box}
 html,body{height:100%;background:var(--bg0);color:var(--text);font-family:'DM Sans',sans-serif;overflow-x:hidden}
 
-/* â”€â”€ AUTH GATE â”€â”€ */
+
 #auth-gate{
   position:fixed;inset:0;background:var(--bg0);z-index:2000;
   display:flex;align-items:center;justify-content:center;padding:20px;
@@ -44,7 +44,7 @@ html,body{height:100%;background:var(--bg0);color:var(--text);font-family:'DM Sa
 .forgot-password{display:block;text-align:center;margin-top:16px;font-family:'DM Sans',sans-serif;font-size:12px;color:var(--text3);text-decoration:underline;cursor:pointer;transition:color 0.2s;}
 .forgot-password:hover{color:var(--text);}
 
-/* â”€â”€ MOBILE HEADER (Hidden on Desktop) â”€â”€ */
+
 #mobile-header {
   display: none; position: fixed; top: 0; left: 0; right: 0; height: 60px;
   background: var(--bg1); border-bottom: 1px solid var(--border); z-index: 99;
@@ -57,7 +57,7 @@ html,body{height:100%;background:var(--bg0);color:var(--text);font-family:'DM Sa
   display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 998; backdrop-filter: blur(4px);
 }
 
-/* â”€â”€ SIDEBAR â”€â”€ */
+
 #sidebar{
   position:fixed;top:0;left:0;width:var(--sidebar);height:100vh;
   background:var(--bg1);border-right:1px solid var(--border);
@@ -85,7 +85,7 @@ html,body{height:100%;background:var(--bg0);color:var(--text);font-family:'DM Sa
 .logout-btn{margin-top: 16px; width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--border2);background: transparent; color: var(--text2); cursor: pointer; font-family: 'Syne', sans-serif;font-size: 10px; font-weight: 700; text-transform: uppercase; transition: all .2s;}
 .logout-btn:hover{color: var(--text); border-color: var(--border);}
 
-/* â”€â”€ MAIN STAGE â”€â”€ */
+
 #stage{
   margin-left:var(--sidebar);height:100vh;
   overflow-y:auto;background:var(--bg0);
@@ -94,7 +94,7 @@ html,body{height:100%;background:var(--bg0);color:var(--text);font-family:'DM Sa
 #stage::-webkit-scrollbar-track{background:transparent}
 #stage::-webkit-scrollbar-thumb{background:var(--border2);border-radius:4px}
 
-/* â”€â”€ UNIFORM PADDING FOR ALL VIEWS â”€â”€ */
+
 #view-grid, #view-announcements, #view-support, #view-profile, #view-earnings {
   padding: 40px 40px 60px;
   animation: fadeUp .4s ease;
@@ -125,7 +125,7 @@ html,body{height:100%;background:var(--bg0);color:var(--text);font-family:'DM Sa
 .stat-num{font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:1px}
 .stat-lbl{font-size:11px;color:var(--text3);font-family:'Syne',sans-serif;letter-spacing:.1em;text-transform:uppercase}
 
-/* â”€â”€ PERMANENT SOLUTION: FLEX COLUMN FOR WIDE BANNERS â”€â”€ */
+
 #campaign-grid{
   display:flex;
   flex-direction:column;
@@ -136,7 +136,7 @@ html,body{height:100%;background:var(--bg0);color:var(--text);font-family:'DM Sa
 .empty-title{font-family:'Bebas Neue',sans-serif;font-size:32px;color:var(--text2)}
 .empty-sub{font-size:14px;color:var(--text3);margin-top:8px}
 
-/* â”€â”€ THE HORIZONTAL RECTANGULAR CAMPAIGN CARD â”€â”€ */
+
 .c-card{
   background:var(--bg1);border:1px solid var(--border);border-radius:16px;
   overflow:hidden;cursor:pointer;transition:all .2s ease-in-out;
@@ -190,7 +190,7 @@ html,body{height:100%;background:var(--bg0);color:var(--text);font-family:'DM Sa
   transition: color 0.2s, transform 0.2s;
 }
 
-/* â”€â”€ VIEW B: ASYMMETRICAL DETAIL â”€â”€ */
+
 #view-detail{display:none;animation:fadeUp .35s ease;padding:30px 40px 60px; max-width:1200px;}
 #view-detail.show{display:block}
 
@@ -298,6 +298,17 @@ html,body{height:100%;background:var(--bg0);color:var(--text);font-family:'DM Sa
 .viral-link{display:block;color:inherit;text-decoration:none}
 .viral-url{font-size:10px;color:var(--text3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 
+.ann-filter-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+.ann-filter{border:1px solid var(--border2);background:var(--bg2);color:var(--text2);border-radius:999px;padding:8px 14px;font-family:'Syne',sans-serif;font-size:10px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;cursor:pointer}
+.ann-filter.active,.ann-filter:hover{color:#000;background:var(--lime);border-color:var(--lime)}
+.policy-banner{background:linear-gradient(135deg,rgba(255,90,31,.18),rgba(255,255,255,.02));border:1px solid rgba(255,90,31,.35);border-radius:16px;padding:16px 18px;margin-bottom:16px;cursor:pointer}
+.policy-banner-title{font-family:'Syne',sans-serif;font-size:13px;font-weight:900;color:var(--orange);letter-spacing:.12em;text-transform:uppercase;margin-bottom:6px}
+.ann-card{background:var(--bg1);border:1px solid var(--border);border-radius:16px;padding:18px 20px;cursor:pointer;transition:border-color .2s,background .2s}
+.ann-card:hover{border-color:rgba(200,255,0,.28)}
+.ann-body{font-size:14px;color:var(--text2);line-height:1.7;margin-top:10px;display:none}
+.ann-card.open .ann-body{display:block}
+.ann-preview{font-size:13px;color:var(--text3);line-height:1.6;margin-top:8px}
+.ann-card.open .ann-preview{display:none}
 /* PROFILE + CHAT */
 .profile-shell{max-width:860px;background:var(--bg1);border:1px solid var(--border);border-radius:20px;padding:24px}
 .profile-top{display:grid;grid-template-columns:72px 1fr;align-items:center;gap:16px;margin-bottom:20px}
@@ -413,7 +424,7 @@ html,body{height:100%;background:var(--bg0);color:var(--text);font-family:'DM Sa
     </div>
     <div class="auth-field">
       <label>Password</label>
-      <input type="password" id="auth-password" class="auth-input" placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢"/>
+      <input type="password" id="auth-password" class="auth-input" placeholder="********"/>
     </div>
 
     <button class="auth-btn" onclick="handleLogin()" id="btn-login">Log In</button>
@@ -424,7 +435,7 @@ html,body{height:100%;background:var(--bg0);color:var(--text);font-family:'DM Sa
     <div id="reset-password-fields" style="display:none;margin-top:20px;border-top:1px solid var(--border);padding-top:20px;">
       <div class="auth-field">
         <label>Type New Password</label>
-        <input type="password" id="new-password-input" class="auth-input" placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢"/>
+        <input type="password" id="new-password-input" class="auth-input" placeholder="********"/>
       </div>
       <button class="auth-btn" onclick="submitNewPassword()">Update Password</button>
     </div>
@@ -493,9 +504,9 @@ html,body{height:100%;background:var(--bg0);color:var(--text);font-family:'DM Sa
         </div>
       </div>
       <div class="stats-strip">
-        <div class="stat-pill"><div class="stat-dot lime"></div><div><div class="stat-num" id="stat-active">â€”</div><div class="stat-lbl">Active Campaigns</div></div></div>
-        <div class="stat-pill"><div class="stat-dot orange"></div><div><div class="stat-num" id="stat-budget">â€”</div><div class="stat-lbl">Total Budget Pool</div></div></div>
-        <div class="stat-pill"><div class="stat-dot grey"></div><div><div class="stat-num" id="stat-top-cpm">â€”</div><div class="stat-lbl">Highest CPM Rate</div></div></div>
+        <div class="stat-pill"><div class="stat-dot lime"></div><div><div class="stat-num" id="stat-active">-</div><div class="stat-lbl">Active Campaigns</div></div></div>
+        <div class="stat-pill"><div class="stat-dot orange"></div><div><div class="stat-num" id="stat-budget">-</div><div class="stat-lbl">Total Budget Pool</div></div></div>
+        <div class="stat-pill"><div class="stat-dot grey"></div><div><div class="stat-num" id="stat-top-cpm">-</div><div class="stat-lbl">Highest CPM Rate</div></div></div>
       </div>
       
       <div id="campaign-grid"></div>
@@ -512,11 +523,11 @@ html,body{height:100%;background:var(--bg0);color:var(--text);font-family:'DM Sa
           <div class="d-banner-cat" id="d-cat"></div>
           <h1 class="d-banner-title" id="d-title"></h1>
           <div class="d-overview-text" id="d-overview-summary"></div>
-          <button class="d-expand-btn" id="d-expand-toggle" onclick="toggleOverviewExpand()">Expand â–¾</button>
+          <button class="d-expand-btn" id="d-expand-toggle" onclick="toggleOverviewExpand()">Expand</button>
           
           <div class="d-banner-tags">
             <span id="d-dynamic-tag" class="d-tag"></span>
-            <div class="d-review">Avg. review time: <span>24â€“48 hrs</span> &nbsp;Â·&nbsp; Payments processed <span>weekly</span></div>
+            <div class="d-review">Avg. review time: <span>24-48 hrs</span>  -  Payments processed <span>weekly</span></div>
           </div>
         </div>
         <div class="d-header-right-thumb">
@@ -528,7 +539,7 @@ html,body{height:100%;background:var(--bg0);color:var(--text);font-family:'DM Sa
         <div>
           <div class="d-section">
             <div class="d-section-title">Requirements</div>
-            <div class="d-requirements" id="d-requirements">â€”</div>
+            <div class="d-requirements" id="d-requirements">-</div>
           </div>
 
           <div class="d-section">
@@ -569,9 +580,9 @@ html,body{height:100%;background:var(--bg0);color:var(--text);font-family:'DM Sa
           <div class="d-section">
             <div class="d-section-title">Top Performing Videos</div>
             <div class="viral-row" id="d-top-videos">
-              <div class="viral-card"><div class="viral-thumb">ðŸŽ¬<div class="viral-play">â–¶</div></div><div class="viral-meta"><div class="viral-views">2.4M</div><div class="viral-label">Views Â· 3 days ago</div></div></div>
-              <div class="viral-card"><div class="viral-thumb">ðŸŽ¥<div class="viral-play">â–¶</div></div><div class="viral-meta"><div class="viral-views">1.8M</div><div class="viral-label">Views Â· 5 days ago</div></div></div>
-              <div class="viral-card"><div class="viral-thumb">ðŸ“¹<div class="viral-play">â–¶</div></div><div class="viral-meta"><div class="viral-views">980K</div><div class="viral-label">Views Â· 1 week ago</div></div></div>
+              <div class="viral-card"><div class="viral-thumb">VIDEO<div class="viral-play">&#9658;</div></div><div class="viral-meta"><div class="viral-views">2.4M</div><div class="viral-label">Views - 3 days ago</div></div></div>
+              <div class="viral-card"><div class="viral-thumb">VIDEO<div class="viral-play">&#9658;</div></div><div class="viral-meta"><div class="viral-views">1.8M</div><div class="viral-label">Views - 5 days ago</div></div></div>
+              <div class="viral-card"><div class="viral-thumb">VIDEO<div class="viral-play">&#9658;</div></div><div class="viral-meta"><div class="viral-views">980K</div><div class="viral-label">Views - 1 week ago</div></div></div>
             </div>
           </div>
 
@@ -589,11 +600,11 @@ html,body{height:100%;background:var(--bg0);color:var(--text);font-family:'DM Sa
             </div>
 
             <table class="meta-table">
-              <tr><td>Category</td><td id="m-category">â€”</td></tr>
+              <tr><td>Category</td><td id="m-category">-</td></tr>
               <tr><td>Type</td><td id="m-type">UGC / Organic</td></tr>
-              <tr><td>Platforms</td><td id="m-platforms">â€”</td></tr>
-              <tr><td>Status</td><td id="m-status">â€”</td></tr>
-              <tr><td>Last Updated</td><td id="m-updated">â€”</td></tr>
+              <tr><td>Platforms</td><td id="m-platforms">-</td></tr>
+              <tr><td>Status</td><td id="m-status">-</td></tr>
+              <tr><td>Last Updated</td><td id="m-updated">-</td></tr>
             </table>
 
             <div style="margin:18px 0;padding:14px;border:1px solid var(--border);border-radius:12px;background:rgba(255,255,255,.025)">
@@ -615,6 +626,12 @@ html,body{height:100%;background:var(--bg0);color:var(--text);font-family:'DM Sa
       <div class="grid-header">
         <h1 class="grid-title">Announce<span>ments</span></h1>
         <p class="grid-sub">Platform updates, campaign drops, review windows, and payout notices for Clicksable creators.</p>
+      </div>
+      <div class="ann-filter-row" id="ann-filter-row">
+        <button class="ann-filter active" data-ann-filter="All">All</button>
+        <button class="ann-filter" data-ann-filter="Policy">Policy</button>
+        <button class="ann-filter" data-ann-filter="New">New</button>
+        <button class="ann-filter" data-ann-filter="Info">Info</button>
       </div>
       <div id="announcements-list" style="display:grid;gap:14px;max-width:900px">
         <div style="text-align:center;padding:40px;color:var(--text3)">Loading announcements...</div>
@@ -722,7 +739,6 @@ html,body{height:100%;background:var(--bg0);color:var(--text);font-family:'DM Sa
 </div>
 
 <script>
-// â”€â”€ MOBILE MENU LOGIC â”€â”€
 const sidebar = document.getElementById('sidebar');
 const overlay = document.getElementById('sidebar-overlay');
 const menuBtn = document.getElementById('mobile-menu-btn');
@@ -734,7 +750,6 @@ function toggleSidebar() {
 menuBtn.addEventListener('click', toggleSidebar);
 overlay.addEventListener('click', toggleSidebar);
 
-// â”€â”€ SUPABASE INIT â”€â”€
 const SUPABASE_URL  = 'https://ctwrrrnjbytnthadpksl.supabase.co';
 const SUPABASE_ANON = 'sb_publishable_GgNKeidATKP54WWXGgfduQ_sq487yx_';
 const AI_AGENT_PROVIDER = ''; // Optional: 'gemini' or 'claude'. Leave blank to route to HQ only.
@@ -746,7 +761,6 @@ const leadDb = hasSupabaseConfig ? supabase.createClient(SUPABASE_URL, SUPABASE_
 let creatorId = null, userEmail = null, allCampaigns = [], activeFilter = 'all';
 let selectedCampaign = null, creatorProfile = {}, creatorSubmissions = [], isOverviewExpanded = false;
 
-// â”€â”€ AUTHENTICATION â”€â”€
 const authGate = document.getElementById('auth-gate'), appWrapper = document.getElementById('app-wrapper'), errorMsg = document.getElementById('auth-error');
 
 if(leadDb) {
@@ -835,7 +849,6 @@ async function handleLogout() {
   await leadDb.auth.signOut();
 }
 
-// â”€â”€ PROFILE â”€â”€
 async function hydrateCreatorProfile(){
   document.getElementById('profile-email').value = userEmail;
   document.getElementById('profile-avatar').textContent = (userEmail || 'CR').slice(0,2).toUpperCase();
@@ -878,7 +891,6 @@ async function saveCreatorProfile(){
   alert('Profile securely saved.');
 }
 
-// â”€â”€ LOAD CAMPAIGNS â”€â”€
 async function loadCampaigns() {
   if (!leadDb) return;
   const { data, error } = await leadDb.from('campaigns').select('*').eq('status', 'Active').order('created_at', { ascending: false });
@@ -894,13 +906,13 @@ function updateStats(campaigns) {
   const totalBudget = campaigns.reduce((s, c) => s + (c.total_budget || 0), 0);
   document.getElementById('stat-budget').textContent = '$' + (totalBudget >= 1000 ? (totalBudget/1000).toFixed(0)+'K' : totalBudget.toFixed(0));
   const topCpm = Math.max(...campaigns.flatMap(c => [c.cpm_tiktok, c.cpm_instagram, c.cpm_youtube].filter(Boolean)), 0);
-  document.getElementById('stat-top-cpm').textContent = topCpm ? '$'+topCpm.toFixed(2) : 'â€”';
+  document.getElementById('stat-top-cpm').textContent = topCpm ? '$'+topCpm.toFixed(2) : '-';
 }
 
 function renderGrid(campaigns) {
   const grid = document.getElementById('campaign-grid');
   if (!campaigns.length) {
-    grid.innerHTML = `<div class="empty-state"><div class="empty-icon">ðŸ“­</div><div class="empty-title">No Active Campaigns</div><div class="empty-sub">Check back soon â€” new campaigns drop regularly.</div></div>`;
+    grid.innerHTML = `<div class="empty-state"><div class="empty-icon">­</div><div class="empty-title">No Active Campaigns</div><div class="empty-sub">Check back soon. New campaigns drop regularly.</div></div>`;
     return;
   }
   
@@ -974,15 +986,15 @@ function openDetail(c) {
   if (rawDesc.length > 180) {
     overviewSummary.textContent = rawDesc.substring(0, 180) + "...";
     expandToggle.style.display = "flex";
-    expandToggle.textContent = "Expand â–¾";
+    expandToggle.textContent = "Expand";
   } else {
     overviewSummary.textContent = rawDesc;
     expandToggle.style.display = "none";
   }
 
-  document.getElementById('d-cpm-tiktok').innerHTML = c.cpm_tiktok ? `$${c.cpm_tiktok.toFixed(2)} <span>/ 1K views</span>` : '$â€”';
-  document.getElementById('d-cpm-instagram').innerHTML = c.cpm_instagram ? `$${c.cpm_instagram.toFixed(2)} <span>/ 1K views</span>` : '$â€”';
-  document.getElementById('d-cpm-youtube').innerHTML = c.cpm_youtube ? `$${c.cpm_youtube.toFixed(2)} <span>/ 1K views</span>` : '$â€”';
+  document.getElementById('d-cpm-tiktok').innerHTML = c.cpm_tiktok ? `$${c.cpm_tiktok.toFixed(2)} <span>/ 1K views</span>` : '$0.00';
+  document.getElementById('d-cpm-instagram').innerHTML = c.cpm_instagram ? `$${c.cpm_instagram.toFixed(2)} <span>/ 1K views</span>` : '$0.00';
+  document.getElementById('d-cpm-youtube').innerHTML = c.cpm_youtube ? `$${c.cpm_youtube.toFixed(2)} <span>/ 1K views</span>` : '$0.00';
 
   // Toggle display of cards based on availability
   document.getElementById('card-tiktok').style.display = c.cpm_tiktok ? "block" : "none";
@@ -996,9 +1008,9 @@ function openDetail(c) {
   document.getElementById('d-budget-fill').style.width = pct+'%';
   document.getElementById('d-budget-pct').textContent  = pct+'% distributed';
 
-  document.getElementById('m-category').textContent = c.category || 'â€”';
+  document.getElementById('m-category').textContent = c.category || '-';
   const platforms = [c.cpm_tiktok&&'TikTok', c.cpm_instagram&&'Instagram', c.cpm_youtube&&'YouTube'].filter(Boolean).join(', ');
-  document.getElementById('m-platforms').textContent = platforms || 'â€”';
+  document.getElementById('m-platforms').textContent = platforms || '-';
   document.getElementById('m-updated').textContent = new Date(c.created_at).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
   renderTopVideos(c);
   updateSubmitPlatformOptions(c);
@@ -1086,7 +1098,6 @@ document.getElementById('back-btn').addEventListener('click', () => {
   showView('rewards');
 });
 
-// â”€â”€ VIEW SWITCHING â”€â”€
 function setActiveNav(view){
   document.querySelectorAll('.sb-item[data-view]').forEach(el => {
     el.classList.toggle('active', el.dataset.view === view);
@@ -1134,7 +1145,9 @@ document.querySelectorAll('.sb-item[data-view]').forEach(item => {
   });
 });
 
-// â”€â”€ SUPPORT CHAT â”€â”€
+let allAnnouncements = [];
+let activeAnnFilter = 'All';
+
 async function loadAnnouncements(){
   const list = document.getElementById('announcements-list');
   if(!list) return;
@@ -1152,21 +1165,72 @@ async function loadAnnouncements(){
     list.innerHTML = `<div class="empty-state"><div class="empty-title">No Announcements</div><div class="empty-sub">${escapeHtml(error.message)}</div></div>`;
     return;
   }
-  if(!data || !data.length){
+  allAnnouncements = data || [];
+  renderAnnouncements();
+}
+
+function renderAnnouncements(){
+  const list = document.getElementById('announcements-list');
+  if(!list) return;
+  const rows = activeAnnFilter === 'All' ? allAnnouncements : allAnnouncements.filter(a => (a.type || 'Info') === activeAnnFilter);
+  if(!rows.length){
     list.innerHTML = '<div class="empty-state"><div class="empty-title">No Announcements Yet</div><div class="empty-sub">HQ updates will appear here.</div></div>';
     return;
   }
+  const latestPolicy = allAnnouncements.find(a => (a.type || 'Info') === 'Policy');
+  const policyBanner = latestPolicy && activeAnnFilter === 'All' ? `
+    <div class="policy-banner" onclick="setAnnouncementFilter('Policy')">
+      <div class="policy-banner-title">Policy Update</div>
+      <div style="font-size:14px;color:var(--text);font-weight:700">${escapeHtml(latestPolicy.title)}</div>
+      <div style="font-size:12px;color:var(--text2);margin-top:6px">Click to view all policy announcements.</div>
+    </div>` : '';
   const typeColor = { New:'var(--lime)', Policy:'var(--orange)', Info:'var(--text2)' };
-  list.innerHTML = data.map(a => `
-    <article style="background:var(--bg1);border:1px solid var(--border);border-radius:16px;padding:18px 20px">
-      <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;flex-wrap:wrap">
-        <span style="font-family:'Syne',sans-serif;font-size:10px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:${typeColor[a.type] || 'var(--text2)'}">${escapeHtml(a.type || 'Info')}</span>
-        <span style="font-size:11px;color:var(--text3)">${new Date(a.created_at).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})}</span>
-      </div>
-      <h3 style="font-family:'Syne',sans-serif;font-size:16px;font-weight:800;margin-bottom:8px">${escapeHtml(a.title)}</h3>
-      <p style="font-size:14px;color:var(--text2);line-height:1.7;white-space:pre-wrap">${escapeHtml(a.body)}</p>
-    </article>`).join('');
+  list.innerHTML = policyBanner + rows.map((a, index) => {
+    const plain = stripHtml(a.body);
+    const preview = plain.length > 120 ? plain.substring(0,120) + '...' : plain;
+    return `
+      <article class="ann-card" onclick="this.classList.toggle('open')">
+        <div style="display:flex;align-items:center;gap:10px;justify-content:space-between;flex-wrap:wrap">
+          <span style="font-family:'Syne',sans-serif;font-size:10px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:${typeColor[a.type] || 'var(--text2)'}">${escapeHtml(a.type || 'Info')}</span>
+          <span style="font-size:11px;color:var(--text3)">${new Date(a.created_at).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})}</span>
+        </div>
+        <h3 style="font-family:'Syne',sans-serif;font-size:16px;font-weight:800;margin-top:10px">${escapeHtml(a.title)}</h3>
+        <div class="ann-preview">${escapeHtml(preview)}</div>
+        <div class="ann-body">${sanitizeAnnouncementHtml(a.body)}</div>
+      </article>`;
+  }).join('');
 }
+
+function setAnnouncementFilter(type){
+  activeAnnFilter = type;
+  document.querySelectorAll('.ann-filter').forEach(btn => btn.classList.toggle('active', btn.dataset.annFilter === type));
+  renderAnnouncements();
+}
+
+document.querySelectorAll('.ann-filter').forEach(btn => btn.addEventListener('click', () => setAnnouncementFilter(btn.dataset.annFilter)));
+
+function stripHtml(html){
+  const div = document.createElement('div');
+  div.innerHTML = html || '';
+  return div.textContent || div.innerText || '';
+}
+
+function sanitizeAnnouncementHtml(html){
+  const template = document.createElement('template');
+  template.innerHTML = html || '';
+  template.content.querySelectorAll('script,style,iframe,object,embed').forEach(el => el.remove());
+  template.content.querySelectorAll('*').forEach(el => {
+    [...el.attributes].forEach(attr => {
+      if(/^on/i.test(attr.name)) el.removeAttribute(attr.name);
+      if(attr.name === 'style'){
+        const safe = attr.value.split(';').filter(rule => /^\s*(font-size|font-weight|text-align|color)\s*:/i.test(rule)).join(';');
+        safe ? el.setAttribute('style', safe) : el.removeAttribute('style');
+      }
+    });
+  });
+  return template.innerHTML;
+}
+
 
 function updateSubmitPlatformOptions(c){
   const select = document.getElementById('submit-platform');
@@ -1315,7 +1379,6 @@ document.getElementById('chat-input')?.addEventListener('keydown', e => {
   if(e.key === 'Enter') sendChat();
 });
 
-// â”€â”€ SEARCH â”€â”€
 document.getElementById('search-input').addEventListener('keyup', e => {
   const q = e.target.value.toLowerCase();
   const filtered = allCampaigns.filter(c =>
@@ -1325,7 +1388,6 @@ document.getElementById('search-input').addEventListener('keyup', e => {
   renderGrid(filtered);
 });
 
-// â”€â”€ FILTER TABS â”€â”€
 document.querySelectorAll('.ftab').forEach(tab => {
   tab.addEventListener('click', () => {
     document.querySelectorAll('.ftab').forEach(t => t.classList.remove('on'));
