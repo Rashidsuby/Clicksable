@@ -297,8 +297,6 @@ html,body{height:100%;background:var(--bg0);color:var(--text);font-family:'DM Sa
 .viral-label{font-size:10px;color:var(--text3);font-family:'Syne',sans-serif}
 .viral-link{display:block;color:inherit;text-decoration:none}
 .viral-url{font-size:10px;color:var(--text3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.viral-open{display:inline-flex;margin-top:6px;color:var(--text2);font-size:10px;font-family:'Syne',sans-serif;text-decoration:none;text-transform:uppercase;letter-spacing:.08em}
-.viral-open:hover{color:var(--lime)}
 
 /* PROFILE + CHAT */
 .profile-shell{max-width:860px;background:var(--bg1);border:1px solid var(--border);border-radius:20px;padding:24px}
@@ -518,7 +516,7 @@ html,body{height:100%;background:var(--bg0);color:var(--text);font-family:'DM Sa
           
           <div class="d-banner-tags">
             <span id="d-dynamic-tag" class="d-tag"></span>
-            <div class="d-review">Avg. review time: <span>24-48 hrs</span> &nbsp;Â·&nbsp; Payments processed <span>weekly</span></div>
+            <div class="d-review">Avg. review time: <span>24â€“48 hrs</span> &nbsp;Â·&nbsp; Payments processed <span>weekly</span></div>
           </div>
         </div>
         <div class="d-header-right-thumb">
@@ -760,6 +758,7 @@ if(leadDb) {
       authGate.style.display = 'none';
       appWrapper.style.display = 'block'; 
       loadCampaigns();
+      loadAnnouncements();
       hydrateCreatorProfile();
       loadCreatorSubmissions();
       showView('rewards');
@@ -1002,6 +1001,7 @@ function openDetail(c) {
   document.getElementById('m-platforms').textContent = platforms || 'â€”';
   document.getElementById('m-updated').textContent = new Date(c.created_at).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
   renderTopVideos(c);
+  updateSubmitPlatformOptions(c);
 
   document.getElementById('stage').scrollTo({top:0, behavior:'smooth'});
 }
@@ -1033,7 +1033,12 @@ function resourceIcon(type){
 function renderTopVideos(c){
   const box = document.getElementById('d-top-videos');
   if(!box) return;
-  const urls = [c.top_video_1_url, c.top_video_2_url, c.top_video_3_url].filter(Boolean);
+  const videos = [
+    {url:c.top_video_1_url, label:c.top_video_1_label},
+    {url:c.top_video_2_url, label:c.top_video_2_label},
+    {url:c.top_video_3_url, label:c.top_video_3_label}
+  ].filter(v => v.url);
+  const urls = videos.map(v => v.url);
   if(!urls.length){
     box.innerHTML = `
       <div class="viral-card"><div class="viral-thumb"><div class="viral-placeholder">PLAY</div><div class="viral-play">&#9658;</div></div><div class="viral-meta"><div class="viral-views">2.4M</div><div class="viral-label">Reference clip</div></div></div>
@@ -1041,17 +1046,18 @@ function renderTopVideos(c){
       <div class="viral-card"><div class="viral-thumb"><div class="viral-placeholder">VIRAL</div><div class="viral-play">&#9658;</div></div><div class="viral-meta"><div class="viral-views">980K</div><div class="viral-label">Reference clip</div></div></div>`;
     return;
   }
-  box.innerHTML = urls.map((url, i) => {
+  box.innerHTML = videos.map((item, i) => {
+    const url = item.url;
     const playable = isDirectVideoUrl(url);
+    const label = item.label || `Video ${i+1}`;
     return `
       <div class="viral-card">
         <div class="viral-thumb">
           ${playable ? `<video src="${escapeAttr(url)}" controls playsinline preload="metadata"></video>` : `<div class="viral-placeholder">#${i+1}</div><div class="viral-play">&#9658;</div>`}
         </div>
         <div class="viral-meta">
-          <div class="viral-views">Example</div>
+          <div class="viral-views">${escapeHtml(label)}</div>
           <div class="viral-url">${escapeHtml(url)}</div>
-          ${playable ? `<a class="viral-open" href="${escapeAttr(url)}" target="_blank" rel="noopener">Open original</a>` : `<a class="viral-open" href="${escapeAttr(url)}" target="_blank" rel="noopener">Open video</a>`}
         </div>
       </div>`;
   }).join('');
@@ -1100,6 +1106,7 @@ function showView(view){
   if(view === 'rewards'){
     document.getElementById('view-grid').style.display = 'block';
   } else if(view === 'announcements'){
+    loadAnnouncements();
     document.getElementById('view-announcements').style.display = 'block';
   } else if(view === 'support'){
     loadSupportMessages();
@@ -1128,6 +1135,52 @@ document.querySelectorAll('.sb-item[data-view]').forEach(item => {
 });
 
 // â”€â”€ SUPPORT CHAT â”€â”€
+async function loadAnnouncements(){
+  const list = document.getElementById('announcements-list');
+  if(!list) return;
+  if(!leadDb){
+    list.innerHTML = '<div class="empty-state"><div class="empty-title">Announcements Offline</div><div class="empty-sub">Connect Supabase to load HQ updates.</div></div>';
+    return;
+  }
+  list.innerHTML = '<div style="text-align:center;padding:40px;color:var(--text3)">Loading announcements...</div>';
+  const { data, error } = await leadDb
+    .from('announcements')
+    .select('*')
+    .eq('published', true)
+    .order('created_at', { ascending:false });
+  if(error){
+    list.innerHTML = `<div class="empty-state"><div class="empty-title">No Announcements</div><div class="empty-sub">${escapeHtml(error.message)}</div></div>`;
+    return;
+  }
+  if(!data || !data.length){
+    list.innerHTML = '<div class="empty-state"><div class="empty-title">No Announcements Yet</div><div class="empty-sub">HQ updates will appear here.</div></div>';
+    return;
+  }
+  const typeColor = { New:'var(--lime)', Policy:'var(--orange)', Info:'var(--text2)' };
+  list.innerHTML = data.map(a => `
+    <article style="background:var(--bg1);border:1px solid var(--border);border-radius:16px;padding:18px 20px">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;flex-wrap:wrap">
+        <span style="font-family:'Syne',sans-serif;font-size:10px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:${typeColor[a.type] || 'var(--text2)'}">${escapeHtml(a.type || 'Info')}</span>
+        <span style="font-size:11px;color:var(--text3)">${new Date(a.created_at).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})}</span>
+      </div>
+      <h3 style="font-family:'Syne',sans-serif;font-size:16px;font-weight:800;margin-bottom:8px">${escapeHtml(a.title)}</h3>
+      <p style="font-size:14px;color:var(--text2);line-height:1.7;white-space:pre-wrap">${escapeHtml(a.body)}</p>
+    </article>`).join('');
+}
+
+function updateSubmitPlatformOptions(c){
+  const select = document.getElementById('submit-platform');
+  if(!select || !c) return;
+  const platforms = [
+    {value:'TikTok', enabled:Boolean(c.cpm_tiktok)},
+    {value:'Instagram', enabled:Boolean(c.cpm_instagram)},
+    {value:'YouTube', enabled:Boolean(c.cpm_youtube)}
+  ].filter(p => p.enabled);
+  select.innerHTML = platforms.length
+    ? platforms.map(p => `<option value="${p.value}">${p.value}</option>`).join('')
+    : '<option value="">No platform available</option>';
+}
+
 function updateProfileCards(){
   ['tiktok','instagram','youtube'].forEach(platform => {
     const card = document.querySelector(`.social-connect-card[data-platform="${platform}"]`);
