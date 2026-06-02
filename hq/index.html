@@ -917,10 +917,16 @@ async function loadDirectory(){
   const { data, error } = await leadDb
     .from('campaigns')
     .select('*')
-    .order('created_at', { ascending: false });
+    .order('sort_order', { ascending: true, nullsFirst: false });
 
-  if(error){ showToast('Failed to load campaigns', 'error'); return; }
-  allCampaigns = data || [];
+  if(error){
+    // fallback to created_at if sort_order column doesn't exist yet
+    const { data: data2, error: err2 } = await leadDb.from('campaigns').select('*').order('created_at', { ascending: false });
+    if(err2){ showToast('Failed to load campaigns', 'error'); return; }
+    allCampaigns = data2 || [];
+  } else {
+    allCampaigns = data || [];
+  }
   renderDirectory(allCampaigns);
 
   const active = allCampaigns.filter(c => c.status==='Active').length;
@@ -934,8 +940,18 @@ function renderDirectory(campaigns){
     list.innerHTML = '<div class="dir-empty">No campaigns yet.<br>Create your first one</div>';
     return;
   }
-  list.innerHTML = campaigns.map(c => `
-    <div class="dir-item ${editingId===c.id?'selected':''}" id="dir-${c.id}">
+  list.innerHTML = campaigns.map((c, idx) => `
+    <div class="dir-item ${editingId===c.id?'selected':''}" id="dir-${c.id}" draggable="true" data-id="${c.id}" data-idx="${idx}"
+      style="cursor:grab;user-select:none;"
+      ondragstart="onDragStart(event,${idx})"
+      ondragover="onDragOver(event)"
+      ondrop="onDrop(event,${idx})"
+      ondragend="onDragEnd(event)">
+      <div style="display:flex;flex-direction:column;align-items:center;gap:2px;opacity:0.3;flex-shrink:0;margin-right:4px;cursor:grab;">
+        <span style="width:14px;height:2px;background:var(--text3);border-radius:2px;display:block;"></span>
+        <span style="width:14px;height:2px;background:var(--text3);border-radius:2px;display:block;"></span>
+        <span style="width:14px;height:2px;background:var(--text3);border-radius:2px;display:block;"></span>
+      </div>
       <div class="dir-thumb">
         ${c.thumbnail_url
           ? `<img src="${c.thumbnail_url}" alt="" onerror="this.style.display='none'">`
@@ -951,6 +967,46 @@ function renderDirectory(campaigns){
       <button class="dir-edit" onclick="loadEdit(${c.id})">Edit</button>
     </div>
   `).join('');
+}
+
+// — Drag-to-reorder campaigns —
+let dragSrcIdx = null;
+
+function onDragStart(e, idx) {
+  dragSrcIdx = idx;
+  e.currentTarget.style.opacity = '0.4';
+  e.dataTransfer.effectAllowed = 'move';
+}
+
+function onDragOver(e) {
+  e.preventDefault();
+  e.dataTransfer.dropEffect = 'move';
+  // Highlight drop target
+  document.querySelectorAll('.dir-item').forEach(el => el.style.outline = '');
+  e.currentTarget.style.outline = '1px solid var(--lime)';
+}
+
+function onDragEnd(e) {
+  e.currentTarget.style.opacity = '';
+  document.querySelectorAll('.dir-item').forEach(el => { el.style.outline = ''; el.style.opacity = ''; });
+}
+
+async function onDrop(e, dropIdx) {
+  e.preventDefault();
+  if (dragSrcIdx === null || dragSrcIdx === dropIdx) return;
+  // Reorder allCampaigns in memory
+  const moved = allCampaigns.splice(dragSrcIdx, 1)[0];
+  allCampaigns.splice(dropIdx, 0, moved);
+  dragSrcIdx = null;
+  renderDirectory(allCampaigns);
+  // Persist new order as sort_order to Supabase
+  if (leadDb) {
+    const updates = allCampaigns.map((c, i) => ({ id: c.id, sort_order: i }));
+    for (const u of updates) {
+      await leadDb.from('campaigns').update({ sort_order: u.sort_order }).eq('id', u.id);
+    }
+    showToast('Campaign order saved!', 'success');
+  }
 }
 
 function loadEdit(id){
@@ -1483,4 +1539,3 @@ async function showCreatorsDirectory() {
 </script>
 </body>
 </html>
-
