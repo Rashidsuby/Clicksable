@@ -59,7 +59,38 @@
   const mobileCta=document.getElementById('mobileCta');window.addEventListener('scroll',()=>{if(window.scrollY>520)mobileCta.classList.add('show');else mobileCta.classList.remove('show')},{passive:true});const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('show')}),{threshold:.12});document.querySelectorAll('.reveal').forEach(x=>io.observe(x));
   function faq(btn){const item=btn.parentElement;document.querySelectorAll('.faq-item').forEach(x=>{if(x!==item)x.classList.remove('open')});item.classList.toggle('open')}
   function toggleMenu(){const links=document.querySelector('.top-links');const open=links.style.display==='flex';links.style.display=open?'none':'flex';links.style.position='absolute';links.style.top='62px';links.style.right='18px';links.style.left='18px';links.style.padding='18px';links.style.background='#0d100e';links.style.border='1px solid rgba(240,237,230,.12)';links.style.flexDirection='column';links.style.alignItems='stretch'}
-  function sendBrief(e){e.preventDefault();const n=encodeURIComponent(document.getElementById('name').value),em=encodeURIComponent(document.getElementById('email').value),b=encodeURIComponent(document.getElementById('business').value),need=encodeURIComponent(document.getElementById('need').value),m=encodeURIComponent(document.getElementById('message').value);const subject=encodeURIComponent('Pakistan Digital Growth Inquiry - '+document.getElementById('business').value);const body=encodeURIComponent('Name: '+document.getElementById('name').value+'\nContact: '+document.getElementById('email').value+'\nBusiness: '+document.getElementById('business').value+'\nNeed: '+document.getElementById('need').value+'\nProblem: '+document.getElementById('message').value);const wa='https://wa.me/923391952004?text='+encodeURIComponent('Hi Clicksable Pakistan, I am '+document.getElementById('name').value+' from '+document.getElementById('business').value+'. I need help with '+document.getElementById('need').value+'. '+document.getElementById('message').value);document.getElementById('status').innerHTML='Choose how to send your brief: <a href=\"mailto:hello@clicksable.com?subject='+subject+'&body='+encodeURIComponent('Name: '+document.getElementById('name').value+'\nContact: '+document.getElementById('email').value+'\nBusiness: '+document.getElementById('business').value+'\nNeed: '+document.getElementById('need').value+'\nProblem: '+document.getElementById('message').value)+'\" style=\"color:var(--pk)\">Email us</a> or <a href=\"'+wa+'\" target=\"_blank\" rel=\"noopener\" style=\"color:var(--pk)\">send on WhatsApp</a>.';document.getElementById('status').style.display='block'}
+  async function sendBrief(e){
+    e.preventDefault();
+    const form=e.target;
+    const button=form.querySelector('button[type=submit]');
+    const status=document.getElementById('status');
+    const payload={
+      name:document.getElementById('name').value.trim(),
+      contact:document.getElementById('email').value.trim(),
+      business:document.getElementById('business').value.trim(),
+      need:document.getElementById('need').value,
+      problem:document.getElementById('message').value.trim(),
+      source:'Clicksable Pakistan page'
+    };
+    button.disabled=true;
+    button.textContent='Saving your brief...';
+    status.style.display='block';
+    status.textContent='Sending your details securely...';
+    const endpoint='https://script.google.com/macros/s/AKfycbxPtsejkuytx4Sn96RBxyWpZlJSjAgzDrXtjSdkfCyZMX2uJMktP52LGf8j6hIXfoVDYA/exec';
+    try{
+      const body=new URLSearchParams({payload:JSON.stringify(payload)});
+      await fetch(endpoint,{method:'POST',mode:'no-cors',body});
+      const wa='https://wa.me/923391952004?text='+encodeURIComponent('Hi Clicksable Pakistan, I am '+payload.name+' from '+payload.business+'. I submitted the form and need help with '+payload.need+'.');
+      status.innerHTML='Thank you — your details were sent. We will contact you soon. You can also <a href="'+wa+'" target="_blank" rel="noopener" style="color:var(--pk)">chat with us on WhatsApp</a>.';
+      form.reset();
+      button.textContent='Brief sent ✓';
+    }catch(error){
+      status.innerHTML='We could not send the form right now. Please <a href="https://wa.me/923391952004?text=Hi%20Clicksable%20Pakistan%2C%20I%20need%20help%20with%20my%20business." target="_blank" rel="noopener" style="color:var(--pk)">chat with us on WhatsApp</a>.';
+      button.disabled=false;
+      button.textContent='Try again →';
+    }
+  }
+
 </script>
 </body>
 </html>
