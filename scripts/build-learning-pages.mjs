@@ -144,7 +144,7 @@ for (const article of articles) {
   const related = articles.filter(item => item.slug !== article.slug && validSlug(item.slug)).slice(0, 3);
   const relatedHtml = related.length ? `<section class="related"><div class="related-heading"><p class="eyebrow">KEEP EXPLORING</p><h2>More ideas for what comes next.</h2></div><div class="related-grid">${related.map(item => `<a class="related-card" href="/learning/${encodeURIComponent(item.slug)}/"><span>${esc(item.category || 'Insights')}</span><strong>${esc(item.title)}</strong><small>Read article ↗</small></a>`).join('')}</div></section>` : '';
   const structured = {
-    '@context': 'https://schema.org', '@type': 'Article', headline: article.title,
+    '@context': 'https://schema.org', '@type': 'BlogPosting', headline: article.title,
     description, datePublished: publishedIso, dateModified: modifiedIso,
     author: { '@type': 'Person', name: author, ...(authorRole ? { jobTitle: authorRole } : {}), ...(avatar ? { image: avatar } : {}) },
     publisher: { '@type': 'Organization', name: 'clicksable.' }, mainEntityOfPage: canonical,
