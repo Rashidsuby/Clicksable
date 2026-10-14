@@ -179,8 +179,17 @@ await fs.writeFile(listingTarget, listingHtml);
 
 const xmlEsc = value => esc(value).replace(/&#39;/g, '&apos;');
 const rssItems = articles.filter(a => validSlug(a.slug)).map(a => `<item><title>${xmlEsc(a.title)}</title><link>${xmlEsc(articleUrl(a.slug))}</link><guid isPermaLink="true">${xmlEsc(articleUrl(a.slug))}</guid><pubDate>${new Date(a.published_at).toUTCString()}</pubDate><category>${xmlEsc(a.category || 'Insights')}</category><description>${xmlEsc(a.excerpt || '')}</description></item>`).join('');
-const rss = `<?xml version="1.0" encoding="UTF-8"?>\n<rss version="2.0"><channel><title>clicksable. Learning Center</title><link>${siteUrl}/learning/</link><description>Ideas on creator growth, AI visibility, and building durable digital businesses.</description><language>en</language>${rssItems}</channel></rss>\n`;
+const rss = `<?xml version="1.0" encoding="UTF-8"?>\n<?xml-stylesheet type="text/xsl" href="/learning/feed.xsl"?>\n<rss version="2.0"><channel><title>clicksable. Learning Center</title><link>${siteUrl}/learning/</link><description>Ideas on creator growth, AI visibility, and building durable digital businesses.</description><language>en</language>${rssItems}</channel></rss>\n`;
 await fs.writeFile(path.join(outputRoot, 'learning', 'feed.xml'), rss);
+const feedXsl = `<?xml version="1.0" encoding="UTF-8"?>
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+<xsl:output method="html" encoding="UTF-8" indent="yes"/>
+<xsl:template match="/rss/channel">
+<html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/><title>clicksable. Learning Center RSS</title><style>*{box-sizing:border-box}body{margin:0;background:#f7f5ed;color:#171a14;font:16px/1.65 system-ui,sans-serif}.wrap{width:min(900px,calc(100% - 36px));margin:64px auto}.brand{display:inline-block;padding:9px 13px;border-radius:10px;background:#172318;color:white;text-decoration:none;font-weight:800;letter-spacing:-.05em}.brand span{color:#c8ff00}h1{margin:36px 0 8px;font-size:clamp(38px,7vw,66px);line-height:1;letter-spacing:-.06em}.intro{color:#62685e}.item{padding:26px 0;border-top:1px solid rgba(23,26,20,.15)}.item h2{margin:7px 0;font-size:24px;line-height:1.2;letter-spacing:-.035em}.item h2 a{color:#294719;text-decoration:none}.meta{color:#697064;font-size:12px}.item p{max-width:700px;color:#42483f}.back{display:inline-block;margin-top:22px;padding:11px 15px;border-radius:999px;background:#294719;color:white;text-decoration:none;font-weight:700;font-size:13px}</style></head><body><main class="wrap"><a class="brand" href="https://clicksable.com/learning/">click<span>sable.</span></a><h1>Learning Center feed</h1><p class="intro">The same blog posts, formatted for quick reading. Add this page's RSS address to your preferred reader app.</p>
+<xsl:for-each select="item"><article class="item"><div class="meta"><xsl:value-of select="category"/><xsl:text> · </xsl:text><xsl:value-of select="pubDate"/></div><h2><a><xsl:attribute name="href"><xsl:value-of select="link"/></xsl:attribute><xsl:value-of select="title"/></a></h2><p><xsl:value-of select="description"/></p></article></xsl:for-each>
+<a class="back" href="https://clicksable.com/learning/">Visit the Learning Center</a></main></body></html>
+</xsl:template></xsl:stylesheet>`;
+await fs.writeFile(path.join(outputRoot, 'learning', 'feed.xsl'), feedXsl);
 
 const entries = [
   { url: `${siteUrl}/` },
