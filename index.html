@@ -1528,7 +1528,7 @@ Recommend creating a small, fixed set of buyer questions, testing them across ch
 Give 3 prioritized, low-risk actions based on the supplied profile. Do not guarantee rankings, citations, traffic, leads, revenue, or a specific timeline. Do not present llms.txt or any single technical file as a shortcut to inclusion in AI answers.
 
 ## LIMITS OF THIS BRIEF
-State plainly that this is an AI-generated starting point based on the visitor's answers, not a live crawl, platform test, visibility measurement, or promise of results. Invite the reader to validate the examples before making business decisions.
+Explain that AI organizes only the information submitted by the visitor. State that no website crawl, live search, platform test, or visibility measurement was performed. Present recommendations as suggestions to verify before making business decisions.
 
 Tone: helpful, specific, calm, and transparent. Total: 350-500 words.`;
 }
@@ -1583,7 +1583,7 @@ function showResult(type, data, brief, {failed=false}={}){
     ? 'Your details are saved. Retry the report without submitting the form again.'
     : (isCreator
       ? `Personalized for ${data.handle} — ${data.audience} ${data.platform} audience in ${data.niche}.`
-      : `AI-generated starting brief for ${data.name} (${data.domain}) in ${data.industry}. It is not a live platform scan or measured visibility score.`);
+      : `Business brief prepared from submitted details for ${data.name} (${data.domain}) in ${data.industry}. It is not a live platform scan or measured visibility score.`);
 
   const downloadButton = document.getElementById('dl-btn');
   const retryButton = document.getElementById('cal-btn');
