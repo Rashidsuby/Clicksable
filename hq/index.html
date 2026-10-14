@@ -1299,7 +1299,7 @@ let selectedAnnType = 'New';
 const learningEsc = value => String(value ?? '').replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
 const learningSafeUrl = value => { const raw=String(value??'').trim(); if(!raw)return ''; try { const u=new URL(raw,location.href); return ['http:','https:'].includes(u.protocol)&&!u.username&&!u.password?u.href:''; } catch { return ''; } };
 function sanitizeLearningHtml(source){
-  const doc=new DOMParser().parseFromString(String(source||''),'text/html'),allowed=new Set(['P','BR','H2','H3','H4','UL','OL','LI','STRONG','B','EM','I','BLOCKQUOTE','A','HR','CODE','PRE']);
+  const raw=String(source||''),text=document.createElement('textarea');if(/&lt;\/?(?:p|h[2-4]|ul|ol|li|blockquote|strong|b|em|i|a|hr|code|pre)\b/i.test(raw))text.innerHTML=raw;const markup=text.value?text.value:raw;const doc=new DOMParser().parseFromString(markup,'text/html'),allowed=new Set(['P','BR','H2','H3','H4','UL','OL','LI','STRONG','B','EM','I','BLOCKQUOTE','A','HR','CODE','PRE']);
   const cleanNode=node=>{[...node.childNodes].forEach(child=>{if(child.nodeType===Node.COMMENT_NODE){child.remove();return;}if(child.nodeType!==Node.ELEMENT_NODE)return;if(!allowed.has(child.tagName)){child.replaceWith(...child.childNodes);return;}const href=child.tagName==='A'?learningSafeUrl(child.getAttribute('href')):'';[...child.attributes].forEach(a=>child.removeAttribute(a.name));if(child.tagName==='A'&&href){child.setAttribute('href',href);child.setAttribute('rel','noopener noreferrer');}cleanNode(child);});};cleanNode(doc.body);return doc.body.innerHTML;
 }
 function formatLearning(command,value){document.getElementById('learning-body').focus();document.execCommand(command,false,value||null);}
