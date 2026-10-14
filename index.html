@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<link rel="icon" type="image/svg+xml" href="/assets/clicksable-pointer.svg">
 <script id="clean-index-url">if(location.pathname.endsWith("/index.html")){history.replaceState(history.state,"",location.pathname.slice(0,-10)+location.search+location.hash)}</script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Clicksable — Make attention go further</title>
@@ -796,6 +797,14 @@ html{overflow-x:hidden}body{overflow-x:hidden}img,svg,video,canvas{max-width:100
 </style>
 <script id="site-error-watch">(()=>{const announce=()=>{const show=()=>{const panel=document.getElementById('site-recovery');if(panel)panel.hidden=false};if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',show,{once:true});else show()};window.addEventListener('error',announce);window.addEventListener('unhandledrejection',announce);window.addEventListener('offline',announce);window.addEventListener('online',()=>{const panel=document.getElementById('site-recovery');if(panel)panel.hidden=true})})();</script>
 <style id="project-form-anchor-offset">#pg-creator .form-section,#pg-business .business-form-section{scroll-margin-top:110px}</style>
+<style id="global-mobile-menu-project-dialog-and-brand-cursor">
+@media(max-width:920px){
+  #pg-creator .path-menu-btn,#pg-business .path-menu-btn,#pg-about .about-menu-btn{width:auto!important;min-width:92px!important;height:44px!important;min-height:44px!important;display:inline-flex!important;align-items:center;justify-content:center;gap:9px;padding:0 15px;border:1px solid rgba(23,26,20,.12)!important;border-radius:999px!important;background:rgba(255,255,255,.82)!important;color:#263024;font:600 13px/1 'DM Sans',system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;letter-spacing:.01em;box-shadow:0 4px 12px rgba(23,26,20,.06)}
+  #pg-creator .path-menu-btn::before,#pg-business .path-menu-btn::before,#pg-about .about-menu-btn::before{content:"";width:14px;height:10px;display:block;background:linear-gradient(to bottom,#263024 0 1.5px,transparent 1.5px 4px,#263024 4px 5.5px,transparent 5.5px 8px,#263024 8px 9.5px);border-radius:2px;flex:none}
+}
+#project-start-modal{position:fixed;inset:0;margin:auto;width:min(calc(100vw - 32px),680px);max-width:none;max-height:min(90dvh,820px)}
+@media(hover:hover) and (pointer:fine){a,button:not(:disabled),[role="button"],summary,input[type="submit"],.project-choice{cursor:url("/assets/clicksable-pointer.svg") 8 8,pointer!important}button:disabled{cursor:not-allowed!important}}
+</style>
 </head>
 <body class="home-page"><noscript><div style="position:fixed;z-index:9999;inset:12px 12px auto;padding:16px;border-radius:14px;background:#fff4cf;color:#172318;font:600 14px/1.5 system-ui,sans-serif">Some interactive features need JavaScript. Enable it to use the project forms and navigation, or contact <a href="mailto:hello@clicksable.com">hello@clicksable.com</a>.</div></noscript>
 
