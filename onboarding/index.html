@@ -326,6 +326,45 @@ ul li::before{
   .completion-title{font-size:38px}
 }
 </style>
+
+<style id="clicksable-design-system">
+:root{color-scheme:light;--paper:#f7f5ed;--paper-deep:#ece9df;--ink:#171a14;--muted:#5d635a;--green:#294719;--green-deep:#172318;--lime:#c8ff00;--orange:#ff5a1f;--surface:#fffdf8;--surface-2:#f0eee6;--line:rgba(23,26,20,.12);--line-strong:rgba(23,26,20,.2);--shadow-soft:0 12px 32px rgba(23,26,20,.07);--shadow-card:0 18px 48px rgba(23,26,20,.09)}
+*,*::before,*::after{box-sizing:border-box}
+body,button,input,select,textarea{font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+body{background:var(--paper)!important;color:var(--ink)!important;-webkit-font-smoothing:antialiased}
+a{color:inherit}
+button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid var(--green)!important;outline-offset:3px}
+::selection{background:rgba(200,255,0,.55);color:var(--ink)}
+
+:root{--bg0:var(--paper);--bg1:var(--surface);--bg2:var(--surface-2);--bg3:#e9e6dc;--border:var(--line);--border2:var(--line-strong);--lime:var(--green);--orange:#ff5a1f;--text:var(--ink);--text2:var(--muted);--text3:#74796f;--danger:#b42318}
+.progress-bar-wrap{background:rgba(247,245,237,.94);backdrop-filter:blur(18px);border-color:var(--line)}.progress-track{background:#e2dfd5}.progress-fill{background:var(--green)}.step-ind{color:var(--muted)}.step-dot{background:#d7d5cc;border-color:#d7d5cc}.step-dot.active,.step-dot.done{background:var(--green);border-color:var(--green)}.step-line{background:var(--line-strong)}
+.funnel-outer{background:var(--paper)}.step-inner{max-width:760px;padding:clamp(24px,5vw,56px) 22px 42px}.logo,.chapter-title,.card-title,.completion-title{font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;letter-spacing:-.045em}.logo{font-size:21px;font-weight:800}.logo em,.chapter-title{color:var(--green)}.sub-logo{color:var(--muted)}.card{padding:clamp(22px,4vw,32px);background:var(--surface);border:1px solid var(--line);border-radius:20px;box-shadow:var(--shadow-soft)}.card-title{font-size:18px;font-weight:730;letter-spacing:-.025em;text-transform:none;color:var(--ink)}.chapter-title{font-size:clamp(27px,4vw,36px);font-weight:750;line-height:1.08}.chapter-num{background:rgba(41,71,25,.09);border-color:rgba(41,71,25,.18);border-radius:999px;color:var(--green);letter-spacing:.04em}.card p,.check-text,.tier-countries{color:var(--muted);line-height:1.7}
+.highlight-box,.alert-box{background:#f2f0e8!important;border:1px solid var(--line)!important;border-radius:16px!important;color:var(--ink)}.hl-title,.alert-title{font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;font-weight:700;color:var(--green)}.tier-grid{gap:12px}.tier-card{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:18px 14px;transition:border-color .18s ease,background-color .18s ease,transform .18s ease}.tier-card:hover,.tier-card.selected{background:#f2f0e8;border-color:rgba(41,71,25,.38);transform:translateY(-1px)}.tier-name{font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;font-size:12px;color:var(--green);letter-spacing:.04em}
+.timeline{border-color:var(--line)}.tl-content{background:var(--surface);border:1px solid var(--line);border-radius:14px}.tl-day{color:var(--green)}.bad-list{color:#7a342e}.completion-wrap{background:var(--paper)}.completion-title{font-size:clamp(34px,5vw,52px);font-weight:760;line-height:1.04;color:var(--ink)}.completion-sub{color:var(--muted);line-height:1.7}.btn-confirm,.btn-next{min-height:48px;border-radius:999px!important;background:var(--green)!important;border-color:var(--green)!important;color:#fff!important;font:680 14px/1 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif!important;letter-spacing:0!important;transition:transform .16s ease,background-color .16s ease}.btn-confirm:hover,.btn-next:hover{background:#1e3714!important;transform:translateY(-1px)}.btn-back{min-height:48px;border-radius:999px!important;border:1px solid var(--line-strong)!important;background:transparent!important;color:var(--ink)!important;font:650 14px/1 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif!important;letter-spacing:0!important}
+@media(max-width:680px){.tier-grid{grid-template-columns:1fr 1fr}.step-inner{padding-top:30px}.card{padding:21px;border-radius:17px}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}.confetti-wrap{display:none!important}}
+</style>
+<style id="onboarding-responsive-pass">
+html,body{overflow-x:hidden}img,svg{max-width:100%}@media(max-width:680px){body{min-height:100svh}.progress-bar-wrap{padding:13px 14px!important}.step-indicators{gap:0!important}.step-line{min-width:8px!important}.step-dot{width:29px!important;height:29px!important;font-size:11px!important}.step-dot-label{font-size:7px!important;letter-spacing:.04em!important}.funnel-outer{padding:14px!important}.step-inner{width:100%!important;max-width:100%!important;padding:22px 0 36px!important}.card{width:100%!important}.tier-grid{grid-template-columns:1fr!important}.form-row,.question-grid{grid-template-columns:1fr!important}.card input,.card select,.card textarea{font-size:16px!important}.nav-buttons{gap:10px!important;flex-direction:column-reverse}.nav-buttons button{width:100%!important;min-height:48px!important}}@media(max-width:390px){.progress-bar-wrap{padding-inline:8px!important}.step-dot-label{display:none!important}.card{padding:19px 16px!important}}
+</style>
+<style id="mobile-comfort-pass">
+  @media(max-width:680px){
+    html,body{min-width:320px;-webkit-text-size-adjust:100%;overscroll-behavior-x:none}
+    .progress-bar-wrap{padding-top:calc(11px + env(safe-area-inset-top));padding-left:max(12px,env(safe-area-inset-left));padding-right:max(12px,env(safe-area-inset-right))}
+    .step-indicators{width:100%;justify-content:space-between}
+    .step-ind{min-width:0;flex:1}
+    .step-dot-wrap{min-width:38px}
+    .step-dot{width:32px;height:32px;display:grid;place-items:center;font-size:12px}
+    .step-dot-label{display:block!important;max-width:70px;margin-top:4px;font-size:8px!important;line-height:1.15;letter-spacing:0!important;white-space:nowrap;text-align:center}
+    .step-line{flex:1;min-width:4px!important}
+    .nav-buttons{padding-bottom:env(safe-area-inset-bottom)}
+    .nav-buttons button{min-height:50px!important;font-size:15px!important}
+    .card input,.card select,.card textarea{min-height:46px;font-size:16px!important}
+    .card textarea{min-height:120px}
+    .tier-card{min-width:0;overflow-wrap:anywhere}
+  }
+  @media(max-width:360px){.step-dot-label{font-size:7.5px!important}.step-dot-wrap{min-width:32px}.progress-bar-wrap{padding-left:8px!important;padding-right:8px!important}}
+</style>
 </head>
 <body>
 
@@ -377,7 +416,7 @@ ul li::before{
 <!-- ==================== STEP 1: INTRO ==================== -->
 <div class="step active" id="step-1">
   <div class="step-inner">
-    <div class="logo">Click<em>sable</em>.</div>
+    <div class="logo">click<em>sable.</em>.</div>
     <div class="sub-logo">Creator Rewards Hub</div>
 
     <div class="card">
@@ -802,3 +841,4 @@ updateUI();
 </script>
 </body>
 </html>
+
