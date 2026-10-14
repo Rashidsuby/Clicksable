@@ -1693,8 +1693,10 @@ function downloadPDF(){
   if(el) el.addEventListener('keydown',e=>{if(e.key==='Enter'){if(id.startsWith('c'))submitCreator();else submitBusiness()}});
 });
 
-// Initial page visible
-setTimeout(()=>document.getElementById('pg-gateway').classList.add('visible'),50);
+// Restore direct links to the Company view, including legacy redirects.
+const requestedPage=new URLSearchParams(location.search).get('page');
+if(requestedPage==='company')goPage('about');
+else setTimeout(()=>document.getElementById('pg-gateway').classList.add('visible'),50);
 </script>
 
 <script id="path-page-header-script">document.querySelectorAll('.path-page-header').forEach(header=>{const button=header.querySelector('.path-menu-btn'),menu=header.querySelector('.path-mobile-menu');if(!button||!menu)return;button.addEventListener('click',()=>{const open=menu.classList.toggle('is-open');button.setAttribute('aria-expanded',String(open));});menu.querySelectorAll('a').forEach(link=>link.addEventListener('click',()=>{menu.classList.remove('is-open');button.setAttribute('aria-expanded','false');}));});</script>
