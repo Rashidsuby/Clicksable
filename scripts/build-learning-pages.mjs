@@ -122,6 +122,9 @@ await fs.writeFile(listingTarget, listingHtml);
 
 const entries = [
   { url: `${siteUrl}/` },
+  { url: `${siteUrl}/creator/` },
+  { url: `${siteUrl}/business/` },
+  { url: `${siteUrl}/company/` },
   { url: `${siteUrl}/learning/`, lastmod: new Date().toISOString() },
   { url: `${siteUrl}/privacy.html` },
   { url: `${siteUrl}/terms.html` },

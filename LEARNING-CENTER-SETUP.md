@@ -20,6 +20,8 @@ Sign-ups are saved as **pending** in `newsletter_subscribers`; HQ can review the
 
 Published articles are generated as standalone HTML at `/learning/<slug>/`, with unique metadata, canonical URLs, Article JSON-LD, sanitized article content, and optional FAQ markup. The generated sitemap includes each published article; the Learning Center listing also has ordinary links to those pages. A scheduled GitHub Actions run rebuilds and deploys the sitemap and pages every 15 minutes, and it can also be started manually.
 
+The main site’s distinct public pages have their own URLs as well: `/creator/`, `/business/`, and `/company/`. Each has its own canonical URL and title/description metadata, and the navigation links directly to those routes. The root `sitemap.xml` lists these URLs. It is a machine-readable XML file that crawlers can fetch; a separate visual sitemap page in the site navigation is optional and not required for SEO.
+
 ### One-time GitHub Pages setup
 
 After merging the static publisher workflow, open the repository on GitHub and go to **Settings → Pages → Build and deployment → Source**. Select **GitHub Actions**. The first workflow run then publishes the website and crawlable article pages together. You do not need to create Supabase secrets: the generator uses only the same public Supabase publishable key already used by the Learning Center, and the database's public policy exposes only published articles. Never put the Supabase service-role key in GitHub Actions or the website.

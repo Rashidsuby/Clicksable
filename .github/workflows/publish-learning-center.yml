@@ -29,6 +29,8 @@ jobs:
         uses: actions/setup-node@v6
         with:
           node-version: 22
+      - name: Generate dedicated Creator, Business, and Company URLs
+        run: node scripts/build-public-pages.mjs
       - name: Generate static article pages and sitemap
         run: node scripts/build-learning-pages.mjs
       - name: Configure GitHub Pages
