@@ -1,0 +1,8 @@
+Platform logo assets
+
+- TikTok, Instagram, Facebook, Snapchat, YouTube, X, Bilibili, Google, Claude, and Gemini are SVG brand marks from Simple Icons (https://github.com/simple-icons/simple-icons). The project is CC0; individual names and logos remain trademarks of their respective owners.
+- ChatGPT uses OpenAI's official black monoblossom SVG from https://cdn.openai.com/brand/OpenAI-Logos-2025.zip.
+- Manus uses the original logo image from the Manus press kit at https://manus-ai.pressdeck.io/media/logos.
+- Grok uses the Grok logo mark sourced from https://commons.wikimedia.org/wiki/File:Grok-2025-logo.svg, originally published by X.AI Corp. from grok.com.
+
+These marks identify platforms only and do not imply endorsement or affiliation.
