@@ -5,6 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Clicksable — Make attention go further</title>
 <meta name="description" content="Clicksable helps creators build revenue from their audiences and helps businesses show up in AI search.">
+<link rel="canonical" href="https://clicksable.com/">
+<meta property="og:type" content="website"><meta property="og:site_name" content="clicksable."><meta property="og:title" content="Clicksable — Make attention go further"><meta property="og:description" content="Clicksable helps creators build revenue from their audiences and helps businesses show up in AI search.">
+<meta name="twitter:card" content="summary"><meta name="twitter:title" content="Clicksable — Make attention go further"><meta name="twitter:description" content="Clicksable helps creators build revenue from their audiences and helps businesses show up in AI search.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
@@ -1274,11 +1277,16 @@ const leadDb = SUPABASE_URL && SUPABASE_ANON_KEY && window.supabase?.createClien
   : null;
 
 // ── PAGE ROUTING ──
-function goPage(id){
+const PUBLIC_PAGE_ROUTES={gateway:{path:'/',title:'Clicksable — Make attention go further',description:'Clicksable helps creators build revenue from their audiences and helps businesses show up in AI search.'},creator:{path:'/creator/',title:'Creator Growth & Monetization | clicksable.',description:'Turn your audience into a business you own. Build a clear offer, stronger audience relationships, and a path from attention to revenue with clicksable.'},business:{path:'/business/',title:'AI Visibility for Businesses | clicksable.',description:'Help buyers and AI understand what your business does. Build a clearer, more credible presence across AI search and discovery with clicksable.'},about:{path:'/company/',title:'About clicksable. | Our Mission and Global Offices',description:'Meet clicksable., a Dubai-founded growth company helping creators and businesses build connected systems for visibility, revenue, and long-term growth.'}};
+function setPublicPageMeta(id){const page=PUBLIC_PAGE_ROUTES[id];if(!page)return;document.title=page.title;document.querySelector('meta[name="description"]')?.setAttribute('content',page.description);document.querySelector('link[rel="canonical"]')?.setAttribute('href',`https://clicksable.com${page.path}`);document.querySelector('meta[property="og:title"]')?.setAttribute('content',page.title);document.querySelector('meta[property="og:description"]')?.setAttribute('content',page.description);document.querySelector('meta[name="twitter:title"]')?.setAttribute('content',page.title);document.querySelector('meta[name="twitter:description"]')?.setAttribute('content',page.description)}
+function publicPageFromPath(pathname=location.pathname){const path=pathname.endsWith('/')?pathname:`${pathname}/`;return Object.keys(PUBLIC_PAGE_ROUTES).find(id=>PUBLIC_PAGE_ROUTES[id].path===path)||'gateway'}
+function goPage(id,updateLocation=true){
   document.querySelectorAll('.page').forEach(p=>{p.classList.remove('active','visible')});
   const pg = document.getElementById('pg-'+id);
   if(!pg){location.href='404.html';return}
+  const publicRoute=PUBLIC_PAGE_ROUTES[id];if(publicRoute){if(updateLocation&&location.pathname!==publicRoute.path)history.pushState({page:id},'',publicRoute.path);setPublicPageMeta(id)}
   document.body.classList.toggle('home-page', id==='gateway');
+  if(id==='creator')currentPath='creator';else if(id==='business')currentPath='business';
 
   pg.classList.add('active');
 
@@ -1693,10 +1701,10 @@ function downloadPDF(){
   if(el) el.addEventListener('keydown',e=>{if(e.key==='Enter'){if(id.startsWith('c'))submitCreator();else submitBusiness()}});
 });
 
-// Restore direct links to the Company view, including legacy redirects.
+// Restore the requested standalone URL on first load and during browser back/forward.
 const requestedPage=new URLSearchParams(location.search).get('page');
-if(requestedPage==='company')goPage('about');
-else setTimeout(()=>document.getElementById('pg-gateway').classList.add('visible'),50);
+if(requestedPage==='company')goPage('about');else goPage(publicPageFromPath(),false);
+window.addEventListener('popstate',()=>goPage(publicPageFromPath(),false));
 </script>
 
 <script id="path-page-header-script">document.querySelectorAll('.path-page-header').forEach(header=>{const button=header.querySelector('.path-menu-btn'),menu=header.querySelector('.path-mobile-menu');if(!button||!menu)return;button.addEventListener('click',()=>{const open=menu.classList.toggle('is-open');button.setAttribute('aria-expanded',String(open));});menu.querySelectorAll('a').forEach(link=>link.addEventListener('click',()=>{menu.classList.remove('is-open');button.setAttribute('aria-expanded','false');}));});</script>
