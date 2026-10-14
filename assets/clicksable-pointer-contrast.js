@@ -6,7 +6,7 @@
     @media (hover:hover) and (pointer:fine) {
       html.clicksable-cursor-on-dark body,
       html.clicksable-cursor-on-dark body * {
-        cursor: url("/assets/clicksable-pointer-light.svg?v=3") 30 18, auto !important;
+        cursor: url("/assets/clicksable-pointer-light.svg?v=4") 30 18, auto !important;
       }
       html.clicksable-cursor-on-dark input:not([type="button"]):not([type="submit"]):not([type="reset"]):not([type="checkbox"]):not([type="radio"]):not([type="range"]),
       html.clicksable-cursor-on-dark textarea,
