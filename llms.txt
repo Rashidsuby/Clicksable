@@ -1,0 +1,28 @@
+# clicksable.
+
+> Factual directory of Clicksable pages for AI assistants and other readers. This file is a convenience index, not a ranking or citation guarantee.
+
+- [Home](https://clicksable.com/): Main website.
+- [Creator services](https://clicksable.com/creator/): Creator growth information.
+- [Business services](https://clicksable.com/business/): AI visibility services for businesses.
+- [Company](https://clicksable.com/company/): About and office locations.
+- [Blog and Learning Center](https://clicksable.com/learning/): Published articles.
+- [HTML sitemap](https://clicksable.com/sitemap/): Human-readable page directory.
+- [XML sitemap](https://clicksable.com/sitemap.xml): Crawl-discovery file.
+- [AI information](https://clicksable.com/ai-info/): Factual summary and source links.
+- [Entity map](https://clicksable.com/entity-map.html): Company entity information and structured data.
+- [Privacy](https://clicksable.com/privacy.html): Privacy notice.
+- [Terms](https://clicksable.com/terms.html): Terms of use.
+- [RSS feed](https://clicksable.com/learning/feed.xml): Published blog posts.
+
+## Organization
+
+- Preferred brand name: clicksable.
+- Website: https://clicksable.com/
+- Contact: hello@clicksable.com
+- Head office: Dubai, United Arab Emirates.
+- Services: creator growth and business AI visibility.
+
+## Published blog articles
+
+- [How to Make Your Business Easier to Find in AI Search](https://clicksable.com/learning/business-ai-search-visibility/)
