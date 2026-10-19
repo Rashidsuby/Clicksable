@@ -945,14 +945,6 @@ html{overflow-x:hidden}body{overflow-x:hidden}img,svg,video,canvas{max-width:100
       menuButton.setAttribute('aria-expanded', 'false');
     }));
   }
-  document.querySelectorAll('#pg-gateway [data-app-path]').forEach(link => {
-    link.addEventListener('click', event => {
-      event.preventDefault();
-      if (mobileMenu) mobileMenu.classList.remove('open');
-      if (menuButton) menuButton.setAttribute('aria-expanded', 'false');
-      goPage(link.dataset.appPath);
-    });
-  });
   const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const map = document.querySelector('#pg-gateway .service-map');
   if (map && !reduced && window.matchMedia('(hover:hover) and (pointer:fine)').matches) {
