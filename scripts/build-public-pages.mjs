@@ -43,10 +43,10 @@ const pages = [
   },
   {
     id: 'business', section: 'business', title: 'AI Visibility for Businesses | clicksable.',
-    description: 'Help buyers and AI understand what your business does. Build a clearer, more credible presence across AI search and discovery with clicksable.',
-    serviceName: 'Business AI Visibility', serviceDescription: 'Clicksable helps businesses make their services, evidence, and buyer information clearer across search and AI-assisted discovery.',
+    description: 'AI visibility and GEO for B2B software, cybersecurity, legal, financial services, healthcare, and high-end hospitality businesses.',
+    serviceName: 'Business AI Visibility and GEO', serviceDescription: 'Clicksable specializes in AI visibility and Generative Engine Optimization (GEO) for B2B software, cybersecurity, legal, financial services, healthcare, and high-end hospitality businesses.',
     faqHeading: 'Questions about AI visibility',
-    faqIntro: 'Clicksable helps businesses clarify what they sell, who they serve, and why buyers should trust them—so customers, search engines, and AI platforms can understand the business.',
+    faqIntro: 'Clicksable specializes in AI visibility and GEO for B2B software, cybersecurity, legal and financial services, healthcare, and high-end hospitality. We help each business clarify its services, proof, and buyer information for search and AI discovery.',
     relatedLinks: [['Explore business services', '/business/#business-framework-title'], ['Read the AI search guide', '/learning/business-ai-search-visibility/'], ['See the Business Brief form', '/business/#business-path-form']],
     faqs: [
       ['What does Clicksable’s AI Visibility service do?', 'We map the questions your buyers ask, make your service pages and proof clearer, and connect useful information across your site. This gives search and AI systems better material to understand when they evaluate your business.'],
