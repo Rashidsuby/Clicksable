@@ -207,11 +207,83 @@ const entries = [
   { url: `${siteUrl}/business/` },
   { url: `${siteUrl}/company/` },
   { url: `${siteUrl}/learning/`, lastmod: new Date().toISOString() },
+  { url: `${siteUrl}/sitemap/` },
   { url: `${siteUrl}/privacy.html` },
   { url: `${siteUrl}/terms.html` },
   ...articlePages.filter(page => page.canonicalIsLocal),
 ];
 const xml = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${entries.map(entry => `  <url><loc>${esc(entry.url)}</loc>${entry.lastmod ? `<lastmod>${esc(entry.lastmod.slice(0, 10))}</lastmod>` : ''}</url>`).join('\n')}\n</urlset>\n`;
 await fs.writeFile(path.join(outputRoot, 'sitemap.xml'), xml);
-await fs.writeFile(path.join(outputRoot, 'robots.txt'), `User-agent: *\nAllow: /\n\nSitemap: ${siteUrl}/sitemap.xml\n`);
+const robots = `# Search and AI crawlers explicitly permitted by Clicksable.
+User-agent: Googlebot
+Allow: /
+
+# Gemini access is controlled by this Google product token.
+User-agent: Google-Extended
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: GPTBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Claude-SearchBot
+Allow: /
+
+User-agent: bingbot
+Allow: /
+
+# Do not grant blanket crawl access to bots that are not listed above.
+User-agent: *
+Disallow: /
+
+Sitemap: ${siteUrl}/sitemap.xml
+`;
+await fs.writeFile(path.join(outputRoot, 'robots.txt'), robots);
+
+const oneLine = value => String(value || '').replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
+const llmsLines = [
+  '# clicksable.',
+  '',
+  '> clicksable helps creators build revenue from their audiences and helps businesses build a clearer, more credible presence in AI search.',
+  '',
+  '## Core pages',
+  `- [Home](${siteUrl}/): Overview of Clicksable’s creator and business growth services.`,
+  `- [For creators](${siteUrl}/creator/): Creator Engine service for turning audience attention into owned revenue.`,
+  `- [For businesses](${siteUrl}/business/): AI Visibility service for businesses that want to be easier for buyers and AI search systems to understand.`,
+  `- [Company](${siteUrl}/company/): Clicksable’s mission, working principles, office locations, and contact details.`,
+  `- [Contact](${siteUrl}/company/#about-contact): Contact Clicksable at hello@clicksable.com or begin a project enquiry.`,
+  '',
+  '## Learning Center',
+  `- [Learning Center](${siteUrl}/learning/): Articles about creator growth, AI visibility, and durable digital businesses.`,
+  ...articles.filter(article => validSlug(article.slug)).map(article => `- [${oneLine(article.title)}](${articleUrl(article.slug)}): ${oneLine(article.excerpt) || 'Learning Center article.'}`),
+  '',
+  '## Site information',
+  `- [HTML sitemap](${siteUrl}/sitemap/): Human-readable list of important public pages and published Learning Center articles.`,
+  `- [Privacy Notice](${siteUrl}/privacy.html): How Clicksable handles information submitted through the website and portals.`,
+  `- [Terms of Use](${siteUrl}/terms.html): Terms for using the Clicksable website, forms, and Creator Reward portal.`,
+  ''
+];
+await fs.writeFile(path.join(outputRoot, 'llms.txt'), `${llmsLines.join('\n')}\n`);
+
+const sitemapLinks = [
+  ['Home', `${siteUrl}/`, 'Overview of Clicksable’s creator and business growth services.'],
+  ['For creators', `${siteUrl}/creator/`, 'Creator Engine: turn audience attention into owned revenue.'],
+  ['For businesses', `${siteUrl}/business/`, 'AI Visibility: build a clearer, more credible presence in AI search.'],
+  ['Company', `${siteUrl}/company/`, 'Mission, working principles, office locations, and contact details.'],
+  ['Learning Center', `${siteUrl}/learning/`, 'Articles on creator growth, AI visibility, and digital business building.'],
+  ['Privacy Notice', `${siteUrl}/privacy.html`, 'How Clicksable handles submitted information.'],
+  ['Terms of Use', `${siteUrl}/terms.html`, 'Terms for the website, forms, and Creator Reward portal.']
+];
+const sitemapPage = `<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="robots" content="index,follow"><title>HTML Sitemap | clicksable.</title><meta name="description" content="Browse important public Clicksable pages and published Learning Center articles."><link rel="canonical" href="${siteUrl}/sitemap/"><style>body{margin:0;background:#f7f5ed;color:#171a14;font:16px/1.6 system-ui,-apple-system,BlinkMacSystemFont,\"Segoe UI\",sans-serif}.wrap{width:min(900px,calc(100% - 40px));margin:auto;padding:56px 0 84px}nav{display:flex;justify-content:space-between;gap:16px;align-items:center;margin-bottom:80px}.brand{font-size:24px;font-weight:850;letter-spacing:-.06em;color:#fff;background:#294719;border-radius:11px;padding:5px 12px;text-decoration:none}.brand span{color:#c8ff00}nav a:last-child{color:#294719;font-weight:700;text-decoration:none}h1{font-size:clamp(44px,8vw,76px);line-height:.95;letter-spacing:-.075em;margin:0 0 20px}p{color:#5d635a;max-width:620px}h2{margin:62px 0 18px;font-size:25px;letter-spacing:-.04em}.links{display:grid;gap:12px}.item{display:block;padding:20px 22px;border:1px solid rgba(23,26,20,.13);border-radius:16px;background:#fffdf8;color:#171a14;text-decoration:none}.item:hover{border-color:#294719}.item strong{display:block;font-size:18px}.item span{display:block;margin-top:3px;color:#5d635a;font-size:14px}.footer{margin-top:70px;padding-top:20px;border-top:1px solid rgba(23,26,20,.13);color:#5d635a;font-size:13px}@media(max-width:560px){.wrap{width:calc(100% - 32px);padding-top:28px}nav{margin-bottom:56px}}</style></head><body><main class="wrap"><nav><a class="brand" href="/">click<span>sable.</span></a><a href="/learning/">Learning Center</a></nav><h1>Browse<br>clicksable.</h1><p>Important public pages and published Learning Center articles.</p><h2>Website</h2><div class="links">${sitemapLinks.map(([title, url, description]) => `<a class="item" href="${esc(url)}"><strong>${esc(title)}</strong><span>${esc(description)}</span></a>`).join('')}</div><h2>Published articles</h2><div class="links">${articles.filter(article => validSlug(article.slug)).map(article => `<a class="item" href="${esc(articleUrl(article.slug))}"><strong>${esc(article.title)}</strong><span>${esc(oneLine(article.excerpt) || 'Learning Center article.')}</span></a>`).join('') || '<p>No articles have been published yet.</p>'}</div><p class="footer">© ${new Date().getUTCFullYear()} clicksable.</p></main></body></html>`;
+await fs.mkdir(path.join(outputRoot, 'sitemap'), { recursive: true });
+await fs.writeFile(path.join(outputRoot, 'sitemap', 'index.html'), sitemapPage);
 console.log(`Generated ${articlePages.length} article pages and sitemap with ${entries.length} URLs.`);
