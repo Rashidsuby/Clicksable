@@ -33,6 +33,8 @@ jobs:
         run: node scripts/build-public-pages.mjs
       - name: Generate static article pages and sitemap
         run: node scripts/build-learning-pages.mjs
+      - name: Generate discovery pages and entity references
+        run: node scripts/build-discovery-pages.mjs
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v5
       - name: Upload site
