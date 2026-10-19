@@ -195,7 +195,39 @@ const entries = [
 ];
 const xml = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${entries.map(entry => `  <url><loc>${esc(entry.url)}</loc>${entry.lastmod ? `<lastmod>${esc(entry.lastmod.slice(0, 10))}</lastmod>` : ''}</url>`).join('\n')}\n</urlset>\n`;
 await fs.writeFile(path.join(outputRoot, 'sitemap.xml'), xml);
-await fs.writeFile(path.join(outputRoot, 'robots.txt'), `User-agent: *\nAllow: /\n\nSitemap: ${siteUrl}/sitemap.xml\n`);
+const robots = `# Search and AI crawlers explicitly permitted by Clicksable.
+User-agent: Googlebot
+Allow: /
+
+# Gemini access is controlled by this Google product token.
+User-agent: Google-Extended
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: GPTBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Claude-SearchBot
+Allow: /
+
+User-agent: bingbot
+Allow: /
+
+# Do not grant blanket crawl access to bots that are not listed above.
+User-agent: *
+Disallow: /
+
+Sitemap: ${siteUrl}/sitemap.xml
+`;
+await fs.writeFile(path.join(outputRoot, 'robots.txt'), robots);
 
 const oneLine = value => String(value || '').replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
 const llmsLines = [
