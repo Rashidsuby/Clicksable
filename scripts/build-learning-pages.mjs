@@ -207,6 +207,8 @@ const entries = [
   { url: `${siteUrl}/business/` },
   { url: `${siteUrl}/company/` },
   { url: `${siteUrl}/learning/`, lastmod: new Date().toISOString() },
+  { url: `${siteUrl}/ai-info/` },
+  { url: `${siteUrl}/entity-map.html` },
   { url: `${siteUrl}/sitemap/` },
   { url: `${siteUrl}/privacy.html` },
   { url: `${siteUrl}/terms.html` },
@@ -260,6 +262,8 @@ const llmsLines = [
   `- [For businesses](${siteUrl}/business/): AI Visibility service for businesses that want to be easier for buyers and AI search systems to understand.`,
   `- [Company](${siteUrl}/company/): Clicksable’s mission, working principles, office locations, and contact details.`,
   `- [Contact](${siteUrl}/company/#about-contact): Contact Clicksable at hello@clicksable.com or begin a project enquiry.`,
+  `- [AI information](${siteUrl}/ai-info/): Factual overview of Clicksable and its services with links to source pages.`,
+  `- [Entity map](${siteUrl}/entity-map.html): Company identity, service descriptions, locations, and structured data.`,
   '',
   '## Learning Center',
   `- [Learning Center](${siteUrl}/learning/): Articles about creator growth, AI visibility, and durable digital businesses.`,
@@ -279,6 +283,8 @@ const sitemapLinks = [
   ['For businesses', `${siteUrl}/business/`, 'AI Visibility: build a clearer, more credible presence in AI search.'],
   ['Company', `${siteUrl}/company/`, 'Mission, working principles, office locations, and contact details.'],
   ['Learning Center', `${siteUrl}/learning/`, 'Articles on creator growth, AI visibility, and digital business building.'],
+  ['AI information', `${siteUrl}/ai-info/`, 'Factual overview of Clicksable and its services.'],
+  ['Entity map', `${siteUrl}/entity-map.html`, 'Company identity, service descriptions, and office locations.'],
   ['Privacy Notice', `${siteUrl}/privacy.html`, 'How Clicksable handles submitted information.'],
   ['Terms of Use', `${siteUrl}/terms.html`, 'Terms for the website, forms, and Creator Reward portal.']
 ];
