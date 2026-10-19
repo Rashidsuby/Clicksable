@@ -72,9 +72,13 @@ for (const page of pages) {
     const faqHtml = `<section class="service-questions" aria-labelledby="service-questions-title"><div class="service-questions-intro"><p class="service-questions-kicker">CLEAR ANSWERS</p><h2 id="service-questions-title">${page.faqHeading}</h2><p>Read how this service works and what it can—and cannot—promise.</p></div><div class="service-questions-list">${page.faqs.map(([question, answer]) => `<details><summary>${question}</summary><p>${answer}</p></details>`).join('')}</div><nav class="service-related" aria-label="Related pages">${page.relatedLinks.map(([label, href]) => `<a href="${href}">${label}<span aria-hidden="true"> →</span></a>`).join('')}</nav></section>`;
     const activePageStart = html.indexOf(`<div class="page active visible" id="pg-${page.section}">`);
     if (activePageStart < 0) throw new Error(`Missing active page container while adding service questions to /${page.id}/`);
-    const footerStart = html.indexOf('<footer class="universal-footer">', activePageStart);
-    if (footerStart < 0) throw new Error(`Missing footer while adding service questions to /${page.id}/`);
-    html = html.slice(0, footerStart) + faqHtml + html.slice(footerStart);
+    const formId = page.id === 'creator' ? 'creator-path-form' : 'business-path-form';
+    const formMarker = `id="${formId}"`;
+    const formStart = html.indexOf(formMarker, activePageStart);
+    if (formStart < 0) throw new Error(`Missing enquiry form while adding service questions to /${page.id}/`);
+    const faqInsert = html.lastIndexOf('<section', formStart);
+    if (faqInsert < activePageStart) throw new Error(`Could not locate the enquiry form section while adding service questions to /${page.id}/`);
+    html = html.slice(0, faqInsert) + faqHtml + html.slice(faqInsert);
 
     const schema = {
       '@context': 'https://schema.org',
