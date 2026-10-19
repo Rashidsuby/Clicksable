@@ -19,6 +19,11 @@ function rewritePageLinks(html) {
   html = html.replace(/href="#about-mission" onclick="goPage\('about'\);/g, 'href="/company/#about-mission" onclick="goPage(\'about\');');
   html = html.replace(/href="#about-offices-title" onclick="goPage\('about'\);/g, 'href="/company/#about-offices-title" onclick="goPage(\'about\');');
   html = html.replace(/href="#about-contact" onclick="goPage\('about'\);/g, 'href="/company/#about-contact" onclick="goPage(\'about\');');
+  // The standalone public pages include the shared SPA template, but their
+  // page-specific content (including FAQs) is generated into separate URLs.
+  // Keep those links as normal navigations so in-page routing cannot switch
+  // to template content that is missing the generated FAQ section.
+  html = html.replace(/<a\b[^>]*>/g, tag => tag.replace(/\s+onclick=(['"])goPage\('[^']+'\)(?:;return false)?\1/, ''));
   html = html.replace(/\b(href|src|action|poster)=(['"])(?!#|\/|\?|[a-z][a-z0-9+.-]*:)([^'"]*)\2/gi, '$1=$2/$3$2');
   return html;
 }
