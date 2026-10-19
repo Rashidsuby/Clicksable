@@ -32,22 +32,26 @@ const pages = [
     id: 'creator', section: 'creator', title: 'Creator Growth & Monetization | clicksable.',
     description: 'Turn your audience into a business you own. Build a clear offer, stronger audience relationships, and a path from attention to revenue with clicksable.',
     serviceName: 'Creator Growth', serviceDescription: 'Clicksable helps creators shape an offer, messaging, and a conversion path around their audience.',
-    faqHeading: 'Questions about creator growth', relatedLinks: [['Explore the Creator Engine', '/creator/#creator-system-title'], ['See the Creator Blueprint', '/creator/#creator-path-form'], ['Read the Learning Center', '/learning/']],
+    faqHeading: 'Questions about creator growth',
+    faqIntro: 'Clicksable helps creators turn an existing audience into a business they own. The Creator Engine brings together offer direction, launch messaging, and a practical first 14-day plan.',
+    relatedLinks: [['Explore the Creator Engine', '/creator/#creator-system-title'], ['See the Creator Blueprint', '/creator/#creator-path-form'], ['Read the Learning Center', '/learning/']],
     faqs: [
-      ['Who is the Creator Engine for?', 'It is designed for creators who already have an audience and want to build an offer and a clearer path from attention to revenue.'],
-      ['What does the Creator Blueprint provide?', 'The on-page form uses the details you provide to prepare a starting direction for your offer, launch message, and near-term focus. It is a strategy brief, not a promise of revenue.'],
-      ['Does Clicksable guarantee creator income or sales?', 'No. Income and sales depend on your audience, offer, market, and execution. The site does not promise a particular financial result.'],
+      ['Who is the Creator Engine for?', 'It is for creators who want to build a business around their audience, ideas, and expertise—not rely on content or brand deals alone.'],
+      ['What do I get in the Creator Blueprint?', 'We use your answers to outline an offer direction, a launch message, and the first actions to focus on over 14 days. It gives you a clearer place to start before deciding what to build.'],
+      ['Can Clicksable help me earn more from my audience?', 'We help you shape an offer and a path for your audience to act on it. Results depend on the offer, audience, market, and how the plan is carried out, so we do not promise a specific income or sales figure.'],
     ],
   },
   {
     id: 'business', section: 'business', title: 'AI Visibility for Businesses | clicksable.',
     description: 'Help buyers and AI understand what your business does. Build a clearer, more credible presence across AI search and discovery with clicksable.',
     serviceName: 'Business AI Visibility', serviceDescription: 'Clicksable helps businesses make their services, evidence, and buyer information clearer across search and AI-assisted discovery.',
-    faqHeading: 'Questions about AI visibility', relatedLinks: [['Explore business services', '/business/#business-framework-title'], ['Read the AI search guide', '/learning/business-ai-search-visibility/'], ['See the Business Brief form', '/business/#business-path-form']],
+    faqHeading: 'Questions about AI visibility',
+    faqIntro: 'Clicksable helps businesses clarify what they sell, who they serve, and why buyers should trust them—so customers, search engines, and AI platforms can understand the business.',
+    relatedLinks: [['Explore business services', '/business/#business-framework-title'], ['Read the AI search guide', '/learning/business-ai-search-visibility/'], ['See the Business Brief form', '/business/#business-path-form']],
     faqs: [
-      ['What does Clicksable’s AI Visibility service do?', 'It helps businesses make their services, evidence, and buyer information clearer across search and AI-assisted discovery. The work focuses on understanding and discoverability; no placement is guaranteed.'],
-      ['Does the Business Brief scan Google or AI platforms?', 'No. The Business Brief organizes the details you submit into positioning observations, example buyer questions, and suggested checks. It does not perform a live scan or measure rankings, citations, or visibility.'],
-      ['Can Clicksable guarantee that an AI platform will recommend my business?', 'No. Search and AI platforms control their own results. Clicksable can improve the clarity and structure of information, but cannot guarantee a mention, citation, or recommendation.'],
+      ['What does Clicksable’s AI Visibility service do?', 'We map the questions your buyers ask, make your service pages and proof clearer, and connect useful information across your site. This gives search and AI systems better material to understand when they evaluate your business.'],
+      ['What do I get in the Business Brief?', 'The free brief uses the details you submit to suggest positioning improvements, example buyer questions, and practical next steps. It does not crawl your website or check live rankings, AI answers, or citations.'],
+      ['Can Clicksable make AI recommend my business?', 'No agency controls what an AI platform recommends. We can improve how clearly your business and evidence are presented, which gives platforms better information to work with, but recommendations are up to each platform.'],
     ],
   },
   { id: 'company', section: 'about', title: 'About clicksable. | Our Mission and Global Offices', description: 'Meet clicksable., a Dubai-founded growth company helping creators and businesses build connected systems for visibility, revenue, and long-term growth.' },
@@ -74,7 +78,7 @@ for (const page of pages) {
   html = html.replace('<body class="home-page">', '<body>');
 
   if (page.serviceName && page.faqs?.length) {
-    const faqHtml = `<section class="service-questions" aria-labelledby="service-questions-title"><div class="service-questions-intro"><p class="service-questions-kicker">CLEAR ANSWERS</p><h2 id="service-questions-title">${page.faqHeading}</h2><p>Read how this service works and what it can—and cannot—promise.</p></div><div class="service-questions-list">${page.faqs.map(([question, answer]) => `<details><summary>${question}</summary><p>${answer}</p></details>`).join('')}</div><nav class="service-related" aria-label="Related pages">${page.relatedLinks.map(([label, href]) => `<a href="${href}">${label}<span aria-hidden="true"> →</span></a>`).join('')}</nav></section>`;
+    const faqHtml = `<section class="service-questions" aria-labelledby="service-questions-title"><div class="service-questions-intro"><p class="service-questions-kicker">${page.serviceName}</p><h2 id="service-questions-title">${page.faqHeading}</h2><p>${page.faqIntro}</p></div><div class="service-questions-list">${page.faqs.map(([question, answer]) => `<details><summary>${question}</summary><p>${answer}</p></details>`).join('')}</div><nav class="service-related" aria-label="Related pages">${page.relatedLinks.map(([label, href]) => `<a href="${href}">${label}<span aria-hidden="true"> →</span></a>`).join('')}</nav></section>`;
     const activePageStart = html.indexOf(`<div class="page active visible" id="pg-${page.section}">`);
     if (activePageStart < 0) throw new Error(`Missing active page container while adding service questions to /${page.id}/`);
     const footerStart = html.indexOf('<footer class="universal-footer">', activePageStart);
