@@ -376,3 +376,6 @@
 /* Keep the Business hero links clean and give the FAQ its own light surface. */
 #pg-business .bf-actions .bf-button span,#pg-business .bf-actions .bf-text-link span{display:none!important}
 #pg-business .bf-faq{background:#fffefa!important;border-color:rgba(25,35,26,.09);box-shadow:0 18px 50px rgba(34,43,29,.08)}
+#pg-business .bf-faq-visual{width:min(100%,480px);margin:24px 0 0}
+#pg-business .bf-faq-visual img{display:block;width:100%;max-height:380px;object-fit:contain;object-position:left center;filter:drop-shadow(0 14px 24px rgba(34,43,29,.08))}
+#pg-business .bf-faq-visual figcaption{margin-top:8px;color:#7b8376;font-size:10px;line-height:1.45}
