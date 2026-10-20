@@ -1364,6 +1364,30 @@ html{overflow-x:hidden}body{overflow-x:hidden}img,svg,video,canvas{max-width:100
 #pg-business .bf-faq{box-shadow:0 18px 50px rgba(34,43,29,.08)}
 #pg-business .bf-investment-board{border:1px solid rgba(246,247,239,.16);border-radius:22px;background:rgba(255,255,255,.06);box-shadow:inset 0 1px 0 rgba(255,255,255,.08)}
 @media(max-width:760px){#pg-business .bf-journey-node,#pg-business .bf-node-two,#pg-business .bf-node-three{min-height:0;padding:20px;border-radius:20px}#pg-business .bf-journey-node .bf-node-art{inset:19px 19px auto auto;width:38px;height:38px}#pg-business .bf-journey-node>span{min-height:38px;font-size:9px}#pg-business .bf-journey-node h3{margin:43px 0 9px;font-size:21px!important}#pg-business .bf-route-item,#pg-business .bf-report-slide,#pg-business .bf-value-step{border-radius:19px}}
+
+/* Premium treatment for the three-part visibility system. */
+#pg-business .bf-route-item{overflow:hidden;isolation:isolate;border:1px solid rgba(72,94,51,.14);border-radius:24px;background:linear-gradient(112deg,#fffefa 0%,#fbfcf6 53%,#edf3e7 100%);box-shadow:0 15px 40px rgba(35,49,28,.055),inset 0 1px 0 rgba(255,255,255,.92);transition:transform .28s cubic-bezier(.2,.7,.2,1),box-shadow .28s ease,border-color .28s ease}
+#pg-business .bf-route-item:before{position:absolute;z-index:-1;inset:0 auto 0 0;width:4px;background:linear-gradient(180deg,#c8ff00,#83a95d 75%,#d6e3c8);content:"";opacity:.9}
+#pg-business .bf-route-item:after{position:absolute;z-index:-1;top:-110px;right:13%;width:300px;height:300px;border:1px solid rgba(111,145,75,.08);border-radius:50%;box-shadow:0 0 0 22px rgba(111,145,75,.025),0 0 0 52px rgba(111,145,75,.018);content:"";pointer-events:none}
+#pg-business .bf-route-item:hover{transform:translateY(-4px);border-color:rgba(84,125,42,.3);box-shadow:0 24px 56px rgba(35,49,28,.105),inset 0 1px 0 #fff}
+#pg-business .bf-route-label b{border-color:rgba(84,125,42,.2);background:linear-gradient(145deg,#f8ffe9,#d8eba9);box-shadow:0 5px 12px rgba(45,67,30,.12),inset 0 1px 1px rgba(255,255,255,.95)}
+#pg-business .bf-route-content h3{color:#1d2b1c}
+#pg-business .bf-route-tags span{border-color:rgba(84,125,42,.18);background:rgba(255,255,255,.7);box-shadow:0 2px 5px rgba(35,49,28,.04)}
+#pg-business .bf-route-visual{position:relative;z-index:1;border-left-color:rgba(84,100,66,.14)}
+#pg-business .bf-route-visual:before{position:absolute;inset:12px 16px;border-radius:22px;background:radial-gradient(ellipse at 50% 45%,rgba(255,255,255,.92),rgba(238,243,230,.46) 68%,transparent 100%);content:"";z-index:-1}
+#pg-business .bf-lens{filter:drop-shadow(0 9px 9px rgba(38,53,28,.11));transform:perspective(600px) rotateX(7deg)}
+#pg-business .bf-lens i{box-shadow:0 5px 10px rgba(43,61,32,.1),inset 0 1px 0 rgba(255,255,255,.95)}
+#pg-business .bf-lens span{box-shadow:0 4px 9px rgba(43,61,32,.13)}
+#pg-business .bf-priority-stack span{border:1px solid rgba(84,125,42,.13);border-radius:10px;background:linear-gradient(105deg,rgba(255,255,255,.92),rgba(238,243,230,.78));box-shadow:0 4px 8px rgba(35,49,28,.055);transform:perspective(500px) rotateX(2deg)}
+#pg-business .bf-priority-stack span:nth-child(2){margin-left:10px}
+#pg-business .bf-priority-stack span:nth-child(3){margin-left:20px}
+#pg-business .bf-pulse-chart{align-items:end;gap:9px;height:83px;padding:12px 18px 0;border-bottom:1px solid rgba(84,125,42,.2);perspective:300px}
+#pg-business .bf-pulse-chart span{position:relative;width:13px;border-radius:5px 5px 2px 2px;background:linear-gradient(180deg,#d9ff45 0%,#9ec551 48%,#688b45 100%);box-shadow:2px 4px 8px rgba(43,61,32,.17),inset 1px 0 0 rgba(255,255,255,.45);transform:rotateY(-9deg);transform-origin:bottom;transition:filter .2s ease,transform .2s ease}
+#pg-business .bf-pulse-chart span:after{position:absolute;top:1px;right:2px;left:2px;height:3px;border-radius:50%;background:rgba(255,255,255,.52);content:""}
+#pg-business .bf-route-item:hover .bf-pulse-chart span{filter:saturate(1.15);transform:rotateY(-9deg) translateY(-2px)}
+#pg-business .bf-route-measure .bf-route-visual>small{font-size:9px}
+@media(max-width:760px){#pg-business .bf-route-item{border-radius:18px}#pg-business .bf-route-item:after{right:-90px}#pg-business .bf-route-visual{border-left:0;border-top:1px solid rgba(84,100,66,.14)}#pg-business .bf-priority-stack span:nth-child(2){margin-left:0}#pg-business .bf-priority-stack span:nth-child(3){margin-left:0}}
+@media(prefers-reduced-motion:reduce){#pg-business .bf-route-item,#pg-business .bf-pulse-chart span{transition:none}}
 </style>
 </head>
 <body class="home-page"><noscript><div style="position:fixed;z-index:9999;inset:12px 12px auto;padding:16px;border-radius:14px;background:#fff4cf;color:#172318;font:600 14px/1.5 system-ui,sans-serif">Some interactive features need JavaScript. Enable it to use the project forms and navigation, or contact <a href="mailto:hello@clicksable.com">hello@clicksable.com</a>.</div></noscript>
