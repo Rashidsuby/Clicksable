@@ -902,6 +902,30 @@ html{overflow-x:hidden}body{overflow-x:hidden}img,svg,video,canvas{max-width:100
 .industry-perspectives__note{margin:18px 0 0;color:#687367;font:400 12px/1.55 'DM Sans',sans-serif}
 @media(max-width:760px){.industry-perspectives__grid{grid-template-columns:1fr}.industry-perspectives__card{padding:20px}}
 </style>
+<style id="creator-stories-styles">
+.creator-stories .creator-stories__intro{max-width:760px}
+.creator-stories__grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
+.creator-story-card{display:flex;min-width:0;flex-direction:column;overflow:hidden;border:1px solid rgba(25,37,26,.13);border-radius:20px;background:#fffefa;box-shadow:0 12px 32px rgba(25,37,26,.055)}
+.creator-story-photo{position:relative;overflow:hidden;aspect-ratio:1.55;background:#e6eadf}
+.creator-story-photo img{width:100%;height:100%;object-fit:cover;object-position:center 35%;display:block}
+.creator-story-photo-credit{position:absolute;right:10px;bottom:10px;padding:5px 8px;border-radius:99px;background:rgba(18,29,18,.78);color:#fff;font:600 10px/1.3 'DM Sans',sans-serif;text-decoration:none}
+.creator-story-content{display:flex;flex:1;flex-direction:column;padding:22px}
+.creator-story-focus{margin:0 0 12px;color:#527744;font:800 10px/1.4 'DM Sans',sans-serif;letter-spacing:.13em;text-transform:uppercase}
+.creator-story-content blockquote{margin:0 0 14px;color:#19251a;font:700 clamp(18px,2vw,22px)/1.35 'Syne','DM Sans',sans-serif;letter-spacing:-.025em}
+.creator-story-content blockquote a{color:inherit;text-decoration-color:#719050;text-decoration-thickness:1px;text-underline-offset:4px}
+.creator-story-detail{margin:0 0 20px;color:#59645a;font:400 14px/1.65 'DM Sans',sans-serif}
+.creator-story-person{display:flex;align-items:center;gap:11px;margin-top:auto;padding-top:16px;border-top:1px solid rgba(25,37,26,.11)}
+.creator-story-person strong,.creator-story-person span{display:block}
+.creator-story-person strong{color:#19251a;font:700 15px/1.35 'DM Sans',sans-serif}
+.creator-story-person span{margin-top:3px;color:#687367;font:500 12px/1.4 'DM Sans',sans-serif}
+.creator-story-social{display:grid;width:38px;height:38px;flex:0 0 38px;place-items:center;margin-left:auto;border:1px solid rgba(25,37,26,.14);border-radius:50%;color:#294719;transition:background .2s ease,color .2s ease,border-color .2s ease}
+.creator-story-social:hover{background:#294719;border-color:#294719;color:#fff}
+.creator-story-social svg{width:18px;height:18px;display:block;fill:currentColor}
+.creator-story-source{display:inline-flex;align-items:center;gap:6px;margin-top:14px;color:#315b30;font:700 12px/1.45 'DM Sans',sans-serif;text-decoration:underline;text-underline-offset:3px}
+.creator-stories__note{margin:18px 0 0;color:#687367;font:400 12px/1.55 'DM Sans',sans-serif}
+@media(max-width:860px){.creator-stories__grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:600px){.creator-stories__grid{grid-template-columns:1fr}.creator-story-content{padding:20px}.creator-story-content blockquote{font-size:20px}}
+</style>
 </head>
 <body class="home-page"><noscript><div style="position:fixed;z-index:9999;inset:12px 12px auto;padding:16px;border-radius:14px;background:#fff4cf;color:#172318;font:600 14px/1.5 system-ui,sans-serif">Some interactive features need JavaScript. Enable it to use the project forms and navigation, or contact <a href="mailto:hello@clicksable.com">hello@clicksable.com</a>.</div></noscript>
 
@@ -1193,34 +1217,44 @@ html{overflow-x:hidden}body{overflow-x:hidden}img,svg,video,canvas{max-width:100
     <aside class="creator-form-guide" aria-labelledby="form-guide-title"><div class="form-guide-sticky"><p class="creator-eyebrow">Before you begin</p><h2 id="form-guide-title"><span class="creator-title-line">A short form.</span><em class="creator-title-em">A clearer start.</em></h2><p class="form-guide-lede">You do not need a business plan ready. Share the honest version of where you are, and we will use it to find the strongest next move.</p><ol><li><span>1</span><div><strong>Share your public starting point</strong><p>Add your handle, platform and audience size. This shows us where attention already exists.</p></div></li><li><span>2</span><div><strong>Describe your business context</strong><p>Choose your niche and current revenue range. There is no right number.</p></div></li><li><span>3</span><div><strong>Name the obstacle</strong><p>Tell us what feels difficult. A sentence is enough, and it helps make the direction useful.</p></div></li></ol><div class="form-guide-outcome"><i>✦</i><div><small>WHAT YOU GET</small><strong>A tailored Creator Blueprint direction</strong></div></div><p class="form-guide-note">No payment. No commitment. Just a focused place to start.</p></div></aside>
   </div>
 </section>
-    <section class="industry-perspectives" id="creator-industry-perspectives" aria-labelledby="creator-industry-perspectives-title">
+    <section class="industry-perspectives creator-stories" id="creator-industry-perspectives" aria-labelledby="creator-industry-perspectives-title">
   <div class="industry-perspectives__inner">
-    <p class="industry-perspectives__eyebrow">Industry case studies &amp; expert testimony</p>
-    <h2 class="industry-perspectives__title" id="creator-industry-perspectives-title">An audience is a start.<br><em>A creator business needs a model.</em></h2>
-    <p class="industry-perspectives__intro">Research and creator-economy leaders point to a wider opportunity: help creators build sustainable businesses around their work, audience, and relationships—not depend on reach alone.</p>
-    <div class="industry-perspectives__grid">
-      <article class="industry-perspectives__card">
-        <p class="industry-perspectives__label">Creator-economy research · 2025</p>
-        <h3>Many creators see themselves as small businesses</h3>
-        <p>In Visa’s commissioned Morning Consult survey of 1,067 creators across five countries, 68% said they consider themselves small-business owners and 88% expected their creator business to grow over the next year.</p>
-        <div class="industry-perspectives__links"><a href="https://corporate.visa.com/en/solutions/commercial-solutions/knowledge-hub/2025-visa-creators-report.html" target="_blank" rel="noopener noreferrer">Read Visa’s report and methodology ↗</a></div>
+    <p class="industry-perspectives__eyebrow">Creator stories</p>
+    <h2 class="industry-perspectives__title" id="creator-industry-perspectives-title">See what other creators say</h2>
+    <p class="industry-perspectives__intro creator-stories__intro">Real creator stories about building income through their work, products, and audience relationships—not sponsorships alone.</p>
+    <div class="creator-stories__grid">
+      <article class="creator-story-card">
+        <div class="creator-story-photo"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/8f/Amanda_Palmer.jpg/960px-Amanda_Palmer.jpg" alt="Musician Amanda Palmer" width="640" height="426" loading="lazy" decoding="async"><a class="creator-story-photo-credit" href="https://commons.wikimedia.org/wiki/File:Amanda_Palmer.jpg" target="_blank" rel="noopener noreferrer">Photo: Joi · CC BY 2.0</a></div>
+        <div class="creator-story-content">
+          <p class="creator-story-focus">Music · Direct fan support</p>
+          <blockquote><a href="https://time.com/6124508/creator-economy-onlyfans-twitch-future/" target="_blank" rel="noopener noreferrer">“I always keep a lot of phone lines open with my community.”</a></blockquote>
+          <p class="creator-story-detail">Amanda Palmer built a direct-support model with crowdfunding and Patreon. She has also spoken about keeping several ways to reach her community instead of relying on one platform.</p>
+          <a class="creator-story-source" href="https://www.ted.com/talks/amanda_palmer_the_art_of_asking?view=transcript" target="_blank" rel="noopener noreferrer">Watch Amanda’s TED Talk <span aria-hidden="true">↗</span></a>
+          <div class="creator-story-person"><div><strong>Amanda Palmer</strong><span>Musician, artist and author</span></div><a class="creator-story-social" href="https://www.instagram.com/amandapalmer/" target="_blank" rel="noopener noreferrer" aria-label="Amanda Palmer on Instagram"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7.2 2h9.6A5.2 5.2 0 0 1 22 7.2v9.6a5.2 5.2 0 0 1-5.2 5.2H7.2A5.2 5.2 0 0 1 2 16.8V7.2A5.2 5.2 0 0 1 7.2 2Zm0 2A3.2 3.2 0 0 0 4 7.2v9.6A3.2 3.2 0 0 0 7.2 20h9.6a3.2 3.2 0 0 0 3.2-3.2V7.2A3.2 3.2 0 0 0 16.8 4H7.2ZM12 7a5 5 0 1 1 0 10 5 5 0 0 1 0-10Zm0 2a3 3 0 1 0 0 6 3 3 0 0 0 0-6Zm5.5-3a1.25 1.25 0 1 1 0 2.5 1.25 1.25 0 0 1 0-2.5Z"/></svg></a></div>
+        </div>
       </article>
-      <article class="industry-perspectives__card">
-        <p class="industry-perspectives__label">Investor &amp; writer perspective</p>
-        <h3>Li Jin argues for a stronger creator middle class</h3>
-        <p>In her Harvard Business Review essay, Li Jin describes an economy with a small number of major winners and many creators struggling to make a living, and argues for models that support more creators.</p>
-        <p class="industry-perspectives__byline">Li Jin · Co-founder and general partner, Variant</p>
-        <div class="industry-perspectives__links"><a href="https://hbr.org/2020/12/the-creator-economy-needs-a-middle-class" target="_blank" rel="noopener noreferrer">Read her HBR essay ↗</a><a href="https://www.linkedin.com/in/ljin1" target="_blank" rel="noopener noreferrer">Li Jin’s LinkedIn ↗</a></div>
+      <article class="creator-story-card">
+        <div class="creator-story-photo"><img src="https://mpd-biblio-authors.imgix.net/200099959.jpg" alt="Creator and author Ali Abdaal" width="640" height="426" loading="lazy" decoding="async"><a class="creator-story-photo-credit" href="https://us.macmillan.com/author/aliabdaal" target="_blank" rel="noopener noreferrer">Photo: Ali Abdaal · Macmillan</a></div>
+        <div class="creator-story-content">
+          <p class="creator-story-focus">Education · Courses, books and apps</p>
+          <blockquote><a href="https://aliabdaal.com/about/" target="_blank" rel="noopener noreferrer">“Because of your support, I’ve been able to turn an obsession with productivity and personal development into a viable career path.”</a></blockquote>
+          <p class="creator-story-detail">Ali began with educational YouTube videos and grew a business that includes courses, a book, a newsletter, and productivity apps.</p>
+          <a class="creator-story-source" href="https://aliabdaal.com/about/" target="_blank" rel="noopener noreferrer">Read Ali’s story <span aria-hidden="true">↗</span></a>
+          <div class="creator-story-person"><div><strong>Ali Abdaal</strong><span>Creator, author and entrepreneur</span></div><a class="creator-story-social" href="https://www.instagram.com/aliabdaal/" target="_blank" rel="noopener noreferrer" aria-label="Ali Abdaal on Instagram"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7.2 2h9.6A5.2 5.2 0 0 1 22 7.2v9.6a5.2 5.2 0 0 1-5.2 5.2H7.2A5.2 5.2 0 0 1 2 16.8V7.2A5.2 5.2 0 0 1 7.2 2Zm0 2A3.2 3.2 0 0 0 4 7.2v9.6A3.2 3.2 0 0 0 7.2 20h9.6a3.2 3.2 0 0 0 3.2-3.2V7.2A3.2 3.2 0 0 0 16.8 4H7.2ZM12 7a5 5 0 1 1 0 10 5 5 0 0 1 0-10Zm0 2a3 3 0 1 0 0 6 3 3 0 0 0 0-6Zm5.5-3a1.25 1.25 0 1 1 0 2.5 1.25 1.25 0 0 1 0-2.5Z"/></svg></a></div>
+        </div>
       </article>
-      <article class="industry-perspectives__card">
-        <p class="industry-perspectives__label">Creator-founder perspective</p>
-        <h3>Jack Conte speaks about getting artists paid</h3>
-        <p>Patreon co-founder Jack Conte draws on his experience as a working musician to discuss how creators can earn from digital work—not rely on views alone.</p>
-        <p class="industry-perspectives__byline">Jack Conte · Musician and co-founder, Patreon</p>
-        <div class="industry-perspectives__links"><a href="https://www.ted.com/talks/jack_conte_how_artists_can_finally_get_paid_in_the_digital_age" target="_blank" rel="noopener noreferrer">Watch his TED Talk ↗</a><a href="https://www.linkedin.com/in/jack-conte-a15a3686" target="_blank" rel="noopener noreferrer">Jack Conte’s LinkedIn ↗</a></div>
+      <article class="creator-story-card">
+        <div class="creator-story-photo"><img src="https://mastersofscale.com/wp-content/uploads/2022/09/MoS_JackConte_colorcutout-800x800.webp" alt="Musician and creator Jack Conte" width="640" height="640" loading="lazy" decoding="async"><a class="creator-story-photo-credit" href="https://mastersofscale.com/people/jack-conte/" target="_blank" rel="noopener noreferrer">Portrait via Masters of Scale</a></div>
+        <div class="creator-story-content">
+          <p class="creator-story-focus">Music · Digital sales and fan memberships</p>
+          <blockquote><a href="https://mastersofscale.com/wp-content/uploads/2022/08/masters-of-scale-episode-transcript_-jack-conte.pdf" target="_blank" rel="noopener noreferrer">“I started selling hundreds of MP3s, and then I started making 500 bucks a month selling MP3s and posting these video songs on YouTube.”</a></blockquote>
+          <p class="creator-story-detail">Before Patreon, Jack Conte shared music videos and sold MP3s directly to listeners. Those experiments helped him see a business in connecting creators with paying fans.</p>
+          <a class="creator-story-source" href="https://mastersofscale.com/people/jack-conte/" target="_blank" rel="noopener noreferrer">Hear Jack’s story <span aria-hidden="true">↗</span></a>
+          <div class="creator-story-person"><div><strong>Jack Conte</strong><span>Musician and Patreon co-founder</span></div><a class="creator-story-social" href="https://www.instagram.com/jackconte/" target="_blank" rel="noopener noreferrer" aria-label="Jack Conte on Instagram"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7.2 2h9.6A5.2 5.2 0 0 1 22 7.2v9.6a5.2 5.2 0 0 1-5.2 5.2H7.2A5.2 5.2 0 0 1 2 16.8V7.2A5.2 5.2 0 0 1 7.2 2Zm0 2A3.2 3.2 0 0 0 4 7.2v9.6A3.2 3.2 0 0 0 7.2 20h9.6a3.2 3.2 0 0 0 3.2-3.2V7.2A3.2 3.2 0 0 0 16.8 4H7.2ZM12 7a5 5 0 1 1 0 10 5 5 0 0 1 0-10Zm0 2a3 3 0 1 0 0 6 3 3 0 0 0 0-6Zm5.5-3a1.25 1.25 0 1 1 0 2.5 1.25 1.25 0 0 1 0-2.5Z"/></svg></a></div>
+        </div>
       </article>
     </div>
-    <p class="industry-perspectives__note">These are published industry cases and experts’ own testimony about the shift. They are not claims about Clicksable client work, and the people cited are not endorsing Clicksable.</p>
+    <p class="creator-stories__note">These are creators’ published accounts—not reviews or testimonials for Clicksable. Each quote links to its source.</p>
   </div>
 </section>
     <section class="service-questions" id="creator-faq" aria-labelledby="creator-faq-title"><div class="service-questions-intro"><p class="service-questions-kicker">Creator Growth</p><h2 id="creator-faq-title">Questions about creator growth</h2><p>Clicksable helps creators turn an existing audience into a business they own. The Creator Engine brings together offer direction, launch messaging, and a practical first 14-day plan.</p></div><div class="service-questions-list"><details><summary>Who is the Creator Engine for?</summary><p>It is for creators who want to build a business around their audience, ideas, and expertise—not rely on content or brand deals alone.</p></details><details><summary>What do I get in the Creator Blueprint?</summary><p>We use your answers to outline an offer direction, a launch message, and the first actions to focus on over 14 days. It gives you a clearer place to start before deciding what to build.</p></details><details><summary>Can Clicksable help me earn more from my audience?</summary><p>We help you shape an offer and a path for your audience to act on it. Results depend on the offer, audience, market, and how the plan is carried out, so we do not promise a specific income or sales figure.</p></details></div><nav class="service-related" aria-label="Related creator pages"><a href="/creator/#creator-system-title">Explore the Creator Engine<span aria-hidden="true"> →</span></a><a href="/creator/#creator-path-form">See the Creator Blueprint<span aria-hidden="true"> →</span></a><a href="/learning/">Read the Learning Center<span aria-hidden="true"> →</span></a></nav></section><footer class="universal-footer">
