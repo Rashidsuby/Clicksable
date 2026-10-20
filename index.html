@@ -904,8 +904,15 @@ html{overflow-x:hidden}body{overflow-x:hidden}img,svg,video,canvas{max-width:100
 </style>
 <style id="creator-stories-styles">
 .creator-stories .creator-stories__intro{max-width:760px}
-.creator-stories__grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
+.creator-stories__controls{display:flex;justify-content:flex-end;gap:10px;margin:0 0 16px}
+.creator-stories__control{display:grid;width:42px;height:42px;place-items:center;border:1px solid rgba(25,37,26,.18);border-radius:50%;background:#fffefa;color:#294719;cursor:pointer;transition:background .2s ease,color .2s ease,border-color .2s ease}
+.creator-stories__control:hover{background:#294719;border-color:#294719;color:#fff}
+.creator-stories__control:focus-visible{outline:3px solid #789b50;outline-offset:3px}
+.creator-stories__control svg{width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.creator-stories__grid{display:flex;gap:18px;overflow-x:auto;overscroll-behavior-inline:contain;scroll-snap-type:x mandatory;scrollbar-width:thin;scrollbar-color:#9caf88 transparent;padding:0 0 12px}
+.creator-stories__grid:focus-visible{outline:3px solid #789b50;outline-offset:4px;border-radius:8px}
 .creator-story-card{display:flex;min-width:0;flex-direction:column;overflow:hidden;border:1px solid rgba(25,37,26,.13);border-radius:20px;background:#fffefa;box-shadow:0 12px 32px rgba(25,37,26,.055)}
+.creator-stories__grid .creator-story-card{flex:0 0 calc((100% - 36px)/3);scroll-snap-align:start}
 .creator-story-photo{position:relative;overflow:hidden;aspect-ratio:1.55;background:#e6eadf}
 .creator-story-photo img{width:100%;height:100%;object-fit:cover;object-position:center 35%;display:block}
 .creator-story-photo-credit{position:absolute;right:10px;bottom:10px;padding:5px 8px;border-radius:99px;background:rgba(18,29,18,.78);color:#fff;font:600 10px/1.3 'DM Sans',sans-serif;text-decoration:none}
@@ -922,9 +929,9 @@ html{overflow-x:hidden}body{overflow-x:hidden}img,svg,video,canvas{max-width:100
 .creator-story-social:hover{background:#294719;border-color:#294719;color:#fff}
 .creator-story-social svg{width:18px;height:18px;display:block;fill:currentColor}
 .creator-story-source{display:inline-flex;align-items:center;gap:6px;margin-top:14px;color:#315b30;font:700 12px/1.45 'DM Sans',sans-serif;text-decoration:underline;text-underline-offset:3px}
-.creator-stories__note{margin:18px 0 0;color:#687367;font:400 12px/1.55 'DM Sans',sans-serif}
-@media(max-width:860px){.creator-stories__grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
-@media(max-width:600px){.creator-stories__grid{grid-template-columns:1fr}.creator-story-content{padding:20px}.creator-story-content blockquote{font-size:20px}}
+@media(max-width:860px){.creator-stories__grid .creator-story-card{flex-basis:calc((100% - 18px)/2)}}
+@media(max-width:600px){.creator-stories__grid .creator-story-card{flex-basis:100%}.creator-story-content{padding:20px}.creator-story-content blockquote{font-size:20px}}
+@media(prefers-reduced-motion:reduce){.creator-stories__control{transition:none}.creator-stories__grid{scroll-behavior:auto}}
 </style>
 </head>
 <body class="home-page"><noscript><div style="position:fixed;z-index:9999;inset:12px 12px auto;padding:16px;border-radius:14px;background:#fff4cf;color:#172318;font:600 14px/1.5 system-ui,sans-serif">Some interactive features need JavaScript. Enable it to use the project forms and navigation, or contact <a href="mailto:hello@clicksable.com">hello@clicksable.com</a>.</div></noscript>
@@ -1222,7 +1229,51 @@ html{overflow-x:hidden}body{overflow-x:hidden}img,svg,video,canvas{max-width:100
     <p class="industry-perspectives__eyebrow">Creator stories</p>
     <h2 class="industry-perspectives__title" id="creator-industry-perspectives-title">See what other creators say</h2>
     <p class="industry-perspectives__intro creator-stories__intro">Real creator stories about building income through their work, products, and audience relationships—not sponsorships alone.</p>
-    <div class="creator-stories__grid">
+    <div class="creator-stories__controls" role="group" aria-label="Creator story carousel controls">
+      <button class="creator-stories__control" type="button" aria-label="Previous creator stories" onclick="document.getElementById('creator-stories-track').scrollBy({left:-document.getElementById('creator-stories-track').clientWidth,behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'})"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6M9 12h11"/></svg></button>
+      <button class="creator-stories__control" type="button" aria-label="Next creator stories" onclick="document.getElementById('creator-stories-track').scrollBy({left:document.getElementById('creator-stories-track').clientWidth,behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'})"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 18 6-6-6-6m6 6H4"/></svg></button>
+    </div>
+    <div class="creator-stories__grid" id="creator-stories-track" tabindex="0" aria-label="Creator stories carousel">
+      <article class="creator-story-card">
+        <div class="creator-story-photo"><img src="https://media.allure.com/photos/602405276f8a9e3d8c78dd55/16%3A9/w_2560%2Cc_limit/lede%2520%288%29.jpg" alt="Michelle Phan, beauty creator and entrepreneur" width="640" height="360" loading="lazy" decoding="async"><a class="creator-story-photo-credit" href="https://www.allure.com/story/michelle-phan-the-original-beauty-vlogger-interview" target="_blank" rel="noopener noreferrer">Photo: Allure</a></div>
+        <div class="creator-story-content">
+          <p class="creator-story-focus">Beauty · Ipsy and EM Cosmetics</p>
+          <blockquote><a href="https://www.allure.com/story/michelle-phan-the-original-beauty-vlogger-interview" target="_blank" rel="noopener noreferrer">“I wanted to do a subscription beauty business, but I started on YouTube.”</a></blockquote>
+          <p class="creator-story-detail">Michelle Phan grew from YouTube beauty tutorials into co-founding Ipsy and creating her own beauty brand, EM Cosmetics.</p>
+          <a class="creator-story-source" href="https://www.allure.com/story/michelle-phan-the-original-beauty-vlogger-interview" target="_blank" rel="noopener noreferrer">Read Michelle’s interview <span aria-hidden="true">↗</span></a>
+          <div class="creator-story-person"><div><strong>Michelle Phan</strong><span>Beauty creator and founder</span></div><a class="creator-story-social" href="https://www.instagram.com/michellephan/" target="_blank" rel="noopener noreferrer" aria-label="Michelle Phan on Instagram"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7.2 2h9.6A5.2 5.2 0 0 1 22 7.2v9.6a5.2 5.2 0 0 1-5.2 5.2H7.2A5.2 5.2 0 0 1 2 16.8V7.2A5.2 5.2 0 0 1 7.2 2Zm0 2A3.2 3.2 0 0 0 4 7.2v9.6A3.2 3.2 0 0 0 7.2 20h9.6a3.2 3.2 0 0 0 3.2-3.2V7.2A3.2 3.2 0 0 0 16.8 4H7.2ZM12 7a5 5 0 1 1 0 10 5 5 0 0 1 0-10Zm0 2a3 3 0 1 0 0 6 3 3 0 0 0 0-6Zm5.5-3a1.25 1.25 0 1 1 0 2.5 1.25 1.25 0 0 1 0-2.5Z"/></svg></a></div>
+        </div>
+      </article>
+      <article class="creator-story-card">
+        <div class="creator-story-photo"><img src="https://cdn.prod.website-files.com/67444d7e73966fc28ce2424a/676a89657139bbf90536be7e_20211029_CHAMBERLAIN_COFFEE_HOLIDAY_SHOT_04_0337%201%20copy.jpg" alt="Emma Chamberlain for Chamberlain Coffee" width="640" height="426" loading="lazy" decoding="async"><a class="creator-story-photo-credit" href="https://www.hyperionla.com/works/chamberlain-coffee" target="_blank" rel="noopener noreferrer">Photo: Hyperion Creative</a></div>
+        <div class="creator-story-content">
+          <p class="creator-story-focus">Coffee · Chamberlain Coffee</p>
+          <blockquote><a href="https://chamberlaincoffee.com/pages/about-us" target="_blank" rel="noopener noreferrer">“I dreamt of a coffee that was both delicious and easy to make.”</a></blockquote>
+          <p class="creator-story-detail">Emma’s coffee-making videos became a starting point for Chamberlain Coffee, a product company built around an interest she shared with her audience.</p>
+          <a class="creator-story-source" href="https://chamberlaincoffee.com/pages/about-us" target="_blank" rel="noopener noreferrer">Read Emma’s story <span aria-hidden="true">↗</span></a>
+          <div class="creator-story-person"><div><strong>Emma Chamberlain</strong><span>Creator and founder</span></div><a class="creator-story-social" href="https://www.instagram.com/emmachamberlain/" target="_blank" rel="noopener noreferrer" aria-label="Emma Chamberlain on Instagram"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7.2 2h9.6A5.2 5.2 0 0 1 22 7.2v9.6a5.2 5.2 0 0 1-5.2 5.2H7.2A5.2 5.2 0 0 1 2 16.8V7.2A5.2 5.2 0 0 1 7.2 2Zm0 2A3.2 3.2 0 0 0 4 7.2v9.6A3.2 3.2 0 0 0 7.2 20h9.6a3.2 3.2 0 0 0 3.2-3.2V7.2A3.2 3.2 0 0 0 16.8 4H7.2ZM12 7a5 5 0 1 1 0 10 5 5 0 0 1 0-10Zm0 2a3 3 0 1 0 0 6 3 3 0 0 0 0-6Zm5.5-3a1.25 1.25 0 1 1 0 2.5 1.25 1.25 0 0 1 0-2.5Z"/></svg></a></div>
+        </div>
+      </article>
+      <article class="creator-story-card">
+        <div class="creator-story-photo"><img src="https://static.time.com/v3/assets/bltea6093859af6183b/bltab02ab2948121e07/698a4864db2987146b26a343/WMRBEAST-graphic.jpg?auto=webp&branch=production&quality=75&width=1200" alt="YouTube creator Jimmy Donaldson, known as MrBeast" width="640" height="360" loading="lazy" decoding="async"><a class="creator-story-photo-credit" href="https://time.com/collections/time100-leadership-series/6693255/mrbeast-interview/" target="_blank" rel="noopener noreferrer">Photo: TIME</a></div>
+        <div class="creator-story-content">
+          <p class="creator-story-focus">Video · Feastables and owned businesses</p>
+          <blockquote><a href="https://time.com/collections/time100-leadership-series/6693255/mrbeast-interview/" target="_blank" rel="noopener noreferrer">“Hopefully, a year or two from now, we’re only promoting things we own.”</a></blockquote>
+          <p class="creator-story-detail">MrBeast has built businesses including Feastables alongside his video operation. In this interview, he describes the goal of making and promoting more of his own products.</p>
+          <a class="creator-story-source" href="https://time.com/collections/time100-leadership-series/6693255/mrbeast-interview/" target="_blank" rel="noopener noreferrer">Read MrBeast’s interview <span aria-hidden="true">↗</span></a>
+          <div class="creator-story-person"><div><strong>MrBeast</strong><span>Creator and entrepreneur</span></div><a class="creator-story-social" href="https://www.instagram.com/mrbeast/" target="_blank" rel="noopener noreferrer" aria-label="MrBeast on Instagram"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7.2 2h9.6A5.2 5.2 0 0 1 22 7.2v9.6a5.2 5.2 0 0 1-5.2 5.2H7.2A5.2 5.2 0 0 1 2 16.8V7.2A5.2 5.2 0 0 1 7.2 2Zm0 2A3.2 3.2 0 0 0 4 7.2v9.6A3.2 3.2 0 0 0 7.2 20h9.6a3.2 3.2 0 0 0 3.2-3.2V7.2A3.2 3.2 0 0 0 16.8 4H7.2ZM12 7a5 5 0 1 1 0 10 5 5 0 0 1 0-10Zm0 2a3 3 0 1 0 0 6 3 3 0 0 0 0-6Zm5.5-3a1.25 1.25 0 1 1 0 2.5 1.25 1.25 0 0 1 0-2.5Z"/></svg></a></div>
+        </div>
+      </article>
+      <article class="creator-story-card">
+        <div class="creator-story-photo"><img src="https://mythical.com/cdn/shop/files/Mythical_AboutUs_2025-RL.png?v=1758225111&width=960" alt="Rhett and Link, founders of Mythical" width="640" height="360" loading="lazy" decoding="async"><a class="creator-story-photo-credit" href="https://mythical.com/pages/about-us" target="_blank" rel="noopener noreferrer">Photo: Mythical</a></div>
+        <div class="creator-story-content">
+          <p class="creator-story-focus">Entertainment · Mythical Society</p>
+          <blockquote><a href="https://parade.com/572574/alison-abbey/the-best-parts-of-rhett-link-plus-an-exclusive-interview-with-the-internets-kings-of-comedy/" target="_blank" rel="noopener noreferrer">“We had to develop a business model and figure out how to make money off of our YouTube videos.”</a></blockquote>
+          <p class="creator-story-detail">Rhett & Link built Mythical into an entertainment company and offer fans paid membership with exclusive videos, community access, and other perks.</p>
+          <a class="creator-story-source" href="https://www.mythicalsociety.com/perks" target="_blank" rel="noopener noreferrer">Explore Mythical Society <span aria-hidden="true">↗</span></a>
+          <div class="creator-story-person"><div><strong>Rhett &amp; Link</strong><span>Creators and founders of Mythical</span></div><a class="creator-story-social" href="https://www.instagram.com/rhettandlink/" target="_blank" rel="noopener noreferrer" aria-label="Rhett and Link on Instagram"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7.2 2h9.6A5.2 5.2 0 0 1 22 7.2v9.6a5.2 5.2 0 0 1-5.2 5.2H7.2A5.2 5.2 0 0 1 2 16.8V7.2A5.2 5.2 0 0 1 7.2 2Zm0 2A3.2 3.2 0 0 0 4 7.2v9.6A3.2 3.2 0 0 0 7.2 20h9.6a3.2 3.2 0 0 0 3.2-3.2V7.2A3.2 3.2 0 0 0 16.8 4H7.2ZM12 7a5 5 0 1 1 0 10 5 5 0 0 1 0-10Zm0 2a3 3 0 1 0 0 6 3 3 0 0 0 0-6Zm5.5-3a1.25 1.25 0 1 1 0 2.5 1.25 1.25 0 0 1 0-2.5Z"/></svg></a></div>
+        </div>
+      </article>
       <article class="creator-story-card">
         <div class="creator-story-photo"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/8f/Amanda_Palmer.jpg/960px-Amanda_Palmer.jpg" alt="Musician Amanda Palmer" width="640" height="426" loading="lazy" decoding="async"><a class="creator-story-photo-credit" href="https://commons.wikimedia.org/wiki/File:Amanda_Palmer.jpg" target="_blank" rel="noopener noreferrer">Photo: Joi · CC BY 2.0</a></div>
         <div class="creator-story-content">
@@ -1254,7 +1305,6 @@ html{overflow-x:hidden}body{overflow-x:hidden}img,svg,video,canvas{max-width:100
         </div>
       </article>
     </div>
-    <p class="creator-stories__note">These are creators’ published accounts—not reviews or testimonials for Clicksable. Each quote links to its source.</p>
   </div>
 </section>
     <section class="service-questions" id="creator-faq" aria-labelledby="creator-faq-title"><div class="service-questions-intro"><p class="service-questions-kicker">Creator Growth</p><h2 id="creator-faq-title">Questions about creator growth</h2><p>Clicksable helps creators turn an existing audience into a business they own. The Creator Engine brings together offer direction, launch messaging, and a practical first 14-day plan.</p></div><div class="service-questions-list"><details><summary>Who is the Creator Engine for?</summary><p>It is for creators who want to build a business around their audience, ideas, and expertise—not rely on content or brand deals alone.</p></details><details><summary>What do I get in the Creator Blueprint?</summary><p>We use your answers to outline an offer direction, a launch message, and the first actions to focus on over 14 days. It gives you a clearer place to start before deciding what to build.</p></details><details><summary>Can Clicksable help me earn more from my audience?</summary><p>We help you shape an offer and a path for your audience to act on it. Results depend on the offer, audience, market, and how the plan is carried out, so we do not promise a specific income or sales figure.</p></details></div><nav class="service-related" aria-label="Related creator pages"><a href="/creator/#creator-system-title">Explore the Creator Engine<span aria-hidden="true"> →</span></a><a href="/creator/#creator-path-form">See the Creator Blueprint<span aria-hidden="true"> →</span></a><a href="/learning/">Read the Learning Center<span aria-hidden="true"> →</span></a></nav></section><footer class="universal-footer">
