@@ -378,30 +378,53 @@
 #pg-business .bf-faq{background:#fffefa!important;border-color:rgba(25,35,26,.09);box-shadow:0 18px 50px rgba(34,43,29,.08)}
 #pg-business .bf-faq-visual{width:min(100%,480px);margin:24px 0 0}
 #pg-business .bf-faq-visual img{display:block;width:100%;max-height:380px;object-fit:contain;object-position:left center;filter:drop-shadow(0 14px 24px rgba(34,43,29,.08))}
-#pg-business .bf-faq-visual figcaption{margin-top:8px;color:#7b8376;font-size:10px;line-height:1.45}
+#pg-business .bf-faq-visual figcaption{display:none!important}
 
-/* Carry the Creator card system across the Business page. */
-#pg-business .bf-journey-node,#pg-business .bf-node-two,#pg-business .bf-node-three{min-height:260px;padding:24px;border-radius:22px;background:rgba(255,255,255,.06);border-color:rgba(246,247,239,.16);box-shadow:inset 0 1px 0 rgba(255,255,255,.08)}
-#pg-business .bf-journey-node>span{display:flex;align-items:center;min-height:42px;color:#c8ff00;font-size:11px;letter-spacing:.11em}
-#pg-business .bf-journey-node .bf-node-art{position:absolute;inset:24px 24px auto auto;width:42px;height:42px;margin:0;border:1px solid rgba(200,255,0,.36);border-radius:13px;background:rgba(200,255,0,.08)!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.1)}
-#pg-business .bf-journey-node .bf-node-art i{font-size:23px!important}
-#pg-business .bf-journey-node .bf-node-art svg{width:25px;height:25px}
-#pg-business .bf-journey-node h3{margin:70px 0 12px;padding:0;font-size:25px;line-height:1.05;letter-spacing:-.045em}
-#pg-business .bf-journey-node p{font-size:14px;line-height:1.7}
-#pg-business .bf-journey-node:hover{transform:translateY(-4px);background:rgba(255,255,255,.09);border-color:rgba(200,255,0,.36)}
-#pg-business .bf-journey-node:hover .bf-node-art{transform:scale(1.08) rotate(-3deg);background:rgba(200,255,0,.15)!important}
-#pg-business .bf-journey-node:has(.bf-action-art){background:linear-gradient(145deg,rgba(200,255,0,.18),rgba(200,255,0,.065));border-color:rgba(200,255,0,.36)}
-#pg-business .bf-brand-tile,#pg-business .bf-route-item,#pg-business .bf-report-slide,#pg-business .bf-value-step,#pg-business .bf-form-card,#pg-business .bf-faq{border-color:#e3e4db;border-radius:22px;background:#fffefa;box-shadow:0 14px 40px rgba(37,53,31,.045)}
-#pg-business .bf-brand-tile{transition:transform .22s ease,border-color .22s ease,box-shadow .22s ease}
-#pg-business .bf-brand-tile:hover{transform:translateY(-4px);border-color:rgba(41,71,25,.3);box-shadow:0 24px 58px rgba(37,53,31,.1)}
-#pg-business .bf-route-item{transition:transform .22s ease,border-color .22s ease,box-shadow .22s ease}
-#pg-business .bf-route-item:hover{transform:translateY(-3px);border-color:rgba(41,71,25,.24);box-shadow:0 20px 48px rgba(37,53,31,.08)}
-#pg-business .bf-route-audit{background:#fffefa}
-#pg-business .bf-report-shell{padding:0;background:transparent;border:0;box-shadow:none}
-#pg-business .bf-report-slide{border:1px solid #e3e4db;box-shadow:0 14px 40px rgba(37,53,31,.045)}
-#pg-business .bf-value-step{box-shadow:0 14px 40px rgba(37,53,31,.045)}
-#pg-business .bf-value-step[aria-pressed="true"]{box-shadow:0 24px 58px rgba(37,53,31,.11)}
-#pg-business .bf-form-card{border-radius:25px;box-shadow:0 28px 80px rgba(37,53,31,.1)}
-#pg-business .bf-faq{box-shadow:0 18px 50px rgba(34,43,29,.08)}
-#pg-business .bf-investment-board{border:1px solid rgba(246,247,239,.16);border-radius:22px;background:rgba(255,255,255,.06);box-shadow:inset 0 1px 0 rgba(255,255,255,.08)}
-@media(max-width:760px){#pg-business .bf-journey-node,#pg-business .bf-node-two,#pg-business .bf-node-three{min-height:0;padding:20px;border-radius:20px}#pg-business .bf-journey-node .bf-node-art{inset:19px 19px auto auto;width:38px;height:38px}#pg-business .bf-journey-node>span{min-height:38px;font-size:9px}#pg-business .bf-journey-node h3{margin:43px 0 9px;font-size:21px!important}#pg-business .bf-route-item,#pg-business .bf-report-slide,#pg-business .bf-value-step{border-radius:19px}}
+/* A quieter editorial rhythm: keep the page information, remove the repeated tile shells. */
+#pg-business .bf-platform-rail{gap:0 22px;border-top:1px solid rgba(41,71,25,.15);border-bottom:1px solid rgba(41,71,25,.15)}
+#pg-business .bf-brand-tile{min-height:76px;padding:12px 8px;border:0;border-bottom:1px solid rgba(41,71,25,.1);border-radius:0;background:transparent;box-shadow:none;transition:color .18s ease,transform .18s ease}
+#pg-business .bf-brand-tile:hover{transform:translateX(3px);border-color:rgba(41,71,25,.1);background:transparent;box-shadow:none}
+#pg-business .bf-brand-tile span{font-size:14px}
+#pg-business .bf-brand-tile small{font-size:11px}
+#pg-business .bf-route-item{min-height:178px;padding:24px 12px;border:0;border-top:1px solid rgba(41,71,25,.16);border-radius:0;background:transparent;box-shadow:none;transition:background .2s ease}
+#pg-business .bf-route-item:last-child{border-bottom:1px solid rgba(41,71,25,.16)}
+#pg-business .bf-route-item:hover{transform:none;border-color:rgba(41,71,25,.16);background:rgba(255,255,255,.38);box-shadow:none}
+#pg-business .bf-route-visual{background:transparent}
+#pg-business .bf-report-shell{padding:0;border:0;border-radius:0;background:transparent;box-shadow:none}
+#pg-business .bf-report-slide{border:0;border-radius:0;background:transparent;box-shadow:none}
+#pg-business .bf-report-graphic{box-shadow:none}
+#pg-business .bf-value-step{min-height:110px;padding:20px 12px;border:0;border-top:1px solid rgba(41,71,25,.16);border-left:2px solid transparent;border-radius:0;background:transparent;box-shadow:none;transition:background .2s ease,border-color .2s ease}
+#pg-business .bf-value-step:last-child{border-bottom:1px solid rgba(41,71,25,.16)}
+#pg-business .bf-value-step[aria-pressed="true"]{border-left-color:#527d34;background:rgba(255,255,255,.42);box-shadow:none;transform:none}
+#pg-business .bf-value-step:hover,#pg-business .bf-value-step:focus-visible{background:rgba(255,255,255,.45);box-shadow:none;transform:none}
+
+/* Bespoke journey illustrations replace generic icon tiles with simple editorial diagrams. */
+#pg-business .bf-journey-node .bf-node-art{display:none!important}
+#pg-business .bf-journey-node{min-height:280px}
+#pg-business .bf-journey-node>span{margin-bottom:15px}
+#pg-business .bf-node-visual{position:relative;display:flex;align-items:center;gap:10px;height:65px;margin:0 0 19px;padding:0 12px;border-top:1px solid rgba(246,247,239,.18);border-bottom:1px solid rgba(246,247,239,.18);color:rgba(246,247,239,.65);font-size:9px;letter-spacing:.09em}
+#pg-business .bf-node-visual:before{position:absolute;top:-1px;left:0;width:31%;height:1px;background:#c8ff00;content:""}
+#pg-business .bf-node-visual>span{color:#c8ff00;font-weight:800;white-space:nowrap}
+#pg-business .bf-visual-question{justify-content:space-between;background:radial-gradient(ellipse at 85% 50%,rgba(200,255,0,.11),transparent 33%)}
+#pg-business .bf-visual-question>b{padding:9px 12px;border:1px solid rgba(246,247,239,.18);border-radius:999px;color:#fff;font-size:12px;font-weight:600;letter-spacing:0}
+#pg-business .bf-visual-question>i{color:#c8ff00;font-size:19px;font-style:normal;letter-spacing:2px}
+#pg-business .bf-visual-evidence{gap:7px;padding-right:0}
+#pg-business .bf-visual-evidence>span{align-self:flex-start;margin-top:13px}
+#pg-business .bf-visual-evidence>i{position:relative;flex:1;height:24px;border-bottom:1px solid rgba(200,255,0,.56)}
+#pg-business .bf-visual-evidence>i:before{position:absolute;right:4px;bottom:-4px;width:7px;height:7px;border:1px solid #d8ff5d;border-radius:50%;background:#20351f;content:""}
+#pg-business .bf-visual-evidence>b{align-self:flex-end;margin:0 0 10px 3px;color:#fff;font-size:9px;letter-spacing:.03em;white-space:nowrap}
+#pg-business .bf-visual-action{align-content:center;flex-wrap:wrap;gap:6px 12px;background:radial-gradient(ellipse at 84% 52%,rgba(200,255,0,.12),transparent 33%)}
+#pg-business .bf-visual-action>span{width:100%;color:#c8ff00;font-weight:800}
+#pg-business .bf-visual-action>b{padding:5px 8px;border-left:1px solid rgba(200,255,0,.58);color:#fff;font-size:9px;letter-spacing:.04em}
+#pg-business .bf-journey-node h3{margin-top:auto}
+
+@media(max-width:760px){
+  #pg-business .bf-platform-rail{gap:0 14px}
+  #pg-business .bf-brand-tile{min-height:68px;padding:9px 4px}
+  #pg-business .bf-route-item{min-height:0;padding:18px 4px}
+  #pg-business .bf-journey-node{min-height:0}
+  #pg-business .bf-node-visual{height:58px;margin-bottom:15px}
+  #pg-business .bf-value-step{min-height:96px;padding:15px 4px}
+  #pg-business .bf-report-shell{padding:0}
+}
+
