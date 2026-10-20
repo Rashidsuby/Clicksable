@@ -237,8 +237,7 @@ footer{padding:80px 52px 48px;border-top:1px solid var(--border);max-width:960px
 .sec-pad{padding:80px 0}
 
 /* Regular observer class for elements below the fold */
-.fi{opacity:0;transform:translateY(24px);transition:opacity .75s,transform .75s}
-.fi.on{opacity:1;transform:none}
+.fi,.fi.on{opacity:1;transform:none;transition:none}
 
 /* ── PURE CSS HERO FADE (Fix for black screen issue) ── */
 .hero-fade {
@@ -903,7 +902,7 @@ html{overflow-x:hidden}body{overflow-x:hidden}img,svg,video,canvas{max-width:100
 @media(max-width:760px){.industry-perspectives__grid{grid-template-columns:1fr}.industry-perspectives__card{padding:20px}}
 </style>
 <style id="creator-stories-styles">
-.creator-stories{padding-top:clamp(36px,4vw,56px)}
+.creator-stories{padding-block:clamp(36px,4vw,56px)}
 .creator-stories .creator-stories__intro{max-width:760px}
 .creator-stories__controls{display:flex;justify-content:flex-end;gap:10px;margin:0 0 16px}
 .creator-stories__control{display:grid;width:42px;height:42px;place-items:center;border:1px solid rgba(25,37,26,.18);border-radius:50%;background:#fffefa;color:#294719;cursor:pointer;transition:background .2s ease,color .2s ease,border-color .2s ease}
@@ -1207,24 +1206,6 @@ html{overflow-x:hidden}body{overflow-x:hidden}img,svg,video,canvas{max-width:100
     </div>
   </section>
 
-  <section class="form-section" id="creator-path-form" aria-labelledby="creator-form-title">
-  <div class="creator-form-shell fi">
-    <div class="form-box" id="creator-form-box">
-      <div class="creator-form-progress"><span class="creator-form-progress-dot"></span><span>STEP 2 / 2 · Creator Blueprint</span><small>About 2 minutes</small></div>
-      <p class="form-tag">A useful starting point, not a generic score.</p>
-      <h2 class="form-title" id="creator-form-title">Tell us where you are.<br>We’ll show you what to build next.</h2>
-      <p class="form-desc">Your answers create a focused strategy brief for your audience. It is designed to clarify the opportunity before you decide whether Clicksable is the right partner.</p>
-      <div class="form-group"><label class="form-label">Your Handle</label><input type="text" class="form-input" id="c-handle" placeholder="@yourhandle — Instagram / TikTok / YouTube"></div>
-      <div class="form-group"><label class="form-label">Email Address</label><input type="email" class="form-input" id="c-email" placeholder="you@example.com"></div>
-      <div class="form-row"><div class="form-group"><label class="form-label">Primary Platform</label><select class="form-select" id="c-platform"><option value="">Select platform</option><option>Instagram</option><option>TikTok</option><option>Facebook</option><option>Snapchat</option><option>YouTube</option><option>X</option><option>Bilibili</option><option>LinkedIn</option><option>Multi-platform</option></select></div><div class="form-group"><label class="form-label">Audience Size</label><select class="form-select" id="c-audience"><option value="">Select range</option><option>Under 10K</option><option>10K – 50K</option><option>50K – 150K</option><option>150K – 500K</option><option>500K – 1M</option><option>1M+</option></select></div></div>
-      <div class="form-row"><div class="form-group"><label class="form-label">Niche / Category</label><select class="form-select" id="c-niche"><option value="">Select niche</option><option>Finance / Investing</option><option>Business / Entrepreneurship</option><option>Fitness / Health</option><option>Fashion / Lifestyle</option><option>Tech / AI</option><option>Education / Coaching</option><option>Travel</option><option>Food / Cooking</option><option>Other</option></select></div><div class="form-group"><label class="form-label">Current Monthly Revenue</label><select class="form-select" id="c-revenue"><option value="">Select range</option><option>$0 — No monetization yet</option><option>$1 – $1,000</option><option>$1,000 – $5,000</option><option>$5,000 – $15,000</option><option>$15,000 – $50,000</option><option>$50,000+</option></select></div></div>
-      <div class="form-group"><label class="form-label">What feels hardest right now?</label><textarea class="form-textarea" id="c-challenge" placeholder="For example: I depend on brand deals, I am unsure what product to create, or I do not have a sales system."></textarea></div>
-      <label class="form-privacy-consent"><input type="checkbox" id="c-privacy-consent"><span>I agree that clicksable. may use these details to prepare my requested blueprint, as explained in the <a href="/privacy.html" target="_blank" rel="noopener">Privacy Notice</a>.</span></label><button class="submit-btn" id="c-submit" onclick="submitCreator()">Create My Creator Blueprint <span>→</span></button><p class="lead-save-error" id="c-submit-error" role="status" hidden></p>
-      <div class="guarantee"><span class="guarantee-icon">✦</span><p><strong>You will receive a tailored direction, not a sales template.</strong> The brief is based on the details you share here and takes around 20 seconds to generate.</p></div>
-    </div>
-    <aside class="creator-form-guide" aria-labelledby="form-guide-title"><div class="form-guide-sticky"><p class="creator-eyebrow">Before you begin</p><h2 id="form-guide-title"><span class="creator-title-line">A short form.</span><em class="creator-title-em">A clearer start.</em></h2><p class="form-guide-lede">You do not need a business plan ready. Share the honest version of where you are, and we will use it to find the strongest next move.</p><ol><li><span>1</span><div><strong>Share your public starting point</strong><p>Add your handle, platform and audience size. This shows us where attention already exists.</p></div></li><li><span>2</span><div><strong>Describe your business context</strong><p>Choose your niche and current revenue range. There is no right number.</p></div></li><li><span>3</span><div><strong>Name the obstacle</strong><p>Tell us what feels difficult. A sentence is enough, and it helps make the direction useful.</p></div></li></ol><div class="form-guide-outcome"><i>✦</i><div><small>WHAT YOU GET</small><strong>A tailored Creator Blueprint direction</strong></div></div><p class="form-guide-note">No payment. No commitment. Just a focused place to start.</p></div></aside>
-  </div>
-</section>
     <section class="industry-perspectives creator-stories" id="creator-industry-perspectives" aria-labelledby="creator-industry-perspectives-title">
   <div class="industry-perspectives__inner">
     <p class="industry-perspectives__eyebrow">Creator stories</p>
@@ -1308,6 +1289,25 @@ html{overflow-x:hidden}body{overflow-x:hidden}img,svg,video,canvas{max-width:100
     </div>
   </div>
 </section>
+  <section class="form-section" id="creator-path-form" aria-labelledby="creator-form-title">
+  <div class="creator-form-shell fi">
+    <div class="form-box" id="creator-form-box">
+      <div class="creator-form-progress"><span class="creator-form-progress-dot"></span><span>STEP 2 / 2 · Creator Blueprint</span><small>About 2 minutes</small></div>
+      <p class="form-tag">A useful starting point, not a generic score.</p>
+      <h2 class="form-title" id="creator-form-title">Tell us where you are.<br>We’ll show you what to build next.</h2>
+      <p class="form-desc">Your answers create a focused strategy brief for your audience. It is designed to clarify the opportunity before you decide whether Clicksable is the right partner.</p>
+      <div class="form-group"><label class="form-label">Your Handle</label><input type="text" class="form-input" id="c-handle" placeholder="@yourhandle — Instagram / TikTok / YouTube"></div>
+      <div class="form-group"><label class="form-label">Email Address</label><input type="email" class="form-input" id="c-email" placeholder="you@example.com"></div>
+      <div class="form-row"><div class="form-group"><label class="form-label">Primary Platform</label><select class="form-select" id="c-platform"><option value="">Select platform</option><option>Instagram</option><option>TikTok</option><option>Facebook</option><option>Snapchat</option><option>YouTube</option><option>X</option><option>Bilibili</option><option>LinkedIn</option><option>Multi-platform</option></select></div><div class="form-group"><label class="form-label">Audience Size</label><select class="form-select" id="c-audience"><option value="">Select range</option><option>Under 10K</option><option>10K – 50K</option><option>50K – 150K</option><option>150K – 500K</option><option>500K – 1M</option><option>1M+</option></select></div></div>
+      <div class="form-row"><div class="form-group"><label class="form-label">Niche / Category</label><select class="form-select" id="c-niche"><option value="">Select niche</option><option>Finance / Investing</option><option>Business / Entrepreneurship</option><option>Fitness / Health</option><option>Fashion / Lifestyle</option><option>Tech / AI</option><option>Education / Coaching</option><option>Travel</option><option>Food / Cooking</option><option>Other</option></select></div><div class="form-group"><label class="form-label">Current Monthly Revenue</label><select class="form-select" id="c-revenue"><option value="">Select range</option><option>$0 — No monetization yet</option><option>$1 – $1,000</option><option>$1,000 – $5,000</option><option>$5,000 – $15,000</option><option>$15,000 – $50,000</option><option>$50,000+</option></select></div></div>
+      <div class="form-group"><label class="form-label">What feels hardest right now?</label><textarea class="form-textarea" id="c-challenge" placeholder="For example: I depend on brand deals, I am unsure what product to create, or I do not have a sales system."></textarea></div>
+      <label class="form-privacy-consent"><input type="checkbox" id="c-privacy-consent"><span>I agree that clicksable. may use these details to prepare my requested blueprint, as explained in the <a href="/privacy.html" target="_blank" rel="noopener">Privacy Notice</a>.</span></label><button class="submit-btn" id="c-submit" onclick="submitCreator()">Create My Creator Blueprint <span>→</span></button><p class="lead-save-error" id="c-submit-error" role="status" hidden></p>
+      <div class="guarantee"><span class="guarantee-icon">✦</span><p><strong>You will receive a tailored direction, not a sales template.</strong> The brief is based on the details you share here and takes around 20 seconds to generate.</p></div>
+    </div>
+    <aside class="creator-form-guide" aria-labelledby="form-guide-title"><div class="form-guide-sticky"><p class="creator-eyebrow">Before you begin</p><h2 id="form-guide-title"><span class="creator-title-line">A short form.</span><em class="creator-title-em">A clearer start.</em></h2><p class="form-guide-lede">You do not need a business plan ready. Share the honest version of where you are, and we will use it to find the strongest next move.</p><ol><li><span>1</span><div><strong>Share your public starting point</strong><p>Add your handle, platform and audience size. This shows us where attention already exists.</p></div></li><li><span>2</span><div><strong>Describe your business context</strong><p>Choose your niche and current revenue range. There is no right number.</p></div></li><li><span>3</span><div><strong>Name the obstacle</strong><p>Tell us what feels difficult. A sentence is enough, and it helps make the direction useful.</p></div></li></ol><div class="form-guide-outcome"><i>✦</i><div><small>WHAT YOU GET</small><strong>A tailored Creator Blueprint direction</strong></div></div><p class="form-guide-note">No payment. No commitment. Just a focused place to start.</p></div></aside>
+  </div>
+</section>
+
     <section class="service-questions" id="creator-faq" aria-labelledby="creator-faq-title"><div class="service-questions-intro"><p class="service-questions-kicker">Creator Growth</p><h2 id="creator-faq-title">Questions about creator growth</h2><p>Clicksable helps creators turn an existing audience into a business they own. The Creator Engine brings together offer direction, launch messaging, and a practical first 14-day plan.</p></div><div class="service-questions-list"><details><summary>Who is the Creator Engine for?</summary><p>It is for creators who want to build a business around their audience, ideas, and expertise—not rely on content or brand deals alone.</p></details><details><summary>What do I get in the Creator Blueprint?</summary><p>We use your answers to outline an offer direction, a launch message, and the first actions to focus on over 14 days. It gives you a clearer place to start before deciding what to build.</p></details><details><summary>Can Clicksable help me earn more from my audience?</summary><p>We help you shape an offer and a path for your audience to act on it. Results depend on the offer, audience, market, and how the plan is carried out, so we do not promise a specific income or sales figure.</p></details></div><nav class="service-related" aria-label="Related creator pages"><a href="/creator/#creator-system-title">Explore the Creator Engine<span aria-hidden="true"> →</span></a><a href="/creator/#creator-path-form">See the Creator Blueprint<span aria-hidden="true"> →</span></a><a href="/learning/">Read the Learning Center<span aria-hidden="true"> →</span></a></nav></section><footer class="universal-footer">
   <div class="universal-footer-inner">
     <div class="universal-footer-top">
@@ -1547,7 +1547,6 @@ function goPage(id,updateLocation=true){
     window.scrollTo(0,0);
     document.documentElement.style.scrollBehavior = '';
 
-    observeFadeIns();
   }, 50);
 
   document.getElementById('back-btn').classList.toggle('show', id!=='gateway');
@@ -1566,27 +1565,6 @@ function goBack(){
   if(currentPath==='creator') goPage('creator');
   else goPage('business');
 }
-
-// ── FADE-IN OBSERVER ──
-const obs = new IntersectionObserver(entries => {
-  entries.forEach((e, i) => {
-    if (e.isIntersecting) {
-      setTimeout(() => e.target.classList.add('on'), i * 80);
-      obs.unobserve(e.target); 
-    }
-  });
-}, { 
-  threshold: 0.05,
-  rootMargin: "50px 0px"
-});
-
-function observeFadeIns() {
-  obs.disconnect(); 
-  document.querySelectorAll('.page.active .fi:not(.on)').forEach(el => obs.observe(el));
-}
-
-// Initialize on first load
-observeFadeIns();
 
 // ── CREATOR SUBMIT ──
 async function submitCreator(){
