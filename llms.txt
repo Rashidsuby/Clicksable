@@ -4,7 +4,7 @@
 
 - [Home](https://clicksable.com/): Main website.
 - [Creator services](https://clicksable.com/creator/): Creator growth information.
-- [Business services](https://clicksable.com/business/): AI visibility services for businesses.
+- [Business services](https://clicksable.com/business/): AI visibility and GEO for B2B software, cybersecurity, legal, financial services, healthcare, and high-end hospitality businesses.
 - [Company](https://clicksable.com/company/): About and office locations.
 - [Blog and Learning Center](https://clicksable.com/learning/): Published articles.
 - [HTML sitemap](https://clicksable.com/sitemap/): Human-readable page directory.
@@ -21,8 +21,39 @@
 - Website: https://clicksable.com/
 - Contact: hello@clicksable.com
 - Head office: Dubai, United Arab Emirates.
-- Services: creator growth and business AI visibility.
+- Services: creator growth and specialist AI visibility/GEO for B2B software, cybersecurity, legal, financial services, healthcare, and high-end hospitality and venues.
 
 ## Published blog articles
 
 - [How to Make Your Business Easier to Find in AI Search](https://clicksable.com/learning/business-ai-search-visibility/)
+
+## What Clicksable provides
+
+Clicksable has two distinct services:
+
+- **Creator growth:** helps creators shape an offer, launch messaging, and a practical path from audience attention to a business they own. See the [Creator page](https://clicksable.com/creator/).
+- **Business AI visibility and GEO:** helps businesses map buyer questions, clarify service pages and evidence, and connect useful information across their site and relevant sources. It is specialist work for B2B software, cybersecurity, legal services, financial services, healthcare, and high-end hospitality and venues. See the [Business page](https://clicksable.com/business/).
+
+Clicksable cannot control search or AI recommendations and does not guarantee rankings, citations, or revenue. The public Business page explicitly describes the service scope and limits.
+
+## Public perspectives and cited sources
+
+The pages below summarize independent public statements and examples relevant to Clicksable's services. These people and organizations are not Clicksable clients or endorsers; the citations do not establish results delivered by Clicksable.
+
+### Creator growth examples
+
+- [Michelle Phan — Allure interview](https://www.allure.com/story/michelle-phan-the-original-beauty-vlogger-interview): creator journey from YouTube beauty content to beauty businesses.
+- [Emma Chamberlain — Chamberlain Coffee story](https://chamberlaincoffee.com/pages/about-us): turning an existing interest shared through content into a product business.
+- [MrBeast — TIME interview, produced in partnership with Ally](https://time.com/collections/time100-leadership-series/6693255/mrbeast-interview/): his stated goal of promoting products he owns.
+- [Rhett & Link — Parade interview](https://parade.com/572574/alison-abbey/the-best-parts-of-rhett-link-plus-an-exclusive-interview-with-the-internets-kings-of-comedy/): their mixed model includes sponsorships; [Mythical Society](https://www.mythicalsociety.com/perks) offers paid fan membership.
+- [Amanda Palmer — TIME interview](https://time.com/6124508/creator-economy-onlyfans-twitch-future/): maintaining multiple ways to reach an audience.
+- [Ali Abdaal — About page](https://aliabdaal.com/about/): a creator business spanning content and products.
+- [Jack Conte — Masters of Scale](https://mastersofscale.com/people/jack-conte/): early direct music sales and the creator business idea behind Patreon.
+
+### Search and AI visibility perspectives
+
+- [Neil Patel — GEO guide](https://neilpatel.com/blog/generative-engine-optimization-geo/): discusses GEO alongside SEO, useful content, and authority.
+- [Rand Fishkin — SparkToro research](https://sparktoro.com/blog/new-research-search-happens-everywhere-an-analysis-of-41-websites-with-significant-search-activity/): examines search behavior across platforms.
+- [Aleyda Solis — AI search citation research](https://www.aleydasolis.com/en/ai-search/ai-search-citations/): sample-based analysis of third-party sources in AI citations.
+- [Mike King — Microsoft AI Search guide](https://about.ads.microsoft.com/content/dam/sites/msa-about/global/common/content-lib/pdf/microsoft-advertising-ai-marketers-guide.pdf): recommends extending keyword research to AI-generated query variations.
+- [Lily Ray — AI content risks analysis](https://lilyraynyc.substack.com/p/it-works-until-it-doesnt-ai-content-risks): cautions against low-value scaled content.

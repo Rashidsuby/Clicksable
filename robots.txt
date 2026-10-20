@@ -29,3 +29,4 @@ User-agent: *
 Disallow: /
 
 Sitemap: https://clicksable.com/sitemap.xml
+# Factual service and source directory: https://clicksable.com/llms.txt
