@@ -44,7 +44,7 @@ const pages = [
     relatedLinks: [['Explore business services', '/business/#business-framework-title'], ['Read the AI search guide', '/learning/business-ai-search-visibility/'], ['See the Business Brief form', '/business/#business-path-form']],
     faqs: [
       ['What does Clicksable’s AI Visibility service do?', 'We map the questions your buyers ask, make your service pages and proof clearer, and connect useful information across your site. This gives search and AI systems better material to understand when they evaluate your business.'],
-      ['What do I get in the Business Brief?', 'The free brief uses the details you submit to suggest positioning improvements, example buyer questions, and practical next steps. It does not crawl your website or check live rankings, AI answers, or citations.'],
+      ['What do I get in the Business Brief?', 'The free brief turns the business details and goals you share into tailored positioning insights, example buyer questions, and practical next steps.'],
       ['Can Clicksable make AI recommend my business?', 'No agency controls what an AI platform recommends. We can improve how clearly your business and evidence are presented, which gives platforms better information to work with, but recommendations are up to each platform.'],
     ],
   },
