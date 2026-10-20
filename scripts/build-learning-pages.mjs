@@ -247,6 +247,7 @@ User-agent: *
 Disallow: /
 
 Sitemap: ${siteUrl}/sitemap.xml
+# Factual service and source directory: ${siteUrl}/llms.txt
 `;
 await fs.writeFile(path.join(outputRoot, 'robots.txt'), robots);
 

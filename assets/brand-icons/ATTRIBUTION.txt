@@ -6,3 +6,6 @@ Platform logo assets
 - Grok uses the Grok logo mark sourced from https://commons.wikimedia.org/wiki/File:Grok-2025-logo.svg, originally published by X.AI Corp. from grok.com.
 
 These marks identify platforms only and do not imply endorsement or affiliation.
+
+- The Business platform tile uses Google's current full-color G downloaded from Google's Partner Marketing Hub brand guidance (https://partnermarketinghub.withgoogle.com/brands/google/branding-guidelines/how-to-show-googles-brand/).
+- The Creator platform tiles use Instagram's Gradient Glyph from Meta's Instagram Brand Resource Center (https://www.meta.com/en-gb/brand/resources/instagram/instagram-brand/) and Snapchat's primary Ghost logo from Snapchat's official logo package linked by its support page (https://help.snapchat.com/hc/en-us/articles/7012349890452-Snapchat-Ghost-Logo-Usage-Guidelines).
