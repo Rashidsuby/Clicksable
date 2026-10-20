@@ -45,6 +45,8 @@ const pages = [
     faqs: [
       ['What does Clicksable’s AI Visibility service do?', 'We map the questions your buyers ask, make your service pages and proof clearer, and connect useful information across your site. This gives search and AI systems better material to understand when they evaluate your business.'],
       ['What do I get in the Business Brief?', 'The free brief turns the business details and goals you share into tailored positioning insights, example buyer questions, and practical next steps.'],
+      ['How do you check AI visibility?', 'We agree on buyer questions and selected platforms, then record whether the business appears, how it is described, and which sources are cited. Repeating the same questions later gives us a comparable snapshot.'],
+      ['What is AI brand perception?', 'It is how a platform describes a business after it appears in an answer. We review whether the description matches the real services, audience, location, credentials, and evidence.'],
       ['Can Clicksable make AI recommend my business?', 'No agency controls what an AI platform recommends. We can improve how clearly your business and evidence are presented, which gives platforms better information to work with, but recommendations are up to each platform.'],
     ],
   },
