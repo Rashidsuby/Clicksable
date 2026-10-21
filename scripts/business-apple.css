@@ -693,3 +693,33 @@
 #pg-business .bf-cycle-nodes b{color:#28352b!important}
 #pg-business .bf-cycle-ring span{color:#557444!important}
 @media(max-width:760px){#pg-business .bf-hero h1{font-size:clamp(43px,9.2vw,62px)!important;line-height:1.08!important;letter-spacing:-.018em!important}}
+
+/* Final spacing, contrast, and section separation from the live review. */
+#pg-business .bf-route-item.bf-route-strategy{border:1px solid rgba(225,239,207,.2)!important;border-left:4px solid #c8ff00!important;background:radial-gradient(ellipse at 92% 6%,rgba(200,255,0,.15),transparent 38%),linear-gradient(120deg,#263b24,#1b2e1e 78%,#243a24)!important;color:#f7f6f0!important;box-shadow:0 16px 38px rgba(24,42,25,.18)!important}
+#pg-business .bf-route-strategy .bf-route-label b{border-color:rgba(200,255,0,.5)!important;background:#c8ff00!important;color:#20351f!important}
+#pg-business .bf-route-strategy .bf-route-label span{color:#c8dda9!important}
+#pg-business .bf-route-strategy .bf-route-content,#pg-business .bf-route-strategy .bf-route-content h3{color:#fff!important}
+#pg-business .bf-route-strategy .bf-route-content>p{color:rgba(247,246,240,.78)!important}
+#pg-business .bf-route-strategy .bf-route-tags span{border-color:rgba(247,246,240,.2)!important;background:rgba(255,255,255,.07)!important;color:#e5eddc!important}
+#pg-business .bf-route-strategy .bf-route-visual{border-color:rgba(247,246,240,.18)!important}
+#pg-business .bf-route-strategy .bf-priority-stack span{border-color:rgba(247,246,240,.17)!important;background:rgba(255,255,255,.09)!important;color:#fff!important}
+#pg-business .bf-route-strategy .bf-priority-stack span i{color:#c8ff00!important}
+#pg-business .bf-route-strategy .bf-route-visual>small{color:rgba(247,246,240,.72)!important}
+#pg-business .bf-report-slide{box-sizing:border-box;min-width:0;padding:14px 16px 18px!important;overflow:hidden}
+#pg-business .bf-report-slide h3,#pg-business .bf-report-slide>p{margin-right:2px!important;margin-left:2px!important;overflow-wrap:anywhere}
+#pg-business .bf-report-graphic{box-sizing:border-box;min-width:0;width:100%;overflow:hidden}
+#pg-business .bf-process{background:radial-gradient(ellipse at 8% 10%,rgba(255,90,31,.09),transparent 32%),radial-gradient(ellipse at 94% 78%,rgba(200,255,0,.12),transparent 37%),linear-gradient(132deg,#f7f5ed,#e9efdf 62%,#f2f1e7)!important;color:#1d291c!important}
+#pg-business .bf-process .bf-eyebrow{color:#526e3d!important}
+#pg-business .bf-process h2{color:#1d291c!important}
+#pg-business .bf-process h2 em{color:#557d36!important}
+#pg-business .bf-process-copy>p:not(.bf-eyebrow){color:#626d5f!important}
+#pg-business .bf-process-link{color:#294719!important}
+#pg-business .bf-process-board{padding:10px 22px!important;border:1px solid rgba(41,71,25,.14)!important;border-radius:20px!important;background:rgba(255,254,250,.92)!important;box-shadow:0 18px 44px rgba(37,53,31,.09)!important}
+#pg-business .bf-process-board article{border-color:rgba(41,71,25,.13)!important}
+#pg-business .bf-process-board article>b{color:#557b36!important}
+#pg-business .bf-process-board article h3{color:#1d291c!important}
+#pg-business .bf-process-board article p{color:#657062!important}
+#pg-business .bf-process-board article>i{border-color:rgba(75,112,47,.18)!important;background:#eef3e5!important;color:#456a2e!important}
+#pg-business .bf-process-spine{border-color:rgba(85,125,54,.25)!important}
+#pg-business .bf-process-spine span{background:#8aaa50!important;box-shadow:0 0 0 4px rgba(138,170,80,.14)!important}
+@media(max-width:760px){#pg-business .bf-route-item.bf-route-strategy{padding:18px 15px!important;border-radius:15px!important}#pg-business .bf-report-slide{padding:12px 13px 16px!important}#pg-business .bf-process-board{padding:8px 13px!important;border-radius:16px!important}}
