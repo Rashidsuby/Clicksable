@@ -620,3 +620,34 @@
 #pg-business .bf-journey-node:hover{transform:none!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.12),0 14px 36px rgba(0,0,0,.1)}
 @media(prefers-reduced-motion:reduce){#pg-business .bf-answer-window,#pg-business .bf-journey-node,#pg-business .bf-button,#pg-business .bf-report-controls button{transition:none!important}#pg-business .bf-report-track{scroll-behavior:auto!important}}
 @media(prefers-reduced-transparency:reduce){#pg-business .bf-answer-window,#pg-business .bf-brand-tile,#pg-business .bf-journey-node{backdrop-filter:none!important}#pg-business .bf-answer-window{background:#fffefa}}
+#pg-business .bf-process-board article>i svg{display:block;width:17px;height:17px;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+#pg-business .bf-investment-step>b svg{display:block;width:17px;height:17px;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+#pg-business .guarantee-icon svg{display:block;width:18px;height:18px;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+
+/* Business hero: a search-led interface with a real prompt, answer and sources. */
+#pg-business .bf-hero-art{min-height:590px}
+#pg-business a.bf-answer-window{width:min(100%,690px)!important;min-height:438px;padding:30px 32px;border-radius:26px;background:#fff;box-shadow:0 32px 86px rgba(24,38,24,.2),0 3px 10px rgba(24,38,24,.06);transform:rotate(-1deg)}
+#pg-business .bf-answer-top{min-height:36px;gap:10px;color:#242a25;font-size:14px;letter-spacing:-.02em}
+#pg-business .bf-answer-top strong{font-size:15px;font-weight:700}
+#pg-business .bf-answer-mode{padding:6px 10px;border:1px solid #e4e8e3;border-radius:999px;color:#58615a;font-size:11px;font-weight:650;letter-spacing:0}
+#pg-business .bf-answer-query{position:relative;grid-template-columns:24px minmax(0,1fr) 34px;gap:12px;margin:24px 0 21px;padding:15px 16px;border:1px solid #e5e9e5;border-radius:17px;background:#f7f9f7;box-shadow:inset 0 1px 2px rgba(20,30,20,.025)}
+#pg-business .bf-answer-query strong{font-size:16px;font-weight:500;letter-spacing:-.01em}
+#pg-business .bf-search-symbol{position:relative;width:17px;height:17px;margin-left:2px;border:1.8px solid #65746b;border-radius:50%}
+#pg-business .bf-search-symbol:after{position:absolute;right:-5px;bottom:-3px;width:7px;height:1.8px;border-radius:2px;background:#65746b;content:"";transform:rotate(45deg)}
+#pg-business .bf-search-submit{display:grid;width:32px;height:32px;place-items:center;border-radius:11px;background:#1f3821;color:white;font-size:18px}
+#pg-business .bf-answer-meta{display:flex;align-items:center;justify-content:space-between;margin:0 2px 10px;color:#748077;font-size:9px;font-weight:800;letter-spacing:.1em}
+#pg-business .bf-answer-meta>span+span{font-size:11px;font-weight:600;letter-spacing:0}
+#pg-business .bf-answer-meta b{display:inline-grid;width:19px;height:19px;margin-left:4px;place-items:center;border-radius:50%;background:#e9efe8;color:#405c43;font-size:10px}
+#pg-business .bf-answer-recommend{margin-top:0;padding:22px 23px;border:0;border-radius:16px;background:#f7f9f7}
+#pg-business .bf-answer-recommend:after{display:none}
+#pg-business .bf-answer-recommend strong{display:block;max-width:500px;font-size:25px;line-height:1.18}
+#pg-business .bf-answer-recommend>span{display:block;max-width:540px;margin-top:9px;font-size:13px;line-height:1.6}
+#pg-business .bf-answer-source{min-height:38px;border-top:1px solid rgba(31,56,33,.11)}
+#pg-business .bf-answer-source span{font-size:10px}
+#pg-business .bf-answer-bottom{margin-top:15px}
+#pg-business .bf-answer-bottom span:first-child{color:#657168;font-size:10px}
+#pg-business .bf-answer-bottom span:last-child{font-weight:700}
+#pg-business .bf-brand-tile img.bf-perplexity-mark{width:25px;height:25px;object-fit:contain;filter:brightness(0) saturate(100%) invert(17%) sepia(11%) saturate(1571%) hue-rotate(78deg) brightness(94%) contrast(89%)}
+#pg-business .bf-brand-tile img[src*="gemini.svg"]{display:block!important;width:26px;height:26px;min-width:26px;object-fit:contain;opacity:1;visibility:visible}
+@media(max-width:760px){#pg-business .bf-hero-art{min-height:430px;margin-top:6px}#pg-business a.bf-answer-window{width:min(100%,590px)!important;min-height:0;padding:20px;border-radius:21px;transform:none}#pg-business .bf-answer-query{grid-template-columns:20px minmax(0,1fr) 30px;margin:16px 0;padding:12px}#pg-business .bf-answer-query strong{font-size:14px}#pg-business .bf-search-submit{width:29px;height:29px}#pg-business .bf-answer-recommend{padding:16px}#pg-business .bf-answer-recommend strong{font-size:20px}#pg-business .bf-answer-recommend>span{font-size:12px}#pg-business .bf-answer-bottom{align-items:center;flex-direction:row}#pg-business .bf-answer-bottom span:last-child{align-self:auto;padding:8px 10px;font-size:9px}}
+@media(max-width:430px){#pg-business .bf-hero-art{min-height:385px}#pg-business a.bf-answer-window{padding:16px}#pg-business .bf-answer-top{gap:7px}#pg-business .bf-answer-top strong{font-size:13px}#pg-business .bf-answer-mode{padding:5px 8px;font-size:10px}#pg-business .bf-answer-query{gap:9px}#pg-business .bf-answer-recommend strong{font-size:18px}#pg-business .bf-answer-source{gap:8px;font-size:10px}#pg-business .bf-answer-source span{font-size:9px}}
