@@ -30,8 +30,8 @@ await fs.mkdir(path.join(root, 'ai-info'), { recursive: true });
 await fs.writeFile(path.join(root, 'ai-info', 'index.html'), layout('AI information', 'A factual guide to Clicksable, its creator growth and specialist AI visibility/GEO services for six business sectors.', aiContent, '/ai-info/'));
 
 const organization = {
-  '@context': 'https://schema.org', '@type': 'Organization', '@id': `${site}/#organization`, name: 'clicksable.', url: `${site}/`, email: 'hello@clicksable.com',
-  description: 'A Dubai-founded growth and digital services company offering creator growth and specializing in AI visibility and GEO for B2B software, cybersecurity, legal, financial services, healthcare, and high-end hospitality.',
+  '@type': 'Organization', '@id': `${site}/#organization`, name: 'clicksable.', url: `${site}/`, email: 'hello@clicksable.com',
+  description: 'A Dubai-founded growth and digital services company serving creators and businesses with creator growth and AI visibility services.',
   areaServed: ['United Arab Emirates', 'Oman', 'United Kingdom', 'Pakistan', 'United States'],
   address: [
     { '@type': 'PostalAddress', streetAddress: 'Iris Bay, Business Bay', addressLocality: 'Dubai', addressCountry: 'AE' },
@@ -100,7 +100,9 @@ const discoveryLinks = '<a href="/sitemap/">HTML sitemap</a><a href="/ai-info/">
 home = home.replaceAll(`${discoveryLinks}${discoveryLinks}`, discoveryLinks);
 if (!home.includes('/entity-map.html')) home = home.replaceAll('<a href="terms.html">Terms</a>', `<a href="terms.html">Terms</a>${discoveryLinks}`);
 const orgJson = `<script type="application/ld+json">${JSON.stringify({ '@context': 'https://schema.org', '@graph': [organization, { '@type': 'WebSite', '@id': `${site}/#website`, url: `${site}/`, name: 'clicksable.', publisher: { '@id': `${site}/#organization` }, inLanguage: 'en' }] })}</script>`;
-if (!home.includes(`${site}/#organization`)) home = home.replace('</head>', `${orgJson}</head>`);
+home = home.replace(/<script\b(?=[^>]*type=["']application\/ld\+json["'])[^>]*>[\s\S]*?<\/script>/gi, script =>
+  script.includes(`${site}/#organization`) || script.includes(`${site}/#website`) ? '' : script);
+home = home.replace('</head>', `${orgJson}</head>`);
 await fs.writeFile(homePath, home);
 
 console.log(`Generated HTML sitemap, AI information page, entity map, llms.txt, and added ${articleLinks.length} published blog URLs.`);

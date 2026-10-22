@@ -43,14 +43,14 @@ const pages = [
     faqIntro: 'Learn what Generative Engine Optimization includes, how platform reviews are measured, and what a Clicksable engagement can cover.',
     relatedLinks: [['Explore the visibility system', '/business/#business-framework-title'], ['See the audit approach', '/business/#business-audit-title'], ['Request a proposal', '/business/#business-path-form']],
     faqs: [
-      ['What are AI search optimization services?', 'AI search optimization services help businesses improve how clearly they are represented in AI-assisted search and answer experiences. The work can include buyer-question research, SEO and content reviews, accurate business information, authority signals, and repeated visibility checks.'],
-      ['What does a GEO audit include?', 'We agree buyer prompts and platforms, review responses and cited sources, assess how the business and its pages are represented, look at competitor examples, and identify technical, content, and authority opportunities.'],
-      ['Does GEO replace traditional SEO?', 'No. We assess technical SEO, on-page content, off-page authority, relevance, and page experience alongside AI-search visibility. The right mix depends on your starting point and goals.'],
-      ['Which platforms can be reviewed?', 'Potential coverage includes Google AI Overviews and AI Mode, ChatGPT Search, Perplexity, Microsoft Copilot, Gemini, Claude, Grok, and Meta AI. The selected set depends on your audience, access, and engagement scope.'],
-      ['How do you measure AI visibility?', 'We record the prompt, platform, date, market, answer presence, brand mention, citation, recommendation, competitors shown, and cited URLs. Repeating the same checks gives a comparison of observations, not a universal score or guaranteed result.'],
-      ['Can you guarantee that AI will recommend us?', 'No. AI and search platforms decide what to show, and results can vary. We improve the clarity and credibility of the information available and report what we observe.'],
-      ['How much does GEO cost?', 'Pricing depends on research depth, platforms and prompts covered, content needs, and implementation scope. We provide the agreed deliverables and price in a proposal before the engagement begins.'],
-      ['What is included in a proposal?', 'The proposal outlines the goals, platforms and buyer questions to prioritize, research and implementation scope, deliverables, reporting cadence, timing, and price.'],
+      ['What are AI search optimization services?', 'They help businesses improve how clearly their information is represented in AI-assisted search and answer experiences. Work can include buyer-question research, SEO and content reviews, authority improvements, and repeated visibility checks.'],
+      ['What does a GEO audit include?', 'We agree the buyer questions and platforms to review, inspect answers and cited sources, assess relevant SEO and content foundations, and prioritize opportunities for the engagement.'],
+      ['Does GEO replace traditional SEO?', 'No. GEO works alongside technical SEO, useful content, page experience, and credible authority signals. Priorities depend on your audience, market, and starting point.'],
+      ['Which platforms can be reviewed?', 'Potential surfaces include Google AI Overviews and AI Mode, ChatGPT Search, Perplexity, Microsoft Copilot, Gemini, Claude, Meta AI, and Grok. The set is agreed around your audience and engagement scope.'],
+      ['How do you measure AI visibility?', 'We record the prompt, platform, date, market, answer presence, brand mentions, citations, competitors, and source URLs. Repeating agreed checks compares observations over time; it is not a universal score or guarantee.'],
+      ['Can you guarantee that AI will recommend us?', 'No. Search and AI platforms control what they show, and answers can vary by query, location, and time. We strengthen the information available and report what we observe.'],
+      ['How much does GEO cost?', 'Pricing depends on research depth, platform coverage, content needs, and implementation scope. Your proposal sets out the agreed deliverables, timing, and price before work begins.'],
+      ['What is included in a proposal?', 'The proposal outlines goals, selected platforms and questions, audit and implementation scope, deliverables, reporting cadence, timing, and price.'],
     ],
   },
   { id: 'company', section: 'about', title: 'About clicksable. | Our Mission and Global Offices', description: 'Meet clicksable., a Dubai-founded growth company helping creators and businesses build connected systems for visibility, revenue, and long-term growth.' },
@@ -79,6 +79,13 @@ for (const page of pages) {
   if (page.serviceName && page.faqs?.length) {
     const faqId = `${page.id}-faq`;
     if (!html.includes(`id="${faqId}"`)) throw new Error(`Missing visible FAQ section for /${page.id}/`);
+
+    const visibleFaqSection = html.match(new RegExp(`<section\\b[^>]*\\bid=["']${faqId}["'][^>]*>[\\s\\S]*?<\\/section>`, 'i'))?.[0] || '';
+    const visibleFaqs = [...visibleFaqSection.matchAll(/<details\b[^>]*>\s*<summary[^>]*>([\s\S]*?)<\/summary>\s*<p[^>]*>([\s\S]*?)<\/p>\s*<\/details>/gi)]
+      .map(match => match.slice(1).map(value => value.replace(/<[^>]*>/g, ' ').replace(/&nbsp;/g, ' ').replace(/&amp;/g, '&').replace(/&quot;/g, '"').replace(/&#39;|&apos;/g, "'").replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/\s+/g, ' ').trim()));
+    if (JSON.stringify(visibleFaqs) !== JSON.stringify(page.faqs)) {
+      throw new Error(`FAQ structured data does not match visible FAQ content on /${page.id}/`);
+    }
 
     const schema = {
       '@context': 'https://schema.org',

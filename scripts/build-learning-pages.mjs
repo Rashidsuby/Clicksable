@@ -128,7 +128,7 @@ for (const article of articles) {
   const faqs = faqFor(article);
   const takeaways = Array.isArray(article.key_takeaways) ? article.key_takeaways.map(item => String(item || '').trim()).filter(Boolean).slice(0, 8) : [];
   const author = String(article.author_name || 'clicksable.').trim();
-  const authorRole = String(article.author_role || 'Clicksable editorial').trim();
+  const authorRole = String(article.author_role || '').trim();
   const avatar = safeImageUrl(article.author_avatar_url);
   const authorMark = esc(author.split(/\s+/).filter(Boolean).map(part => part[0]).join('').slice(0, 2).toLowerCase() || 'c.');
   const takeawaysHtml = takeaways.length ? `<section class="takeaways"><p class="eyebrow">THE SHORT VERSION</p><h2>Key takeaways</h2><ul>${takeaways.map(item => `<li>${esc(item)}</li>`).join('')}</ul></section>` : '';
@@ -156,11 +156,16 @@ for (const article of articles) {
   const serviceHref = creatorTopic ? '/creator/' : '/business/';
   const serviceName = creatorTopic ? 'Creator growth' : 'AI visibility';
   const serviceDescription = creatorTopic ? 'Build an offer and a revenue path around the audience you have earned.' : 'Make your business and expertise clearer to buyers searching with AI.';
+  const authorIsOrganization = /^clicksable\.?$/i.test(author);
+  const structuredAuthor = authorIsOrganization
+    ? { '@type': 'Organization', '@id': `${siteUrl}/#organization`, name: 'clicksable.' }
+    : { '@type': 'Person', name: author, ...(authorRole ? { jobTitle: authorRole } : {}), ...(avatar ? { image: avatar } : {}) };
   const structured = {
-    '@context': 'https://schema.org', '@type': 'BlogPosting', headline: article.title,
+    '@context': 'https://schema.org', '@type': 'BlogPosting', '@id': `${canonical}#article`, headline: article.title,
     description, datePublished: publishedIso, dateModified: modifiedIso,
-    author: { '@type': 'Person', name: author, ...(authorRole ? { jobTitle: authorRole } : {}), ...(avatar ? { image: avatar } : {}) },
-    publisher: { '@type': 'Organization', name: 'clicksable.' }, mainEntityOfPage: canonical,
+    author: structuredAuthor,
+    publisher: { '@type': 'Organization', '@id': `${siteUrl}/#organization`, name: 'clicksable.' },
+    mainEntityOfPage: { '@id': canonical },
     ...(cover ? { image: [cover] } : {}),
   };
   const faqStructured = faqs.length ? {
