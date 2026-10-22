@@ -250,9 +250,9 @@ Allow: /
 User-agent: bingbot
 Allow: /
 
-# Do not grant blanket crawl access to bots that are not listed above.
+# Allow other search and AI crawlers to discover public pages as well.
 User-agent: *
-Disallow: /
+Allow: /
 
 Sitemap: ${siteUrl}/sitemap.xml
 # Factual service and source directory: ${siteUrl}/llms.txt
