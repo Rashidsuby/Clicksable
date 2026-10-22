@@ -43,7 +43,7 @@ const pages = [
     faqIntro: 'Learn what Generative Engine Optimization includes, how platform reviews are measured, and what a Clicksable engagement can cover.',
     relatedLinks: [['Explore the visibility system', '/business/#business-framework-title'], ['See the audit approach', '/business/#business-audit-title'], ['Request a proposal', '/business/#business-path-form']],
     faqs: [
-      ['What are AI search optimization services?', 'They help businesses improve how clearly their information is represented in AI-assisted search and answer experiences. Work can include buyer-question research, SEO and content reviews, authority improvements, and repeated visibility checks.'],
+      ['What are AI search optimization services?', 'AI search optimization improves how clearly a business is described in AI-assisted search and answer experiences. Services may include buyer-question research, SEO and content reviews, authority work, and repeated visibility checks.'],
       ['What does a GEO audit include?', 'We agree the buyer questions and platforms to review, inspect answers and cited sources, assess relevant SEO and content foundations, and prioritize opportunities for the engagement.'],
       ['Does GEO replace traditional SEO?', 'No. GEO works alongside technical SEO, useful content, page experience, and credible authority signals. Priorities depend on your audience, market, and starting point.'],
       ['Which platforms can be reviewed?', 'Potential surfaces include Google AI Overviews and AI Mode, ChatGPT Search, Perplexity, Microsoft Copilot, Gemini, Claude, Meta AI, and Grok. The set is agreed around your audience and engagement scope.'],

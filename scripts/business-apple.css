@@ -723,3 +723,13 @@
 #pg-business .bf-process-spine{border-color:rgba(85,125,54,.25)!important}
 #pg-business .bf-process-spine span{background:#8aaa50!important;box-shadow:0 0 0 4px rgba(138,170,80,.14)!important}
 @media(max-width:760px){#pg-business .bf-route-item.bf-route-strategy{padding:18px 15px!important;border-radius:15px!important}#pg-business .bf-report-slide{padding:12px 13px 16px!important}#pg-business .bf-process-board{padding:8px 13px!important;border-radius:16px!important}}
+#pg-business .bf-approach-wrap{max-width:1300px;margin:-6px auto 34px;overflow-x:auto}
+#pg-business .bf-approach-table{width:100%;border-collapse:collapse;table-layout:fixed;border-top:1px solid rgba(41,71,25,.2);border-bottom:1px solid rgba(41,71,25,.2);color:#475143;font-size:12px;line-height:1.5}
+#pg-business .bf-approach-table caption{padding:0 0 10px;color:#547a34;font-size:10px;font-weight:800;letter-spacing:.09em;text-align:left;text-transform:uppercase}
+#pg-business .bf-approach-table th,#pg-business .bf-approach-table td{padding:12px 14px;border-bottom:1px solid rgba(41,71,25,.14);text-align:left;vertical-align:top;overflow-wrap:anywhere}
+#pg-business .bf-approach-table thead th{color:#707b69;font-size:9px;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
+#pg-business .bf-approach-table thead th:first-child,#pg-business .bf-approach-table tbody th{width:20%}
+#pg-business .bf-approach-table thead th:nth-child(2){width:34%}
+#pg-business .bf-approach-table tbody th{color:#294719;font-weight:750}
+#pg-business .bf-approach-table tbody tr:last-child th,#pg-business .bf-approach-table tbody tr:last-child td{border-bottom:0}
+@media(max-width:760px){#pg-business .bf-approach-wrap{margin:0 0 26px}#pg-business .bf-approach-table{font-size:10px;line-height:1.45}#pg-business .bf-approach-table th,#pg-business .bf-approach-table td{padding:9px 7px}#pg-business .bf-approach-table thead th{font-size:8px;letter-spacing:.03em}#pg-business .bf-approach-table thead th:first-child,#pg-business .bf-approach-table tbody th{width:21%}#pg-business .bf-approach-table thead th:nth-child(2){width:34%}}
