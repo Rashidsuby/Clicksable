@@ -115,7 +115,10 @@ for (const article of articles) {
   const canonicalInput = safeUrl(article.canonical_url);
   const canonicalParsed = canonicalInput ? new URL(canonicalInput) : null;
   const canonical = canonicalParsed?.origin === siteUrl && canonicalParsed.pathname.startsWith('/hq/') ? articleUrl(article.slug) : canonicalInput || articleUrl(article.slug);
-  const title = String(article.seo_title || article.title || 'Learning Center article').trim().slice(0, 180);
+  const title = String(article.seo_title || article.title || 'Learning Center article')
+    .trim()
+    .replace(/\s*[|–—-]\s*clicksable\.\s*$/i, '')
+    .slice(0, 180);
   const description = String(article.seo_description || article.excerpt || '').trim().slice(0, 320);
   const cover = safeImageUrl(article.cover_image_url);
   const published = new Date(article.published_at);
@@ -206,7 +209,12 @@ const entries = [
   { url: `${siteUrl}/creator/` },
   { url: `${siteUrl}/business/` },
   { url: `${siteUrl}/company/` },
-  { url: `${siteUrl}/learning/`, lastmod: new Date().toISOString() },
+  { url: `${siteUrl}/learning/`, lastmod: articlePages
+    .filter(page => page.canonicalIsLocal)
+    .map(page => page.lastmod)
+    .filter(Boolean)
+    .sort()
+    .at(-1) },
   { url: `${siteUrl}/ai-info/` },
   { url: `${siteUrl}/entity-map.html` },
   { url: `${siteUrl}/sitemap/` },
