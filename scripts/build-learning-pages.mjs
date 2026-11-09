@@ -73,11 +73,11 @@ const decodeArticleMarkup = value => String(value || '').replace(/&(#x[0-9a-f]+|
   return ({ amp: '&', lt: '<', gt: '>', quot: '"', apos: "'", '#39': "'" })[key] || entity;
 });
 const cleanBody = value => {
-  const allowed = new Set(['p', 'br', 'h2', 'h3', 'h4', 'ul', 'ol', 'li', 'strong', 'b', 'em', 'i', 'blockquote', 'a', 'hr', 'code', 'pre']);
-  const voidTags = new Set(['br', 'hr']);
+  const allowed = new Set(['p', 'br', 'h2', 'h3', 'h4', 'ul', 'ol', 'li', 'strong', 'b', 'em', 'i', 'u', 's', 'del', 'blockquote', 'a', 'hr', 'code', 'pre', 'figure', 'figcaption', 'img', 'table', 'caption', 'thead', 'tbody', 'tr', 'th', 'td']);
+  const voidTags = new Set(['br', 'hr', 'img']);
   const dropContent = new Set(['script', 'style', 'iframe', 'svg', 'math', 'object', 'template']);
   const raw = String(value || '');
-  const source = /&lt;\/?(?:p|h[2-4]|ul|ol|li|blockquote|strong|b|em|i|a|hr|code|pre)\b/i.test(raw) ? decodeArticleMarkup(raw) : raw;
+  const source = /&lt;\/?(?:p|h[2-4]|ul|ol|li|blockquote|strong|b|em|i|u|s|del|a|hr|code|pre|figure|figcaption|img|table|caption|thead|tbody|tr|th|td)\b/i.test(raw) ? decodeArticleMarkup(raw) : raw;
   const tokens = source.match(/<!--[\s\S]*?-->|<\/?[a-zA-Z][^>]*>|[^<]+|</g) || [];
   let blocked = 0;
   const output = [];
@@ -93,8 +93,16 @@ const cleanBody = value => {
     if (name === 'a') {
       const attr = token.match(/\bhref\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s>]+))/i);
       const href = safeUrl((attr?.[1] ?? attr?.[2] ?? attr?.[3] ?? '').replace(/&amp;/gi, '&'));
-      output.push(href ? `<a href="${esc(href)}" rel="noopener noreferrer">` : '<a>');
-    } else output.push(`<${name}>`);
+      output.push(href ? '<a href="' + esc(href) + '" rel="noopener noreferrer">' : '<a>');
+    } else if (name === 'img') {
+      const srcAttr = token.match(/\bsrc\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s>]+))/i);
+      const altAttr = token.match(/\balt\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s>]+))/i);
+      const src = safeImageUrl((srcAttr?.[1] ?? srcAttr?.[2] ?? srcAttr?.[3] ?? '').replace(/&amp;/gi, '&'));
+      const alt = (altAttr?.[1] ?? altAttr?.[2] ?? altAttr?.[3] ?? '').slice(0, 180);
+      if (src) output.push('<img src="' + esc(src) + '" alt="' + esc(alt) + '" loading="lazy">');
+    } else if (name === 'th') output.push('<th scope="col">');
+    else if (name === 'td') output.push('<td>');
+    else output.push('<' + name + '>');
   }
   return output.join('');
 };
