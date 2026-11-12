@@ -133,8 +133,8 @@ for (const article of articles) {
   const modified = new Date(article.updated_at || article.published_at);
   const publishedIso = Number.isNaN(published.getTime()) ? '' : published.toISOString();
   const modifiedIso = Number.isNaN(modified.getTime()) ? publishedIso : modified.toISOString();
-  const faqs = faqFor(article);
-  const takeaways = Array.isArray(article.key_takeaways) ? article.key_takeaways.map(item => String(item || '').trim()).filter(Boolean).slice(0, 8) : [];
+  const faqs = faqFor(article).filter(f => !/^question$/i.test(String(f.question || '').trim()) && !/^answer$/i.test(String(f.answer || '').trim()));
+  const takeaways = Array.isArray(article.key_takeaways) ? article.key_takeaways.map(item => String(item || '').trim().replace(/^-\s*/, '')).filter(item => item && !/^key takeaways$/i.test(item)).slice(0, 8) : [];
   const author = String(article.author_name || 'clicksable.').trim();
   const authorRole = String(article.author_role || '').trim();
   const avatar = safeImageUrl(article.author_avatar_url);
@@ -143,7 +143,9 @@ for (const article of articles) {
   const coverAlt = String(article.cover_image_alt || article.title || '').trim();
   const faqHtml = faqs.length ? `<section class="faq"><h2>Common questions</h2>${faqs.map(f => `<details><summary>${esc(f.question)}</summary><p>${esc(f.answer)}</p></details>`).join('')}</section>` : '';
   let headingIndex = 0;
-  const articleBody = cleanBody(article.body_html).replace(/<h2>([\s\S]*?)<\/h2>/gi, (match, inner) => {
+  const articleBody = cleanBody(article.body_html)
+    .replace(/<p[^>]*>\s*Missing information that would make this stronger\s*<\/p>[\s\S]*$/i, '')
+    .replace(/<h2>([\s\S]*?)<\/h2>/gi, (match, inner) => {
     const label = inner.replace(/<[^>]*>/g, '').replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>');
     const id = `${label.toLowerCase().normalize('NFKD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'section'}-${++headingIndex}`;
     return `<h2 id="${esc(id)}">${inner}</h2>`;
