@@ -296,6 +296,19 @@ Allow: /
 User-agent: bingbot
 Allow: /
 
+# Explicitly permit user-requested page fetches from AI assistants.
+User-agent: Google-Agent
+Allow: /
+
+User-agent: Google-GeminiNotebook
+Allow: /
+
+User-agent: Perplexity-User
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
 # Allow other search and AI crawlers to discover public pages as well.
 User-agent: *
 Allow: /
