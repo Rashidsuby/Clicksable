@@ -29,3 +29,8 @@ After merging the static publisher workflow, open the repository on GitHub and g
 After this is enabled, publish from **HQ → Learning Center** as usual. The article appears in the browser-loaded library immediately; its standalone HTML URL and sitemap entry are deployed on the next scheduled run (normally within five minutes; GitHub may occasionally delay scheduled runs). In HQ, use **Open published URL** to open the article page after deployment. GitHub Actions → **Publish crawlable Learning Center** → **Run workflow** can be used to request an immediate rebuild.
 
 Submitting the sitemap in Google Search Console can help Google discover the URLs, but it does not guarantee indexing or first-page rankings. Continue publishing useful original articles and review search performance over time.
+
+
+### Troubleshooting article save permissions
+
+If HQ reports `permission denied for table learning_articles`, run `supabase/migrations/202611120001_learning_articles_grants.sql` in the Supabase SQL Editor. This restores the authenticated role’s table grants; row-level security still limits article writes to allowlisted HQ admins with verified MFA.
