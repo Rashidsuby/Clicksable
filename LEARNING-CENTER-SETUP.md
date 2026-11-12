@@ -18,7 +18,7 @@ Sign-ups are saved as **pending** in `newsletter_subscribers`; HQ can review the
 
 ## SEO / GEO publishing note
 
-Published articles are generated as standalone HTML at `/learning/<slug>/`, with unique metadata, canonical URLs, Article JSON-LD, sanitized article content, and optional FAQ markup. The generated sitemap includes each published article; the Learning Center listing also has ordinary links to those pages. A scheduled GitHub Actions run rebuilds and deploys the sitemap and pages every 15 minutes, and it can also be started manually.
+Published articles are generated as standalone HTML at `/learning/<slug>/`, with unique metadata, canonical URLs, Article JSON-LD, sanitized article content, and optional FAQ markup. The generated sitemap includes each published article; the Learning Center listing also has ordinary links to those pages. A scheduled GitHub Actions run rebuilds and deploys the sitemap and pages every 5 minutes, and it can also be started manually.
 
 The main site’s distinct public pages have their own URLs as well: `/creator/`, `/business/`, and `/company/`. Each has its own canonical URL and title/description metadata, and the navigation links directly to those routes. The root `sitemap.xml` lists these URLs. It is a machine-readable XML file that crawlers can fetch; a separate visual sitemap page in the site navigation is optional and not required for SEO.
 
@@ -26,6 +26,6 @@ The main site’s distinct public pages have their own URLs as well: `/creator/`
 
 After merging the static publisher workflow, open the repository on GitHub and go to **Settings → Pages → Build and deployment → Source**. Select **GitHub Actions**. The first workflow run then publishes the website and crawlable article pages together. You do not need to create Supabase secrets: the generator uses only the same public Supabase publishable key already used by the Learning Center, and the database's public policy exposes only published articles. Never put the Supabase service-role key in GitHub Actions or the website.
 
-After this is enabled, publish from **HQ → Learning Center** as usual. The article appears in the browser-loaded library immediately; its standalone HTML URL and sitemap entry are deployed on the next scheduled run (normally within 15 minutes). In HQ, use **Open published URL** to open the article page after deployment. GitHub Actions → **Publish crawlable Learning Center** → **Run workflow** can be used to request an immediate rebuild.
+After this is enabled, publish from **HQ → Learning Center** as usual. The article appears in the browser-loaded library immediately; its standalone HTML URL and sitemap entry are deployed on the next scheduled run (normally within five minutes; GitHub may occasionally delay scheduled runs). In HQ, use **Open published URL** to open the article page after deployment. GitHub Actions → **Publish crawlable Learning Center** → **Run workflow** can be used to request an immediate rebuild.
 
 Submitting the sitemap in Google Search Console can help Google discover the URLs, but it does not guarantee indexing or first-page rankings. Continue publishing useful original articles and review search performance over time.
