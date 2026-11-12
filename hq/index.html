@@ -863,7 +863,8 @@ One practical action to take next"></textarea><small class="learning-help">These
 const SUPABASE_URL  = 'https://ctwrrrnjbytnthadpksl.supabase.co';
 const SUPABASE_ANON = 'sb_publishable_GgNKeidATKP54WWXGgfduQ_sq487yx_';
 const hasSupabaseConfig = SUPABASE_URL.startsWith('https://') && !SUPABASE_URL.includes('YOUR_') && !SUPABASE_ANON.includes('YOUR_');
-const leadDb = hasSupabaseConfig ? supabase.createClient(SUPABASE_URL, SUPABASE_ANON) : null;
+const supabaseSdkReady = typeof window.supabase?.createClient === 'function';
+const leadDb = hasSupabaseConfig && supabaseSdkReady ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON) : null;
 
 let allCampaigns = [];
 let allSubmissions = [];
@@ -928,7 +929,8 @@ async function verifyHqAdmin(session){
   showHqMfa('enroll','Set up an authenticator app, scan this QR code, then enter its six-digit code to secure HQ.',{qr,secret});
 }
 async function checkPin(){
-  if(!leadDb){showHqAuthError('Supabase is not configured. HQ access is disabled.');return;}
+  if(!supabaseSdkReady){showHqAuthError('The sign-in service did not load. Refresh HQ and try again. If this continues, try Chrome or another network.');return;}
+  if(!hasSupabaseConfig||!leadDb){showHqAuthError('HQ sign-in is not configured. Contact the site administrator.');return;}
   hideHqAuthError();const email=document.getElementById('hq-email').value.trim(),password=document.getElementById('hq-password').value;
   if(!email||!password){showHqAuthError('Enter your administrator email and password.');return;}
   const button=document.getElementById('hq-login-btn');button.disabled=true;button.textContent='Verifying…';
