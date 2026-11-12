@@ -64,6 +64,24 @@ const safeImageUrl = value => {
   const parsed = new URL(url);
   return parsed.origin === siteUrl && parsed.pathname.startsWith('/hq/') ? '' : url;
 };
+const materializeInlineImages = async (html, slug) => {
+  let output = String(html || ''), index = 0;
+  const sources = [...output.matchAll(/<img\b[^>]*\bsrc\s*=\s*(?:"([^"]*)"|'([^']*)')/gi)]
+    .map(match => match[1] ?? match[2]).filter(src => /^data:image\/(?:png|jpeg|webp|avif);base64,/i.test(src));
+  for (const source of sources) {
+    const match = source.match(/^data:image\/(png|jpeg|webp|avif);base64,([A-Za-z0-9+/]+={0,2})$/i);
+    if (!match) continue;
+    const bytes = Buffer.from(match[2], 'base64');
+    if (!bytes.length || bytes.length > 8 * 1024 * 1024) continue;
+    const ext = match[1].toLowerCase() === 'jpeg' ? 'jpg' : match[1].toLowerCase();
+    const name = `inline-${String(++index).padStart(2, '0')}.${ext}`;
+    const directory = path.join(outputRoot, 'learning', slug, 'media');
+    await fs.mkdir(directory, { recursive: true });
+    await fs.writeFile(path.join(directory, name), bytes);
+    output = output.split(source).join(`${siteUrl}/learning/${encodeURIComponent(slug)}/media/${name}`);
+  }
+  return output;
+};
 const decodeArticleMarkup = value => String(value || '').replace(/&(#x[0-9a-f]+|#\d+|amp|lt|gt|quot|apos|#39);/gi, entity => {
   const key = entity.slice(1, -1).toLowerCase();
   if (key[0] === '#') {
@@ -144,7 +162,8 @@ for (const article of articles) {
   const coverAlt = String(article.cover_image_alt || article.title || '').trim();
   const faqHtml = faqs.length ? `<section class="faq"><h2>Common questions</h2>${faqs.map(f => `<details><summary>${esc(f.question)}</summary><p>${esc(f.answer)}</p></details>`).join('')}</section>` : '';
   let headingIndex = 0;
-  let articleBody = cleanBody(article.body_html)
+  const bodyWithPublishedImages = await materializeInlineImages(article.body_html, article.slug);
+  let articleBody = cleanBody(bodyWithPublishedImages)
     .replace(/<p[^>]*>\s*Missing information that would make this stronger\s*<\/p>[\s\S]*$/i, '')
     .replace(/<h2>([\s\S]*?)<\/h2>/gi, (match, inner) => {
     const label = inner.replace(/<[^>]*>/g, '').replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>');
