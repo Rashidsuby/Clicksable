@@ -1,0 +1,13 @@
+name = "clicksable-learning-edge"
+main = "src/index.js"
+compatibility_date = "2026-11-16"
+
+# Add the production route in the Cloudflare dashboard after previewing the worker:
+# clicksable.com/learning/*
+# www.clicksable.com/learning/*
+
+[vars]
+SUPABASE_URL = "https://ctwrrrnjbytnthadpksl.supabase.co"
+# This is Supabase's publishable key. It can read only rows permitted by RLS.
+SUPABASE_ANON_KEY = "sb_publishable_GgNKeidATKP54WWXGgfduQ_sq487yx_"
+GITHUB_PAGES_ORIGIN = "https://rashidsuby.github.io/Clicksable"
