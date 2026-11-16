@@ -242,6 +242,12 @@ for (const article of articles) {
   const target = path.join(outputRoot, 'learning', article.slug, 'index.html');
   await fs.mkdir(path.dirname(target), { recursive: true });
   await fs.writeFile(target, html.replace('</head>', '<script src="/assets/clicksable-pointer-contrast.js?v=2" defer></script></head>'));
+  await fs.writeFile(path.join(path.dirname(target), 'publish-ready.json'), JSON.stringify({
+    slug: article.slug,
+    title: article.title,
+    published_at: publishedIso,
+    generated_at: new Date().toISOString(),
+  }) + '\n');
   articlePages.push({ url: articleUrl(article.slug), lastmod: modifiedIso || publishedIso, canonicalIsLocal: new URL(canonical).origin === siteUrl });
 }
 
