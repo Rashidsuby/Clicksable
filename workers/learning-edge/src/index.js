@@ -1,4 +1,5 @@
 const SITE_URL = 'https://clicksable.com';
+const ARTICLE_STYLES = __ARTICLE_STYLES__;
 
 const esc = value => String(value ?? '').replace(/[&<>"']/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[char]);
 const safeUrl = value => {
@@ -72,7 +73,9 @@ function renderArticle(article, sharedStyles) {
   const slug = article.slug;
   const title = String(article.seo_title || article.title || 'Learning Center article').trim().slice(0, 180);
   const description = String(article.seo_description || article.excerpt || '').trim().slice(0, 320);
-  const canonical = safeUrl(article.canonical_url) || articleUrl(slug);
+  const canonicalInput = safeUrl(article.canonical_url);
+  const canonicalParsed = canonicalInput ? new URL(canonicalInput) : null;
+  const canonical = canonicalParsed?.origin === SITE_URL && canonicalParsed.pathname.startsWith('/hq/') ? articleUrl(slug) : canonicalInput || articleUrl(slug);
   const cover = safeUrl(article.cover_image_url);
   const author = String(article.author_name || 'Clicksable').trim();
   const role = String(article.author_role || '').trim();
@@ -98,16 +101,6 @@ function renderArticle(article, sharedStyles) {
   return `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${esc(title)} | clicksable.</title><meta name="description" content="${esc(description)}"><meta name="robots" content="index,follow,max-image-preview:large"><link rel="canonical" href="${esc(canonical)}"><meta property="og:type" content="article"><meta property="og:site_name" content="clicksable."><meta property="og:title" content="${esc(title)}"><meta property="og:description" content="${esc(description)}">${cover ? `<meta property="og:image" content="${esc(cover)}">` : ''}<meta name="twitter:card" content="${cover ? 'summary_large_image' : 'summary'}"><meta name="twitter:title" content="${esc(title)}"><meta name="twitter:description" content="${esc(description)}"><script type="application/ld+json">${JSON.stringify(schema).replace(/</g, '\\u003c')}</script>${faqSchema ? `<script type="application/ld+json">${JSON.stringify(faqSchema).replace(/</g, '\\u003c')}</script>` : ''}<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.gstatic.com" rel="preconnect" crossorigin><link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"><style>${sharedStyles}</style></head><body><header class="topbar"><a class="brand" href="/">click<span>sable.</span></a><button class="menu-toggle" type="button" aria-expanded="false" aria-controls="learning-site-nav">Menu</button><nav class="site-nav" id="learning-site-nav" aria-label="Main navigation"><a href="/">Home</a><a href="/creator/">For creators</a><a href="/business/">For businesses</a><a href="/company/">Company</a><a href="/learning/" aria-current="page">Learning Center</a></nav></header><main class="shell article-shell"><nav class="breadcrumb" aria-label="Breadcrumb"><a href="/learning/">Learning Center</a><span>/</span><span>${esc(article.category || 'Insights')}</span></nav><article><header class="story-hero"><div class="story-tools"><p class="eyebrow">${esc(article.category || 'Insights')}</p><button class="copy-link" type="button" onclick="navigator.clipboard.writeText(location.href).then(()=>{this.textContent='Link copied'})">Copy link ↗</button></div><h1>${esc(article.title)}</h1><p class="deck">${esc(article.excerpt)}</p><div class="story-meta">${avatar ? `<img class="author-avatar" src="${esc(avatar)}" alt="">` : `<span class="author-mark">${authorMark}</span>`}<span><strong>${esc(author)}</strong><small>${esc(role)}</small></span><span class="meta-spacer"></span><span>${esc(dateText(article.published_at))}<small>${readMinutes} min read</small></span></div></header>${cover ? `<figure class="cover-frame"><img class="cover" src="${esc(cover)}" alt="${esc(article.cover_image_alt || article.title)}" fetchpriority="high"></figure>` : ''}<div class="reading-grid${toc ? '' : ' reading-grid-no-toc'}">${toc}<div>${takeawaysHtml}<div class="body" id="article-body">${body}</div></div></div>${faqHtml}<section class="article-cta"><div><p class="eyebrow">PUT THE IDEAS TO WORK</p><h2>Ready for a clearer next step?</h2><p>${esc(serviceDescription)}</p></div><a href="${serviceHref}">Explore ${esc(serviceName)} <span>↗</span></a></section></article><p class="back-link"><a href="/learning/">← Back to the Learning Center</a></p></main>${universalFooter}<script>document.querySelector('.menu-toggle')?.addEventListener('click',event=>{const button=event.currentTarget,nav=document.getElementById(button.getAttribute('aria-controls'));const open=nav.classList.toggle('is-open');button.setAttribute('aria-expanded',String(open));});document.querySelectorAll('.site-nav a').forEach(link=>link.addEventListener('click',()=>{document.querySelector('.site-nav')?.classList.remove('is-open');document.querySelector('.menu-toggle')?.setAttribute('aria-expanded','false')}));document.querySelectorAll('.toc a').forEach(link=>link.addEventListener('click',event=>{const target=document.querySelector(link.getAttribute('href'));if(target){event.preventDefault();target.scrollIntoView({behavior:'smooth',block:'start'});history.replaceState(null,'',link.getAttribute('href'))}}));</script></body></html>`;
 }
 
-async function sharedArticleStyles(env) {
-  const templateUrl = `${env.GITHUB_PAGES_ORIGIN.replace(/\/$/, '')}/learning/cited-vs-recommended-ai-search/`;
-  const response = await fetch(templateUrl, { headers: { Accept: 'text/html' } });
-  if (!response.ok) throw new Error(`Learning page template returned ${response.status}`);
-  const html = await response.text();
-  const styles = [...html.matchAll(/<style\b[^>]*>([\s\S]*?)<\/style>/gi)].map(match => match[1]);
-  if (!styles.length) throw new Error('Learning page template did not include styles');
-  return styles.join('\n');
-}
-
 async function githubPagesFallback(request, env) {
   // Route Workers can forward the original request to the zone's configured
   // origin. Fetching GitHub Pages directly redirects back to this domain and
@@ -122,9 +115,9 @@ export default {
     if (request.method !== 'GET' && request.method !== 'HEAD') return githubPagesFallback(request, env);
     if (!match || !validSlug(match[1])) return githubPagesFallback(request, env);
     try {
-      const [article, styles] = await Promise.all([publishedArticle(match[1], env), sharedArticleStyles(env)]);
+      const article = await publishedArticle(match[1], env);
       if (!article) return githubPagesFallback(request, env);
-      const response = new Response(request.method === 'HEAD' ? null : renderArticle(article, styles), { headers: { 'Content-Type': 'text/html; charset=UTF-8', 'Cache-Control': 'public, max-age=60, s-maxage=60, stale-while-revalidate=60', 'X-Robots-Tag': 'index, follow' } });
+      const response = new Response(request.method === 'HEAD' ? null : renderArticle(article, ARTICLE_STYLES), { headers: { 'Content-Type': 'text/html; charset=UTF-8', 'Cache-Control': 'public, max-age=60, s-maxage=60, stale-while-revalidate=60', 'X-Robots-Tag': 'index, follow' } });
       return response;
     } catch (error) {
       console.error('Learning edge render failed', error);
