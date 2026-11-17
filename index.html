@@ -2303,6 +2303,7 @@ function loadExternalScript(src, isReady){
   return new Promise((resolve,reject)=>{
     const script=document.createElement('script');
     script.src=src; script.async=true;
+    if(src.includes('cdn.jsdelivr.net/npm/@supabase/supabase-js@2.119.0')){script.integrity='sha384-gnyZit14c5lnGcarmA166QQjjJXpucw25ogZXuwH3HxxY904zHkBqmxVpelsPorb';script.crossOrigin='anonymous';}
     script.onload=()=>isReady()?resolve():reject(new Error('Library did not initialize.'));
     script.onerror=()=>reject(new Error('Library could not be loaded.'));
     document.head.append(script);
@@ -2310,7 +2311,7 @@ function loadExternalScript(src, isReady){
 }
 function getLeadDb(){
   if(leadDb) return Promise.resolve(leadDb);
-  if(!leadDbPromise) leadDbPromise=loadExternalScript('https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2',()=>!!window.supabase?.createClient)
+  if(!leadDbPromise) leadDbPromise=loadExternalScript('https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.119.0',()=>!!window.supabase?.createClient)
     .then(()=>leadDb=window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY))
     .catch(error=>{leadDbPromise=null;console.warn('Lead storage library failed to load:',error.message);return null});
   return leadDbPromise;

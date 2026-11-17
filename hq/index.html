@@ -7,7 +7,7 @@
 <title>Clicksable HQ - Admin CMS</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.119.0" integrity="sha384-gnyZit14c5lnGcarmA166QQjjJXpucw25ogZXuwH3HxxY904zHkBqmxVpelsPorb" crossorigin="anonymous"></script>
 <style>
 :root{
   --bg0:#080808;--bg1:#0d0d0d;--bg2:#131313;--bg3:#1a1a1a;
@@ -991,28 +991,28 @@ function renderSubmissions(){
     const statusColor = status === 'Approved' ? 'var(--lime)' : status === 'Rejected' ? 'var(--danger)' : 'var(--orange)';
     
     const btnStyle = "display:inline-flex; align-items:center; gap:6px; color:var(--text); text-decoration:none; background:var(--bg3); padding:4px 10px; border-radius:6px; font-size:11px; transition:background 0.2s;";
-    const tiktokHtml = creator.tiktok_handle ? `<a href="${creator.tiktok_url || '#'}" target="_blank" style="${btnStyle}">${iconTikTok} ${creator.tiktok_handle}</a>` : '';
-    const instaHtml = creator.instagram_handle ? `<a href="${creator.instagram_url || '#'}" target="_blank" style="${btnStyle}">${iconInsta} ${creator.instagram_handle}</a>` : '';
-    const youtubeHtml = creator.youtube_handle ? `<a href="${creator.youtube_url || '#'}" target="_blank" style="${btnStyle}">${iconYT} ${creator.youtube_handle}</a>` : '';
+    const tiktokHtml = creator.tiktok_handle ? `<a href="${hqEscape(hqSafeWebUrl(creator.tiktok_url)||'#')}" target="_blank" rel="noopener noreferrer" style="${btnStyle}">${iconTikTok} ${hqEscape(creator.tiktok_handle)}</a>` : '';
+    const instaHtml = creator.instagram_handle ? `<a href="${hqEscape(hqSafeWebUrl(creator.instagram_url)||'#')}" target="_blank" rel="noopener noreferrer" style="${btnStyle}">${iconInsta} ${hqEscape(creator.instagram_handle)}</a>` : '';
+    const youtubeHtml = creator.youtube_handle ? `<a href="${hqEscape(hqSafeWebUrl(creator.youtube_url)||'#')}" target="_blank" rel="noopener noreferrer" style="${btnStyle}">${iconYT} ${hqEscape(creator.youtube_handle)}</a>` : '';
     const socialLinks = [tiktokHtml, instaHtml, youtubeHtml].filter(Boolean).join(' ') || '<span style="color:var(--text3)">No social handles saved</span>';
 
     return `<div style="background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:16px">
       <div style="display:grid;grid-template-columns:1fr auto;gap:16px;align-items:start">
         <div>
-          <div style="font-family:'Syne',sans-serif;font-size:13px;font-weight:800;margin-bottom:6px">${s.campaign_title || 'Campaign submission'}</div>
+          <div style="font-family:'Syne',sans-serif;font-size:13px;font-weight:800;margin-bottom:6px">${hqEscape(s.campaign_title || 'Campaign submission')}</div>
           
           <div style="background:var(--bg1); border:1px solid var(--border); border-radius:10px; padding:12px; margin-bottom:12px;">
-            <div style="font-size:13px; font-weight:700; color:var(--text); margin-bottom:4px;">Creator: ${creator.name || s.creator_name || 'Unknown Creator'}</div>
-            <div style="font-size:12px; color:var(--text2); margin-bottom:10px;">Email: ${creator.email || s.creator_email || 'No email provided'}</div>
+            <div style="font-size:13px; font-weight:700; color:var(--text); margin-bottom:4px;">Creator: ${hqEscape(creator.name || s.creator_name || 'Unknown Creator')}</div>
+            <div style="font-size:12px; color:var(--text2); margin-bottom:10px;">Email: ${hqEscape(creator.email || s.creator_email || 'No email provided')}</div>
             <div style="display:flex; gap:8px; flex-wrap:wrap;">
               ${socialLinks}
             </div>
-            <div style="font-size:9px; color:var(--text3); font-family:'Syne',sans-serif; margin-top:10px; text-transform:uppercase;">Creator ID: ${s.creator_id || 'N/A'}</div>
+            <div style="font-size:9px; color:var(--text3); font-family:'Syne',sans-serif; margin-top:10px; text-transform:uppercase;">Creator ID: ${hqEscape(s.creator_id || 'N/A')}</div>
           </div>
           
           <div style="font-size:12px; color:var(--text2); line-height:1.7">
-            Submitted for: <strong style="color:var(--text)">${s.platform || 'Platform'}</strong><br>
-            Video Link: <a href="${s.video_url}" target="_blank" style="color:var(--lime)">Open Original Video</a>
+            Submitted for: <strong style="color:var(--text)">${hqEscape(s.platform || 'Platform')}</strong><br>
+            Video Link: <a href="${hqEscape(hqSafeWebUrl(s.video_url)||'#')}" target="_blank" rel="noopener noreferrer" style="color:var(--lime)">Open Original Video</a>
           </div>
         </div>
         <div style="font-family:'Syne',sans-serif;font-size:10px;font-weight:800;color:${statusColor};text-transform:uppercase; background:var(--bg1); padding:6px 12px; border-radius:20px; border:1px solid ${statusColor};">
@@ -1022,17 +1022,18 @@ function renderSubmissions(){
       <div style="display:grid;grid-template-columns:1fr 1fr auto auto;gap:10px;margin-top:14px;align-items:end; padding-top:14px; border-top:1px solid var(--border);">
         <div class="form-field">
           <label>Approved Views</label>
-          <input id="sub-views-${s.id}" type="number" min="0" value="${Number(s.views)||0}">
+          <input id="sub-views-${hqEscape(s.id)}" type="number" min="0" value="${Number(s.views)||0}">
         </div>
         <div class="form-field">
           <label>Earnings ($)</label>
-          <input id="sub-earnings-${s.id}" type="number" min="0" step="0.01" value="${Number(s.earnings)||0}">
+          <input id="sub-earnings-${hqEscape(s.id)}" type="number" min="0" step="0.01" value="${Number(s.earnings)||0}">
         </div>
-        <button class="tb-btn" onclick="reviewSubmission(${s.id}, 'Approved')" style="color:var(--lime); border-color:var(--lime);">Approve</button>
-        <button class="tb-btn danger" onclick="reviewSubmission(${s.id}, 'Rejected')">Reject</button>
+        <button class="tb-btn" data-review-id="${hqEscape(s.id)}" data-review-status="Approved" style="color:var(--lime); border-color:var(--lime);">Approve</button>
+        <button class="tb-btn danger" data-review-id="${hqEscape(s.id)}" data-review-status="Rejected">Reject</button>
       </div>
     </div>`;
   }).join('');
+  list.querySelectorAll('[data-review-id]').forEach(button=>button.addEventListener('click',()=>reviewSubmission(button.dataset.reviewId,button.dataset.reviewStatus)));
 }
 
 async function reviewSubmission(id, status){
@@ -1084,7 +1085,7 @@ function renderDirectory(campaigns){
     return;
   }
   list.innerHTML = campaigns.map((c, idx) => `
-    <div class="dir-item ${editingId===c.id?'selected':''}" id="dir-${c.id}" draggable="true" data-id="${c.id}" data-idx="${idx}"
+    <div class="dir-item ${editingId===c.id?'selected':''}" id="dir-${hqEscape(c.id)}" draggable="true" data-id="${hqEscape(c.id)}" data-idx="${idx}"
       style="cursor:grab;user-select:none;"
       ondragstart="onDragStart(event,${idx})"
       ondragover="onDragOver(event)"
@@ -1097,19 +1098,20 @@ function renderDirectory(campaigns){
       </div>
       <div class="dir-thumb">
         ${c.thumbnail_url
-          ? `<img src="${c.thumbnail_url}" alt="" onerror="this.style.display='none'">`
+          ? `<img src="${hqEscape(hqSafeWebUrl(c.thumbnail_url))}" alt="" onerror="this.style.display='none'">`
           : 'Campaign'}
       </div>
       <div class="dir-info">
-        <div class="dir-name">${c.title}</div>
+        <div class="dir-name">${hqEscape(c.title)}</div>
         <div class="dir-meta">
-          <span class="dir-badge ${c.status==='Active'?'active':'paused'}">${c.status}</span>
+          <span class="dir-badge ${c.status==='Active'?'active':'paused'}">${hqEscape(c.status)}</span>
           <span class="dir-budget">$${(c.total_budget||0).toLocaleString()}</span>
         </div>
       </div>
-      <button class="dir-edit" onclick="loadEdit(${c.id})">Edit</button>
+      <button class="dir-edit" type="button" data-campaign-id="${hqEscape(c.id)}">Edit</button>
     </div>
   `).join('');
+  list.querySelectorAll('[data-campaign-id]').forEach(button => button.addEventListener('click', () => loadEdit(button.dataset.campaignId)));
 }
 
 // — Drag-to-reorder campaigns —
@@ -1153,7 +1155,7 @@ async function onDrop(e, dropIdx) {
 }
 
 function loadEdit(id){
-  const c = allCampaigns.find(x => x.id === id);
+  const c = allCampaigns.find(x => String(x.id) === String(id));
   if(!c) return;
   editingId = id;
 
@@ -1418,7 +1420,7 @@ async function loadAnnouncementsHQ() {
   list.innerHTML = '<div class="dir-empty">Loading...</div>';
 
   const { data, error } = await leadDb.from('announcements').select('*').order('created_at', { ascending: false });
-  if(error){ list.innerHTML = `<div class="dir-empty" style="color:var(--danger)">Error: ${error.message}<br><small>Make sure the "announcements" table exists in Supabase.</small></div>`; return; }
+  if(error){ list.innerHTML = `<div class="dir-empty" style="color:var(--danger)">Error: ${hqEscape(error.message)}<br><small>Make sure the "announcements" table exists in Supabase.</small></div>`; return; }
   window._hqAnns = data || [];
   if(!data || !data.length){ list.innerHTML = '<div class="dir-empty">No announcements yet. Create the first one below.</div>'; return; }
 
@@ -1430,12 +1432,12 @@ async function loadAnnouncementsHQ() {
     <div style="background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:14px;display:flex;align-items:flex-start;gap:12px">
       <div style="flex:1;min-width:0">
         <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
-          <span style="font-family:'Syne',sans-serif;font-size:9px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:${typeColors[a.type]||'var(--text2)'}">${a.type||'Info'}</span>
+          <span style="font-family:'Syne',sans-serif;font-size:9px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:${typeColors[a.type]||'var(--text2)'}">${hqEscape(a.type||'Info')}</span>
           <span style="font-size:10px;color:var(--text3)">${new Date(a.created_at).toLocaleDateString()}</span>
           ${!a.published ? '<span style="font-size:9px;color:var(--text3);font-family:Syne,sans-serif;text-transform:uppercase">- Draft</span>' : ''}
         </div>
-        <div style="font-family:Syne,sans-serif;font-size:13px;font-weight:700;margin-bottom:4px">${a.title}</div>
-        <div style="font-size:12px;color:var(--text2);line-height:1.5">${plainText(a.body).length > 100 ? plainText(a.body).substring(0,100)+'...' : plainText(a.body)}</div>
+        <div style="font-family:Syne,sans-serif;font-size:13px;font-weight:700;margin-bottom:4px">${hqEscape(a.title)}</div>
+        <div style="font-size:12px;color:var(--text2);line-height:1.5">${hqEscape(plainText(a.body).length > 100 ? plainText(a.body).substring(0,100)+'...' : plainText(a.body))}</div>
       </div>
       <div style="display:flex;gap:6px;flex-shrink:0">
         <button onclick="loadAnnEdit(${a.id})" class="dir-edit">Edit</button>
@@ -1581,31 +1583,33 @@ async function loadSubmissionsTab() {
     return `<div style="background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:16px">
       <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:12px">
         <div>
-          <div style="font-family:'Syne',sans-serif;font-size:13px;font-weight:800;margin-bottom:4px">${s.campaign_title||'Campaign'}</div>
-          <div style="font-size:12px;color:var(--text2)">Creator: ${creator.name||s.creator_name||'Unknown'}  -  ${s.platform||'Platform'}</div>
-          <div style="margin-top:6px"><a href="${s.video_url||'#'}" target="_blank" style="font-size:11px;color:var(--lime)">View Video</a></div>
+          <div style="font-family:'Syne',sans-serif;font-size:13px;font-weight:800;margin-bottom:4px">${hqEscape(s.campaign_title||'Campaign')}</div>
+          <div style="font-size:12px;color:var(--text2)">Creator: ${hqEscape(creator.name||s.creator_name||'Unknown')}  -  ${hqEscape(s.platform||'Platform')}</div>
+          <div style="margin-top:6px"><a href="${hqEscape(hqSafeWebUrl(s.video_url)||'#')}" target="_blank" rel="noopener noreferrer" style="font-size:11px;color:var(--lime)">View Video</a></div>
         </div>
-        <span style="font-family:'Syne',sans-serif;font-size:10px;font-weight:800;color:${statusColor};text-transform:uppercase;flex-shrink:0">${s.status||'Pending'}</span>
+        <span style="font-family:'Syne',sans-serif;font-size:10px;font-weight:800;color:${statusColor};text-transform:uppercase;flex-shrink:0">${hqEscape(s.status||'Pending')}</span>
       </div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px">
         <div>
           <label style="font-family:'Syne',sans-serif;font-size:9px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--text3);display:block;margin-bottom:4px">Views</label>
-          <input type="number" id="views-${s.id}" value="${s.views||0}" min="0"
+          <input type="number" id="views-${hqEscape(s.id)}" value="${Number(s.views)||0}" min="0"
             style="width:100%;background:var(--bg1);border:1px solid var(--border2);border-radius:8px;padding:8px 10px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:13px;outline:none"/>
         </div>
         <div>
           <label style="font-family:'Syne',sans-serif;font-size:9px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--text3);display:block;margin-bottom:4px">Earnings ($)</label>
-          <input type="number" id="earn-${s.id}" value="${s.earnings||0}" min="0" step="0.01"
+          <input type="number" id="earn-${hqEscape(s.id)}" value="${Number(s.earnings)||0}" min="0" step="0.01"
             style="width:100%;background:var(--bg1);border:1px solid var(--border2);border-radius:8px;padding:8px 10px;color:var(--lime);font-family:'DM Sans',sans-serif;font-size:13px;outline:none"/>
         </div>
       </div>
       <div style="display:flex;gap:8px;flex-wrap:wrap">
-        <button onclick="saveEarnings('${s.id}')" style="flex:1;padding:9px;border-radius:8px;border:none;cursor:pointer;background:rgba(200,255,0,.1);border:1px solid rgba(200,255,0,.25);color:var(--lime);font-family:'Syne',sans-serif;font-size:10px;font-weight:800;letter-spacing:.1em;text-transform:uppercase">Save Views & Earnings</button>
-        <button onclick="setStatus('${s.id}','Approved')" style="padding:9px 14px;border-radius:8px;border:1px solid rgba(200,255,0,.25);cursor:pointer;background:transparent;color:var(--lime);font-family:'Syne',sans-serif;font-size:10px;font-weight:700;text-transform:uppercase">Approve</button>
-        <button onclick="setStatus('${s.id}','Rejected')" style="padding:9px 14px;border-radius:8px;border:1px solid rgba(255,59,59,.25);cursor:pointer;background:transparent;color:var(--danger);font-family:'Syne',sans-serif;font-size:10px;font-weight:700;text-transform:uppercase">Reject</button>
+        <button data-save-earnings="${hqEscape(s.id)}" style="flex:1;padding:9px;border-radius:8px;border:none;cursor:pointer;background:rgba(200,255,0,.1);border:1px solid rgba(200,255,0,.25);color:var(--lime);font-family:'Syne',sans-serif;font-size:10px;font-weight:800;letter-spacing:.1em;text-transform:uppercase">Save Views & Earnings</button>
+        <button data-submission-status="${hqEscape(s.id)}" data-status="Approved" style="padding:9px 14px;border-radius:8px;border:1px solid rgba(200,255,0,.25);cursor:pointer;background:transparent;color:var(--lime);font-family:'Syne',sans-serif;font-size:10px;font-weight:700;text-transform:uppercase">Approve</button>
+        <button data-submission-status="${hqEscape(s.id)}" data-status="Rejected" style="padding:9px 14px;border-radius:8px;border:1px solid rgba(255,59,59,.25);cursor:pointer;background:transparent;color:var(--danger);font-family:'Syne',sans-serif;font-size:10px;font-weight:700;text-transform:uppercase">Reject</button>
       </div>
     </div>`;
   }).join('');
+  list.querySelectorAll('[data-save-earnings]').forEach(button=>button.addEventListener('click',()=>saveEarnings(button.dataset.saveEarnings)));
+  list.querySelectorAll('[data-submission-status]').forEach(button=>button.addEventListener('click',()=>setStatus(button.dataset.submissionStatus,button.dataset.status)));
 }
 
 async function saveEarnings(id) {
@@ -1631,6 +1635,13 @@ let activeSupportCreatorId = null;
 
 function hqEscape(value){
   return String(value || '').replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+}
+
+function hqSafeWebUrl(value){
+  try {
+    const url = new URL(String(value || '').trim(), location.origin);
+    return ['http:', 'https:'].includes(url.protocol) && !url.username && !url.password ? url.href : '';
+  } catch { return ''; }
 }
 
 async function loadSupportInbox(){
@@ -1746,19 +1757,19 @@ async function showCreatorsDirectory() {
 
   grid.innerHTML = data.map(c => {
     const btnStyle = "display:inline-flex; align-items:center; gap:6px; color:var(--text); text-decoration:none; background:var(--bg3); padding:4px 10px; border-radius:6px; font-size:11px; transition:background 0.2s;";
-    const tiktokHtml = c.tiktok_handle ? `<a href="${c.tiktok_url || '#'}" target="_blank" style="${btnStyle}">${iconTikTok} ${c.tiktok_handle}</a>` : '';
-    const instaHtml = c.instagram_handle ? `<a href="${c.instagram_url || '#'}" target="_blank" style="${btnStyle}">${iconInsta} ${c.instagram_handle}</a>` : '';
-    const youtubeHtml = c.youtube_handle ? `<a href="${c.youtube_url || '#'}" target="_blank" style="${btnStyle}">${iconYT} ${c.youtube_handle}</a>` : '';
+    const tiktokHtml = c.tiktok_handle ? `<a href="${hqEscape(hqSafeWebUrl(c.tiktok_url)||'#')}" target="_blank" rel="noopener noreferrer" style="${btnStyle}">${iconTikTok} ${hqEscape(c.tiktok_handle)}</a>` : '';
+    const instaHtml = c.instagram_handle ? `<a href="${hqEscape(hqSafeWebUrl(c.instagram_url)||'#')}" target="_blank" rel="noopener noreferrer" style="${btnStyle}">${iconInsta} ${hqEscape(c.instagram_handle)}</a>` : '';
+    const youtubeHtml = c.youtube_handle ? `<a href="${hqEscape(hqSafeWebUrl(c.youtube_url)||'#')}" target="_blank" rel="noopener noreferrer" style="${btnStyle}">${iconYT} ${hqEscape(c.youtube_handle)}</a>` : '';
     const socialLinks = [tiktokHtml, instaHtml, youtubeHtml].filter(Boolean).join(' ') || '<span style="color:var(--text3); font-size:11px;">No handles provided</span>';
 
     return `
       <div style="background:var(--bg2); border:1px solid var(--border); border-radius:12px; padding:16px;">
-        <div style="font-size:15px; font-weight:700; color:var(--lime); margin-bottom:4px;">${c.name || 'Unnamed Creator'}</div>
-        <div style="font-size:12px; color:var(--text2); margin-bottom:12px;">Email: ${c.email || 'No email'}</div>
+        <div style="font-size:15px; font-weight:700; color:var(--lime); margin-bottom:4px;">${hqEscape(c.name || 'Unnamed Creator')}</div>
+        <div style="font-size:12px; color:var(--text2); margin-bottom:12px;">Email: ${hqEscape(c.email || 'No email')}</div>
         <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:12px;">
           ${socialLinks}
         </div>
-        <div style="font-size:9px; color:var(--text3); font-family:'Syne',sans-serif; text-transform:uppercase; border-top:1px solid var(--border); padding-top:10px;">ID: ${c.creator_id}</div>
+        <div style="font-size:9px; color:var(--text3); font-family:'Syne',sans-serif; text-transform:uppercase; border-top:1px solid var(--border); padding-top:10px;">ID: ${hqEscape(c.creator_id)}</div>
       </div>
     `;
   }).join('');

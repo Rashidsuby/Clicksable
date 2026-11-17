@@ -13,17 +13,28 @@ const validSlug = value => /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(value) && value.len
 const articleUrl = slug => `${SITE_URL}/learning/${encodeURIComponent(slug)}/`;
 const dateText = value => new Intl.DateTimeFormat('en', { dateStyle: 'long', timeZone: 'UTC' }).format(new Date(value));
 
+const decodeArticleMarkup = value => String(value || '').replace(/&(#x[0-9a-f]+|#\d+|amp|lt|gt|quot|apos|#39);/gi, entity => {
+  const key = entity.slice(1, -1).toLowerCase();
+  if (key[0] === '#') {
+    const code = key[1] === 'x' ? parseInt(key.slice(2), 16) : parseInt(key.slice(1), 10);
+    return Number.isFinite(code) && code > 0 && code <= 0x10ffff ? String.fromCodePoint(code) : '';
+  }
+  return ({ amp: '&', lt: '<', gt: '>', quot: '"', apos: "'", '#39': "'" })[key] || entity;
+});
+
 function cleanBody(value) {
   const allowed = new Set(['p', 'br', 'div', 'h2', 'h3', 'h4', 'ul', 'ol', 'li', 'strong', 'b', 'em', 'i', 'u', 's', 'del', 'blockquote', 'a', 'hr', 'code', 'pre', 'figure', 'figcaption', 'img', 'table', 'caption', 'thead', 'tbody', 'tr', 'th', 'td']);
   const voidTags = new Set(['br', 'hr', 'img']);
   const dropContent = new Set(['script', 'style', 'iframe', 'svg', 'math', 'object', 'template']);
-  const tokens = String(value || '').match(/<!--[\s\S]*?-->|<\/?[a-zA-Z][^>]*>|[^<]+|</g) || [];
+  const raw = String(value || '');
+  const source = /&lt;\/?(?:p|div|h[2-4]|ul|ol|li|blockquote|strong|b|em|i|u|s|del|a|hr|code|pre|figure|figcaption|img|table|caption|thead|tbody|tr|th|td)\b/i.test(raw) ? decodeArticleMarkup(raw) : raw;
+  const tokens = source.match(/<!--[\s\S]*?-->|<\/?[a-zA-Z][^>]*>|[^<]+|</g) || [];
   let blocked = 0;
   const output = [];
   for (const token of tokens) {
     if (token.startsWith('<!--')) continue;
     const match = token.match(/^<\/?\s*([a-zA-Z0-9-]+)/);
-    if (!match) { if (!blocked) output.push(token === '<' ? '&lt;' : esc(token)); continue; }
+    if (!match) { if (!blocked) output.push(token === '<' ? '&lt;' : token); continue; }
     const tag = match[1].toLowerCase();
     const closing = /^<\//.test(token);
     if (dropContent.has(tag)) { blocked = closing ? Math.max(0, blocked - 1) : blocked + 1; continue; }
@@ -32,12 +43,12 @@ function cleanBody(value) {
     if (tag === 'div') { output.push('<p>'); continue; }
     if (tag === 'a') {
       const href = token.match(/\bhref\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s>]+))/i);
-      const url = safeLink(href?.[1] ?? href?.[2] ?? href?.[3] ?? '');
+      const url = safeLink((href?.[1] ?? href?.[2] ?? href?.[3] ?? '').replace(/&amp;/gi, '&'));
       output.push(url ? `<a href="${esc(url)}" rel="noopener noreferrer">` : '<a>');
     } else if (tag === 'img') {
       const src = token.match(/\bsrc\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s>]+))/i);
       const alt = token.match(/\balt\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s>]+))/i);
-      const url = safeUrl(src?.[1] ?? src?.[2] ?? src?.[3] ?? '');
+      const url = safeUrl((src?.[1] ?? src?.[2] ?? src?.[3] ?? '').replace(/&amp;/gi, '&'));
       if (url) output.push(`<img src="${esc(url)}" alt="${esc(alt?.[1] ?? alt?.[2] ?? alt?.[3] ?? '')}" loading="lazy">`);
     } else if (tag === 'th') output.push('<th scope="col">');
     else if (tag === 'td') output.push('<td>');

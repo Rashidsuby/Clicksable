@@ -1,16 +1,18 @@
 name: Supabase Keep Alive
 on:
   schedule:
-    # Runs at midnight on Mondays and Thursdays
-    - cron: '0 0 * * 1,4' 
+    - cron: '0 0 * * 1,4'
   workflow_dispatch:
-
 jobs:
   ping:
     runs-on: ubuntu-latest
     steps:
-      - name: Ping Supabase Database
+      - name: Ping public Learning Center data
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
         run: |
-          curl -X GET "${{ secrets.SUPABASE_URL }}/rest/v1/support_messages?limit=1" \
-          -H "apikey: ${{ secrets.SUPABASE_KEY }}" \
-          -H "Authorization: Bearer ${{ secrets.SUPABASE_KEY }}"
+          curl --fail --silent --show-error --output /dev/null \
+            "$SUPABASE_URL/rest/v1/learning_articles?select=id&status=eq.published&limit=1" \
+            -H "apikey: $SUPABASE_KEY" \
+            -H "Authorization: Bearer $SUPABASE_KEY"
