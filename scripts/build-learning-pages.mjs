@@ -283,20 +283,30 @@ const entries = [
 ];
 const xml = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${entries.map(entry => `  <url><loc>${esc(entry.url)}</loc>${entry.lastmod ? `<lastmod>${esc(entry.lastmod.slice(0, 10))}</lastmod>` : ''}</url>`).join('\n')}\n</urlset>\n`;
 await fs.writeFile(path.join(outputRoot, 'sitemap.xml'), xml);
-const robots = `# Search and AI crawlers explicitly permitted by Clicksable.
+const robots = `# Google Search access.
 User-agent: Googlebot
 Allow: /
 
-# Gemini access is controlled by this Google product token.
+# Gemini access controls. Google-Extended governs use in Gemini and other
+# Google AI products; Google-GeminiNotebook covers user-submitted sources.
 User-agent: Google-Extended
 Allow: /
 
+User-agent: Google-GeminiNotebook
+Allow: /
+
+# OpenAI crawlers. Search visibility, training use, and user-triggered fetches
+# have separate tokens and remain explicitly allowed.
 User-agent: OAI-SearchBot
 Allow: /
 
 User-agent: GPTBot
 Allow: /
 
+User-agent: ChatGPT-User
+Allow: /
+
+# Other search and AI crawlers already permitted.
 User-agent: PerplexityBot
 Allow: /
 
@@ -309,20 +319,14 @@ Allow: /
 User-agent: bingbot
 Allow: /
 
-# Explicitly permit user-requested page fetches from AI assistants.
+# Explicitly permit user-requested page fetches.
 User-agent: Google-Agent
-Allow: /
-
-User-agent: Google-GeminiNotebook
 Allow: /
 
 User-agent: Perplexity-User
 Allow: /
 
-User-agent: ChatGPT-User
-Allow: /
-
-# Allow other search and AI crawlers to discover public pages as well.
+# Allow all other crawlers to discover public pages.
 User-agent: *
 Allow: /
 
