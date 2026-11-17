@@ -84,7 +84,7 @@ function renderArticle(article, sharedStyles) {
   const slug = article.slug;
   const title = String(article.seo_title || article.title || 'Learning Center article')
     .trim()
-    .replace(/\s*[|–—-]\s*clicksable\.\s*$/i, '')
+    .replace(/\s*[|–—-]\s*clicksable\.?\s*$/i, '')
     .slice(0, 180);
   const description = String(article.seo_description || article.excerpt || '').trim().slice(0, 320);
   const canonicalInput = safeUrl(article.canonical_url);
