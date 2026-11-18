@@ -137,6 +137,35 @@ const cleanBody = value => {
   }
   return output.join('');
 };
+const promoteParagraphLists = markup => {
+  const paragraphsToLists = block => {
+    const paragraphs = [...block.matchAll(/(<p\b[^>]*>)([\s\S]*?)(<\/p>)/gi)].map(match => ({ open: match[1], inner: match[2], close: match[3] }));
+    const bullet = inner => { const marker = inner.match(/^\s*(?:•|&bull;|▪|‣|◦|·|&middot;)(?:\s|&nbsp;|&#160;|&#xA0;)*/i); return marker ? inner.slice(marker[0].length) : null; };
+    const numbered = inner => { const marker = inner.match(/^\s*(\d{1,2})[.)](?:\s|&nbsp;|&#160;|&#xA0;)+/); return marker ? { number: Number(marker[1]), content: inner.slice(marker[0].length) } : null; };
+    const output = [];
+    for (let index = 0; index < paragraphs.length;) {
+      const first = bullet(paragraphs[index].inner);
+      if (first !== null) {
+        const items = [first]; index++;
+        while (index < paragraphs.length) { const next = bullet(paragraphs[index].inner); if (next === null) break; items.push(next); index++; }
+        output.push(`<ul>${items.map(item => `<li>${item}</li>`).join('')}</ul>`); continue;
+      }
+      const firstNumber = numbered(paragraphs[index].inner);
+      if (firstNumber?.number === 1) {
+        const items = [firstNumber.content]; let expected = 2, nextIndex = index + 1;
+        while (nextIndex < paragraphs.length) { const next = numbered(paragraphs[nextIndex].inner); if (next?.number !== expected) break; items.push(next.content); expected++; nextIndex++; }
+        if (items.length > 1) { output.push(`<ol>${items.map(item => `<li>${item}</li>`).join('')}</ol>`); index = nextIndex; continue; }
+      }
+      const paragraph = paragraphs[index]; output.push(`${paragraph.open}${paragraph.inner}${paragraph.close}`); index++;
+    }
+    return output.join('');
+  };
+  const tables = [];
+  let html = String(markup || '').replace(/<table\b[\s\S]*?<\/table>/gi, table => { const token = `LEARNINGTABLE${tables.length}TOKEN`; tables.push(table); return token; });
+  html = html.replace(/(?:<p\b[^>]*>[\s\S]*?<\/p>\s*)+/gi, paragraphsToLists);
+  tables.forEach((table, index) => { html = html.replace(`LEARNINGTABLE${index}TOKEN`, table); });
+  return html;
+};
 const dateText = value => {
   const date = new Date(value);
   return Number.isNaN(date.getTime()) ? '' : new Intl.DateTimeFormat('en', { dateStyle: 'long', timeZone: 'UTC' }).format(date);
@@ -189,7 +218,8 @@ for (const article of articles) {
     const token = `LEARNINGTABLE${savedTables.length}TOKEN`;
     savedTables.push(table);
     return token;
-  }).replace(/<p>([\s\S]*?)<\/p>/gi, (paragraph, inner) => {
+  });
+  articleBody = promoteParagraphLists(articleBody).replace(/<p>([\s\S]*?)<\/p>/gi, (paragraph, inner) => {
     const label = inner.replace(/<[^>]*>/g, '').replace(/&(?:amp|lt|gt|quot|#39);/g, ' ').trim();
     const words = label.split(/\s+/).filter(Boolean);
     if (label.length < 4 || label.length > 88 || words.length > 12 || /[.!?;:]$/.test(label) || /^(?:figure|table)\s+\d/i.test(label) || /^\d+[.)]/.test(label)) return paragraph;

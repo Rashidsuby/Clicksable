@@ -22,6 +22,7 @@
 .body h2:before{position:absolute;top:.12em;left:0;width:5px;height:.82em;border-radius:5px;background:#a5c75a;content:""}
 .body h3{margin:1.45em 0 .5em;color:#294719;font-size:23px}
 .body ul,.body ol{margin:1.2em 0;padding-left:1.35em}
+.body ul{list-style:disc outside}.body ol{list-style:decimal outside}.body li{display:list-item}.body ul ul{list-style-type:circle}.body ol ol{list-style-type:lower-alpha}
 .body li{padding-left:7px;margin:10px 0}
 .body li::marker{color:#748b55}
 .body blockquote{margin:1.8em 0;padding:20px 24px;border:0;border-left:4px solid #a5c75a;border-radius:0 16px 16px 0;background:#edf2e7;color:#34432b;font-size:1.05em}

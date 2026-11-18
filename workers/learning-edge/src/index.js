@@ -67,6 +67,55 @@ function articleBody(value) {
     const token = `LEARNINGTABLE${tables.length}TOKEN`;
     tables.push(table);
     return token;
+  });
+  body = body.replace(/(?:<p\b[^>]*>[\s\S]*?<\/p>\s*)+/gi, block => {
+    const paragraphs = [...block.matchAll(/(<p\b[^>]*>)([\s\S]*?)(<\/p>)/gi)].map(match => ({ open: match[1], inner: match[2], close: match[3] }));
+    const bulletContent = inner => {
+      const marker = inner.match(/^\s*(?:•|&bull;|▪|‣|◦|·|&middot;)(?:\s|&nbsp;|&#160;|&#xA0;)*/i);
+      return marker ? inner.slice(marker[0].length) : null;
+    };
+    const numberedContent = inner => {
+      const marker = inner.match(/^\s*(\d{1,2})[.)](?:\s|&nbsp;|&#160;|&#xA0;)+/);
+      return marker ? { number: Number(marker[1]), content: inner.slice(marker[0].length) } : null;
+    };
+    const output = [];
+    for (let index = 0; index < paragraphs.length;) {
+      const bullet = bulletContent(paragraphs[index].inner);
+      if (bullet !== null) {
+        const items = [bullet];
+        index++;
+        while (index < paragraphs.length) {
+          const next = bulletContent(paragraphs[index].inner);
+          if (next === null) break;
+          items.push(next);
+          index++;
+        }
+        output.push(`<ul>${items.map(item => `<li>${item}</li>`).join('')}</ul>`);
+        continue;
+      }
+      const numbered = numberedContent(paragraphs[index].inner);
+      if (numbered?.number === 1) {
+        const items = [numbered.content];
+        let expected = 2;
+        let nextIndex = index + 1;
+        while (nextIndex < paragraphs.length) {
+          const next = numberedContent(paragraphs[nextIndex].inner);
+          if (next?.number !== expected) break;
+          items.push(next.content);
+          expected++;
+          nextIndex++;
+        }
+        if (items.length > 1) {
+          output.push(`<ol>${items.map(item => `<li>${item}</li>`).join('')}</ol>`);
+          index = nextIndex;
+          continue;
+        }
+      }
+      const paragraph = paragraphs[index];
+      output.push(`${paragraph.open}${paragraph.inner}${paragraph.close}`);
+      index++;
+    }
+    return output.join('');
   }).replace(/<p\b[^>]*>([\s\S]*?)<\/p>/gi, (paragraph, inner) => {
     const label = inner.replace(/<[^>]*>/g, '').replace(/&amp;/gi, '&').replace(/&lt;/gi, '<').replace(/&gt;/gi, '>').replace(/&quot;/gi, '"').replace(/&#39;/gi, "'").trim();
     const words = label.split(/\s+/).filter(Boolean);
