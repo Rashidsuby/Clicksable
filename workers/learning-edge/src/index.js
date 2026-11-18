@@ -62,8 +62,29 @@ function cleanBody(value) {
 }
 
 function articleBody(value) {
+  const tables = [];
+  let body = cleanBody(value).replace(/<table\b[\s\S]*?<\/table>/gi, table => {
+    const token = `LEARNINGTABLE${tables.length}TOKEN`;
+    tables.push(table);
+    return token;
+  }).replace(/<p\b[^>]*>([\s\S]*?)<\/p>/gi, (paragraph, inner) => {
+    const label = inner.replace(/<[^>]*>/g, '').replace(/&amp;/gi, '&').replace(/&lt;/gi, '<').replace(/&gt;/gi, '>').replace(/&quot;/gi, '"').replace(/&#39;/gi, "'").trim();
+    const words = label.split(/\s+/).filter(Boolean);
+    if (label.length < 4 || label.length > 88 || words.length > 12 || /[.!?;:]$/.test(label) || /^(?:figure|table)\s+\d/i.test(label) || /^\d+[.)]/.test(label)) return paragraph;
+    return `<h2>${inner}</h2>`;
+  }).replace(/<span\b[^>]*>([\s\S]*?)<\/span>/gi, (span, inner, offset, source) => {
+    const before = source.slice(0, offset).trimEnd();
+    const after = source.slice(offset + span.length).trimStart();
+    const standalone = (!before || /<\/(?:p|h[2-4]|li|blockquote|figure)>$/i.test(before))
+      && (!after || /^(?:<(?:p|h[2-4]|ul|ol|li|table|figure|blockquote|hr)\b|<\/(?:div|body|article)>)/i.test(after));
+    const label = inner.replace(/<[^>]*>/g, '').replace(/&amp;/gi, '&').replace(/&lt;/gi, '<').replace(/&gt;/gi, '>').replace(/&quot;/gi, '"').replace(/&#39;/gi, "'").trim();
+    const words = label.split(/\s+/).filter(Boolean);
+    if (!standalone || label.length < 4 || label.length > 88 || words.length > 12 || /[.!?;:]$/.test(label) || /^(?:figure|table)\s+\d/i.test(label) || /^\d+[.)]/.test(label)) return span;
+    return `<h2>${inner}</h2>`;
+  });
+  tables.forEach((table, index) => { body = body.replace(`LEARNINGTABLE${index}TOKEN`, table); });
   let index = 0;
-  return cleanBody(value).replace(/<h2>([\s\S]*?)<\/h2>/gi, (_match, label) => {
+  return body.replace(/<h2>([\s\S]*?)<\/h2>/gi, (_match, label) => {
     const plain = label.replace(/<[^>]*>/g, '').toLowerCase().normalize('NFKD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'section';
     return `<h2 id="${esc(`${plain}-${++index}`)}">${label}</h2>`;
   });
@@ -102,9 +123,11 @@ function renderArticle(article, sharedStyles) {
   const takeaways = Array.isArray(article.key_takeaways) ? article.key_takeaways.filter(Boolean).slice(0, 8) : [];
   const faqs = Array.isArray(article.geo_faq) ? article.geo_faq.filter(item => item?.question && item?.answer).slice(0, 30) : [];
   const headings = [...body.matchAll(/<h2 id="([^"]+)">([\s\S]*?)<\/h2>/gi)];
-  const toc = headings.length ? `<aside class="toc"><p class="toc-title">IN THIS ARTICLE</p><nav aria-label="Article contents">${headings.map(([, id, label]) => `<a href="#${esc(id)}">${esc(label.replace(/<[^>]*>/g, ''))}</a>`).join('')}</nav></aside>` : '';
+  const tocLinks = headings.map(([, id, label]) => `<a href="#${esc(id)}">${esc(label.replace(/<[^>]*>/g, ''))}</a>`);
+  if (faqs.length) tocLinks.push('<a href="#common-questions">Common questions</a>');
+  const toc = tocLinks.length ? `<aside class="toc"><p class="toc-title">IN THIS ARTICLE</p><nav aria-label="Article contents">${tocLinks.join('')}</nav></aside>` : '';
   const takeawaysHtml = takeaways.length ? `<section class="takeaways"><p class="eyebrow">THE SHORT VERSION</p><h2>Key takeaways</h2><ul>${takeaways.map(item => `<li>${esc(item)}</li>`).join('')}</ul></section>` : '';
-  const faqHtml = faqs.length ? `<section class="faq"><h2>Common questions</h2>${faqs.map(item => `<details><summary>${esc(item.question)}</summary><p>${esc(item.answer)}</p></details>`).join('')}</section>` : '';
+  const faqHtml = faqs.length ? `<section class="faq"><h2 id="common-questions">Common questions</h2>${faqs.map(item => `<details><summary>${esc(item.question)}</summary><p>${esc(item.answer)}</p></details>`).join('')}</section>` : '';
   const authorMark = esc(author.split(/\s+/).filter(Boolean).map(part => part[0]).join('').slice(0, 2).toLowerCase() || 'c.');
   const wordCount = body.replace(/<[^>]*>/g, ' ').split(/\s+/).filter(Boolean).length;
   const readMinutes = Math.max(1, Math.ceil(wordCount / 220));

@@ -172,7 +172,7 @@ for (const article of articles) {
   const authorMark = esc(author.split(/\s+/).filter(Boolean).map(part => part[0]).join('').slice(0, 2).toLowerCase() || 'c.');
   const takeawaysHtml = takeaways.length ? `<section class="takeaways"><p class="eyebrow">THE SHORT VERSION</p><h2>Key takeaways</h2><ul>${takeaways.map(item => `<li>${esc(item)}</li>`).join('')}</ul></section>` : '';
   const coverAlt = String(article.cover_image_alt || article.title || '').trim();
-  const faqHtml = faqs.length ? `<section class="faq"><h2>Common questions</h2>${faqs.map(f => `<details><summary>${esc(f.question)}</summary><p>${esc(f.answer)}</p></details>`).join('')}</section>` : '';
+  const faqHtml = faqs.length ? `<section class="faq"><h2 id="common-questions">Common questions</h2>${faqs.map(f => `<details><summary>${esc(f.question)}</summary><p>${esc(f.answer)}</p></details>`).join('')}</section>` : '';
   let headingIndex = 0;
   const bodyWithPublishedImages = await materializeInlineImages(article.body_html, article.slug);
   let articleBody = cleanBody(bodyWithPublishedImages)
@@ -195,6 +195,16 @@ for (const article of articles) {
     if (label.length < 4 || label.length > 88 || words.length > 12 || /[.!?;:]$/.test(label) || /^(?:figure|table)\s+\d/i.test(label) || /^\d+[.)]/.test(label)) return paragraph;
     return `<h2>${inner}</h2>`;
   });
+  articleBody = articleBody.replace(/<span\b[^>]*>([\s\S]*?)<\/span>/gi, (span, inner, offset, source) => {
+    const before = source.slice(0, offset).trimEnd();
+    const after = source.slice(offset + span.length).trimStart();
+    const standalone = (!before || /<\/(?:p|h[2-4]|li|blockquote|figure)>$/i.test(before))
+      && (!after || /^(?:<(?:p|h[2-4]|ul|ol|li|table|figure|blockquote|hr)\b|<\/(?:div|body|article)>)/i.test(after));
+    const label = inner.replace(/<[^>]*>/g, '').replace(/&amp;/gi, '&').replace(/&lt;/gi, '<').replace(/&gt;/gi, '>').replace(/&quot;/gi, '"').replace(/&#39;/gi, "'").trim();
+    const words = label.split(/\s+/).filter(Boolean);
+    if (!standalone || label.length < 4 || label.length > 88 || words.length > 12 || /[.!?;:]$/.test(label) || /^(?:figure|table)\s+\d/i.test(label) || /^\d+[.)]/.test(label)) return span;
+    return `<h2>${inner}</h2>`;
+  });
   savedTables.forEach((table, index) => { articleBody = articleBody.replace(`LEARNINGTABLE${index}TOKEN`, table); });
   headingIndex = 0;
   articleBody = articleBody.replace(/<h2>([\s\S]*?)<\/h2>/gi, (match, inner) => {
@@ -203,7 +213,9 @@ for (const article of articles) {
     return `<h2 id="${esc(id)}">${inner}</h2>`;
   });
   const tocItems = [...articleBody.matchAll(/<h2 id="([^"]+)">([\s\S]*?)<\/h2>/gi)];
-  const tocHtml = tocItems.length ? `<aside class="toc"><p class="toc-title">IN THIS ARTICLE</p><nav aria-label="Article contents">${tocItems.map(([, id, label]) => `<a href="#${esc(id)}">${esc(label.replace(/<[^>]*>/g, '').replace(/&amp;/g, '&'))}</a>`).join('')}</nav></aside>` : '';
+  const tocLinks = tocItems.map(([, id, label]) => `<a href="#${esc(id)}">${esc(label.replace(/<[^>]*>/g, '').replace(/&amp;/g, '&'))}</a>`);
+  if (faqs.length) tocLinks.push('<a href="#common-questions">Common questions</a>');
+  const tocHtml = tocLinks.length ? `<aside class="toc"><p class="toc-title">IN THIS ARTICLE</p><nav aria-label="Article contents">${tocLinks.join('')}</nav></aside>` : '';
   const wordCount = articleBody.replace(/<[^>]*>/g, ' ').split(/\s+/).filter(Boolean).length;
   const readMinutes = Math.max(1, Math.ceil(wordCount / 220));
   // Weave links within a topic cluster first, then fall back to recent posts.
