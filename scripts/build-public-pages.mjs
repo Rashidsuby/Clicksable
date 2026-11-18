@@ -36,8 +36,8 @@ const pages = [
     ],
   },
   {
-    id: 'business', section: 'business', title: 'AI Visibility for Businesses | clicksable.',
-    description: 'Generative Engine Optimization and AI search visibility services combining platform research, SEO audits, buyer-focused content, authority work, and ongoing measurement.',
+    id: 'business', section: 'business', title: 'AI Search Visibility Services for Businesses | clicksable.',
+    description: 'Help your business appear more clearly in Google and AI answers. Clicksable reviews buyer questions, cited sources, SEO, and content, then builds a measurable plan.',
     serviceName: 'Generative Engine Optimization and AI Search Visibility', serviceDescription: 'Clicksable helps businesses improve how clearly they are represented in AI-assisted and traditional search through buyer-question research, SEO and content reviews, authority work, and repeated visibility checks.',
     faqHeading: 'Questions about AI visibility',
     faqIntro: 'Learn what Generative Engine Optimization includes, how platform reviews are measured, and what a Clicksable engagement can cover.',
