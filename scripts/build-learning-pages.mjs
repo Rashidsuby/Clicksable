@@ -165,7 +165,7 @@ for (const article of articles) {
   const publishedIso = Number.isNaN(published.getTime()) ? '' : published.toISOString();
   const modifiedIso = Number.isNaN(modified.getTime()) ? publishedIso : modified.toISOString();
   const faqs = faqFor(article).filter(f => !/^question$/i.test(String(f.question || '').trim()) && !/^answer$/i.test(String(f.answer || '').trim()));
-  const takeaways = Array.isArray(article.key_takeaways) ? article.key_takeaways.map(item => String(item || '').trim().replace(/^-\s*/, '')).filter(item => item && !/^key takeaways$/i.test(item)).slice(0, 8) : [];
+  const takeaways = Array.isArray(article.key_takeaways) ? article.key_takeaways.map(item => String(item || '').trim().replace(/^(?:[•·▪‣◦]|&bull;|&#(?:8226|x2022);)(?:\s|&nbsp;|&#160;|&#xA0;)*/i, '').replace(/^-\s*/, '')).filter(item => item && !/^key takeaways$/i.test(item)).slice(0, 8) : [];
   const author = String(article.author_name || 'clicksable.').trim();
   const authorRole = String(article.author_role || '').trim();
   const avatar = safeImageUrl(article.author_avatar_url);

@@ -120,7 +120,7 @@ function renderArticle(article, sharedStyles) {
   const role = String(article.author_role || '').trim();
   const avatar = safeUrl(article.author_avatar_url);
   const body = articleBody(article.body_html);
-  const takeaways = Array.isArray(article.key_takeaways) ? article.key_takeaways.filter(Boolean).slice(0, 8) : [];
+  const takeaways = Array.isArray(article.key_takeaways) ? article.key_takeaways.map(item => String(item || '').replace(/^\s*(?:[•·▪‣◦]|&bull;|&#(?:8226|x2022);)(?:\s|&nbsp;|&#160;|&#xA0;)*/i, '').trim()).filter(Boolean).slice(0, 8) : [];
   const faqs = Array.isArray(article.geo_faq) ? article.geo_faq.filter(item => item?.question && item?.answer).slice(0, 30) : [];
   const headings = [...body.matchAll(/<h2 id="([^"]+)">([\s\S]*?)<\/h2>/gi)];
   const tocLinks = headings.map(([, id, label]) => `<a href="#${esc(id)}">${esc(label.replace(/<[^>]*>/g, ''))}</a>`);
