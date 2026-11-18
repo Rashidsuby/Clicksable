@@ -99,7 +99,9 @@ const decodeArticleMarkup = value => String(value || '').replace(/&(#x[0-9a-f]+|
   return ({ amp: '&', lt: '<', gt: '>', quot: '"', apos: "'", '#39': "'" })[key] || entity;
 });
 const cleanBody = value => {
-  const allowed = new Set(['p', 'br', 'div', 'h2', 'h3', 'h4', 'ul', 'ol', 'li', 'strong', 'b', 'em', 'i', 'u', 's', 'del', 'blockquote', 'a', 'hr', 'code', 'pre', 'figure', 'figcaption', 'img', 'table', 'caption', 'thead', 'tbody', 'tr', 'th', 'td']);
+  const safeColor = color => /^(?:#[\da-f]{3,4}(?:[\da-f]{3,4})?|(?:rgb|rgba|hsl|hsla)\([\d.%+\-,\s/]+\)|[a-z]+)$/i.test(String(color||'').trim()) ? String(color).trim() : '';
+  const safeInlineStyle = value => String(value||'').split(';').map(part=>{const i=part.indexOf(':');if(i<0)return '';const property=part.slice(0,i).trim().toLowerCase(),raw=part.slice(i+1).trim();if(['color','background-color','border-color'].includes(property)){const color=safeColor(raw);return color?`${property}: ${color}`:'';}if(property==='text-align'&&/^(left|right|center|justify|start|end)$/i.test(raw))return `${property}: ${raw.toLowerCase()}`;if(property==='vertical-align'&&/^(top|middle|bottom|baseline|sub|super)$/i.test(raw))return `${property}: ${raw.toLowerCase()}`;return '';}).filter(Boolean).join('; ');
+  const allowed = new Set(['p', 'br', 'div', 'h2', 'h3', 'h4', 'ul', 'ol', 'li', 'span', 'strong', 'b', 'em', 'i', 'u', 's', 'del', 'blockquote', 'a', 'hr', 'code', 'pre', 'figure', 'figcaption', 'img', 'table', 'caption', 'thead', 'tbody', 'tr', 'th', 'td']);
   const voidTags = new Set(['br', 'hr', 'img']);
   const dropContent = new Set(['script', 'style', 'iframe', 'svg', 'math', 'object', 'template']);
   const raw = String(value || '');
@@ -117,19 +119,21 @@ const cleanBody = value => {
     if (blocked || !allowed.has(name)) continue;
     if (closing) { if (name === 'div') output.push('</p>'); else if (!voidTags.has(name)) output.push(`</${name}>`); continue; }
     if (name === 'div') { output.push('<p>'); continue; }
+    const styleAttr = token.match(/\bstyle\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s>]+))/i);
+    const style = safeInlineStyle(styleAttr?.[1] ?? styleAttr?.[2] ?? styleAttr?.[3] ?? '');
     if (name === 'a') {
       const attr = token.match(/\bhref\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s>]+))/i);
       const href = safeLinkUrl((attr?.[1] ?? attr?.[2] ?? attr?.[3] ?? '').replace(/&amp;/gi, '&'));
-      output.push(href ? '<a href="' + esc(href) + '" rel="noopener noreferrer">' : '<a>');
+      output.push('<a' + (href ? ' href="' + esc(href) + '" rel="noopener noreferrer"' : '') + (style ? ' style="' + esc(style) + '"' : '') + '>');
     } else if (name === 'img') {
       const srcAttr = token.match(/\bsrc\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s>]+))/i);
       const altAttr = token.match(/\balt\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s>]+))/i);
       const src = safeImageUrl((srcAttr?.[1] ?? srcAttr?.[2] ?? srcAttr?.[3] ?? '').replace(/&amp;/gi, '&'));
       const alt = (altAttr?.[1] ?? altAttr?.[2] ?? altAttr?.[3] ?? '').slice(0, 180);
       if (src) output.push('<img src="' + esc(src) + '" alt="' + esc(alt) + '" loading="lazy">');
-    } else if (name === 'th') output.push('<th scope="col">');
-    else if (name === 'td') output.push('<td>');
-    else output.push('<' + name + '>');
+    } else if (name === 'th') output.push('<th scope="col"' + (style ? ' style="' + esc(style) + '"' : '') + '>');
+    else if (name === 'td') output.push('<td' + (style ? ' style="' + esc(style) + '"' : '') + '>');
+    else output.push('<' + name + (style ? ' style="' + esc(style) + '"' : '') + '>');
   }
   return output.join('');
 };

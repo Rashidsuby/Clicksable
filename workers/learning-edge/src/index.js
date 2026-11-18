@@ -9,6 +9,8 @@ const safeUrl = value => {
   } catch { return ''; }
 };
 const safeLink = value => /^mailto:[^\s@/]+@[^\s@/]+\.[^\s@/]+$/i.test(String(value || '').trim()) ? String(value).trim() : safeUrl(value);
+const safeColor = value => { const color=String(value||'').trim(); return /^(?:#[\da-f]{3,4}(?:[\da-f]{3,4})?|(?:rgb|rgba|hsl|hsla)\([\d.%+\-,\s/]+\)|[a-z]+)$/i.test(color) ? color : ''; };
+const safeInlineStyle = value => String(value||'').split(';').map(part=>{const i=part.indexOf(':');if(i<0)return '';const property=part.slice(0,i).trim().toLowerCase(),raw=part.slice(i+1).trim();if(['color','background-color','border-color'].includes(property)){const color=safeColor(raw);return color?`${property}: ${color}`:'';}if(property==='text-align'&&/^(left|right|center|justify|start|end)$/i.test(raw))return `${property}: ${raw.toLowerCase()}`;if(property==='vertical-align'&&/^(top|middle|bottom|baseline|sub|super)$/i.test(raw))return `${property}: ${raw.toLowerCase()}`;return '';}).filter(Boolean).join('; ');
 const validSlug = value => /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(value) && value.length <= 120;
 const articleUrl = slug => `${SITE_URL}/learning/${encodeURIComponent(slug)}/`;
 const dateText = value => new Intl.DateTimeFormat('en', { dateStyle: 'long', timeZone: 'UTC' }).format(new Date(value));
@@ -23,7 +25,7 @@ const decodeArticleMarkup = value => String(value || '').replace(/&(#x[0-9a-f]+|
 });
 
 function cleanBody(value) {
-  const allowed = new Set(['p', 'br', 'div', 'h2', 'h3', 'h4', 'ul', 'ol', 'li', 'strong', 'b', 'em', 'i', 'u', 's', 'del', 'blockquote', 'a', 'hr', 'code', 'pre', 'figure', 'figcaption', 'img', 'table', 'caption', 'thead', 'tbody', 'tr', 'th', 'td']);
+  const allowed = new Set(['p', 'br', 'div', 'h2', 'h3', 'h4', 'ul', 'ol', 'li', 'span', 'strong', 'b', 'em', 'i', 'u', 's', 'del', 'blockquote', 'a', 'hr', 'code', 'pre', 'figure', 'figcaption', 'img', 'table', 'caption', 'thead', 'tbody', 'tr', 'th', 'td']);
   const voidTags = new Set(['br', 'hr', 'img']);
   const dropContent = new Set(['script', 'style', 'iframe', 'svg', 'math', 'object', 'template']);
   const raw = String(value || '');
@@ -41,18 +43,20 @@ function cleanBody(value) {
     if (blocked || !allowed.has(tag)) continue;
     if (closing) { if (tag === 'div') output.push('</p>'); else if (!voidTags.has(tag)) output.push(`</${tag}>`); continue; }
     if (tag === 'div') { output.push('<p>'); continue; }
+    const styleAttr = token.match(/\bstyle\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s>]+))/i);
+    const style = safeInlineStyle(styleAttr?.[1] ?? styleAttr?.[2] ?? styleAttr?.[3] ?? '');
     if (tag === 'a') {
       const href = token.match(/\bhref\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s>]+))/i);
       const url = safeLink((href?.[1] ?? href?.[2] ?? href?.[3] ?? '').replace(/&amp;/gi, '&'));
-      output.push(url ? `<a href="${esc(url)}" rel="noopener noreferrer">` : '<a>');
+      output.push(`<a${url ? ` href="${esc(url)}" rel="noopener noreferrer"` : ''}${style ? ` style="${esc(style)}"` : ''}>`);
     } else if (tag === 'img') {
       const src = token.match(/\bsrc\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s>]+))/i);
       const alt = token.match(/\balt\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s>]+))/i);
       const url = safeUrl((src?.[1] ?? src?.[2] ?? src?.[3] ?? '').replace(/&amp;/gi, '&'));
       if (url) output.push(`<img src="${esc(url)}" alt="${esc(alt?.[1] ?? alt?.[2] ?? alt?.[3] ?? '')}" loading="lazy">`);
-    } else if (tag === 'th') output.push('<th scope="col">');
-    else if (tag === 'td') output.push('<td>');
-    else output.push(`<${tag}>`);
+    } else if (tag === 'th') output.push(`<th scope="col"${style ? ` style="${esc(style)}"` : ''}>`);
+    else if (tag === 'td') output.push(`<td${style ? ` style="${esc(style)}"` : ''}>`);
+    else output.push(`<${tag}${style ? ` style="${esc(style)}"` : ''}>`);
   }
   return output.join('');
 }
